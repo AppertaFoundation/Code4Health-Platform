@@ -1,19 +1,19 @@
 {
     "home": {
-        "title": "Välkommen Java Hipster!",
+        "title": "Välkommen Operon User!",
         "subtitle": "Det här är din hemsida",
         "logged": {
             "message": "Du är inloggad som \"{{username}}\"."
         },
-        "question": "Om du har några frågor om JHipster:",
+        "question": "Om du har några frågor om Operon:",
         "link": {
-            "homepage": "JHipsters hemsida",
-            "stackoverflow": "JHipster på Stack Overflow",
-            "bugtracker": "JHipster bughanterare",
-            "chat": "JHipster public chat room",
-            "follow": "kontakta @java_hipster på Twitter"
+            "homepage": "Operon hemsida",
+            "stackoverflow": "Operon på Stack Overflow",
+            "bugtracker": "Operon bughanterare",
+            "chat": "Operon public chat room",
+            "follow": "kontakta @operonsystems på Twitter"
         },
-        "like": "Om du gillar JHipster, glöm inte att ge oss en stjärna på",
+        "like": "Om du gillar Operon, glöm inte att ge oss en stjärna på",
         "github": "GitHub"
     }
 }
