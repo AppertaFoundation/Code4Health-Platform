@@ -1,0 +1,58 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "operino",
+            "otherEntityName": "operino",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "name"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "hosting",
+            "fieldType": "HostingType",
+            "fieldValues": "N3, NON_N3",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "availability",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "applyLimits",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "recordsNumber",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "transactionsLimit",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "diskSpace",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "computeResourceLimit",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "type",
+            "fieldType": "OperinoComponentType",
+            "fieldValues": "CDR, DEMOGRAPHICS, TERMINOLOGY",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20170228143059",
+    "dto": "no",
+    "service": "serviceImpl",
+    "entityTableName": "operino_component",
+    "pagination": "infinite-scroll"
+}

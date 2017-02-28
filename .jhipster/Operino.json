@@ -1,0 +1,39 @@
+{
+    "fluentMethods": true,
+    "relationships": [
+        {
+            "relationshipName": "user",
+            "otherEntityName": "user",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "login",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "operino"
+        },
+        {
+            "relationshipName": "components",
+            "otherEntityName": "operinoComponent",
+            "relationshipType": "one-to-many",
+            "otherEntityField": "operino",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "operino"
+        }
+    ],
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "changelogDate": "20170228091725",
+    "dto": "no",
+    "service": "serviceImpl",
+    "entityTableName": "operino",
+    "pagination": "infinite-scroll"
+}
