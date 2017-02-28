@@ -10,7 +10,7 @@
     </parent>
 
     <groupId>org.code4health</groupId>
-    <artifactId>code-4-healthplatform</artifactId>
+    <artifactId>c4hplatform</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Code 4 Healthplatform</name>
