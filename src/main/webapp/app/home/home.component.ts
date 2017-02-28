@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { EventManager, JhiLanguageService } from 'ng-jhipster';
 
-import { Account, LoginModalService, Principal, Auth } from '../shared';
+import { Account, LoginModalService, Principal } from '../shared';
 
 @Component({
     selector: 'jhi-home',
@@ -21,8 +21,6 @@ export class HomeComponent implements OnInit {
         private principal: Principal,
         private loginModalService: LoginModalService,
         private eventManager: EventManager
-        //,
-        //private auth: Auth
     ) {
         this.jhiLanguageService.setLocations(['home']);
     }
@@ -48,6 +46,5 @@ export class HomeComponent implements OnInit {
 
     login() {
         this.modalRef = this.loginModalService.open();
-        //this.auth.loginWithGoogle();
     }
 }

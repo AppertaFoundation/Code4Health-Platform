@@ -1,0 +1,25 @@
+{
+    "code4HealthplatformApp": {
+        "operino" : {
+            "home": {
+                "title": "Operinos",
+                "createLabel": "Create a new Operino",
+                "createOrEditLabel": "Create or edit a Operino",
+                "search": "Search for Operino"
+            },
+            "created": "A new Operino is created with identifier {{ param }}",
+            "updated": "A Operino is updated with identifier {{ param }}",
+            "deleted": "A Operino is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Operino {{ id }}?"
+            },
+            "detail": {
+                "title": "Operino"
+            },
+            "name": "Name",
+            "active": "Active",
+            "user": "User",
+            "components": "Components"
+        }
+    }
+}

@@ -1,11 +1,10 @@
 package org.code4health.security.jwt;
 
 import io.github.jhipster.config.JHipsterProperties;
-
-import java.util.*;
-import java.util.stream.Collectors;
-import javax.annotation.PostConstruct;
-
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,7 +14,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
-import io.jsonwebtoken.*;
+import javax.annotation.PostConstruct;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.stream.Collectors;
 
 @Component
 public class TokenProvider {
@@ -69,39 +72,39 @@ public class TokenProvider {
     }
 
     public Authentication getAuthentication(String token) {
-//        Claims claims = Jwts.parser()
-//            .setSigningKey(secretKey)
-//            .parseClaimsJws(token)
-//            .getBody();
-//
-//        Collection<? extends GrantedAuthority> authorities =
-//            Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-//                .map(SimpleGrantedAuthority::new)
-//                .collect(Collectors.toList());
-//
-//        User principal = new User(claims.getSubject(), "", authorities);
-//
-//        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
-
         Claims claims = Jwts.parser()
-                .setSigningKey(secretKey)
-                .parseClaimsJws(token)
-                .getBody();
-
-        String principal = claims.getSubject();
-
-        // CHANGES START HERE
-        String roles = claims.get(AUTHORITIES_KEY, Map.class).get("roles").toString();
-        if(roles != null && roles.length() > 0) {
-            roles = roles.substring(1, roles.length() - 1);
-        }
+            .setSigningKey(secretKey)
+            .parseClaimsJws(token)
+            .getBody();
 
         Collection<? extends GrantedAuthority> authorities =
-                Arrays.asList(roles.split(",")).stream()
-                        .map(authority -> new SimpleGrantedAuthority("ROLE_" + authority.toUpperCase()))
-                        .collect(Collectors.toList());
+            Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
 
-        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+        User principal = new User(claims.getSubject(), "", authorities);
+
+        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+
+//        Claims claims = Jwts.parser()
+//                .setSigningKey(secretKey)
+//                .parseClaimsJws(token)
+//                .getBody();
+//
+//        String principal = claims.getSubject();
+//
+//        // CHANGES START HERE
+//        String roles = claims.get(AUTHORITIES_KEY, Map.class).get("roles").toString();
+//        if(roles != null && roles.length() > 0) {
+//            roles = roles.substring(1, roles.length() - 1);
+//        }
+//
+//        Collection<? extends GrantedAuthority> authorities =
+//                Arrays.asList(roles.split(",")).stream()
+//                        .map(authority -> new SimpleGrantedAuthority("ROLE_" + authority.toUpperCase()))
+//                        .collect(Collectors.toList());
+//
+//        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
     public boolean validateToken(String authToken) {

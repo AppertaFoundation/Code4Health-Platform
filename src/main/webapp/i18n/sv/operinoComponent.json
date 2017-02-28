@@ -1,0 +1,30 @@
+{
+    "code4HealthplatformApp": {
+        "operinoComponent" : {
+            "home": {
+                "title": "Operino Components",
+                "createLabel": "Skapa en ny Operino Component",
+                "createOrEditLabel": "Skapa eller ändra en Operino Component",
+                "search": "Sök efter Operino Component"
+            },
+            "created": "En ny Operino Component är skapad med id {{ param }}",
+            "updated": "En Operino Component är uppdaterad med id  {{ param }}",
+            "deleted": "En Operino Component är borttagen med id  {{ param }}",
+            "delete": {
+                "question": "Är du säker på att du vill ta bort Operino Component {{ id }}?"
+            },
+            "detail": {
+                "title": "Operino Component"
+            },
+            "hosting": "Hosting",
+            "availability": "Availability",
+            "applyLimits": "Apply Limits",
+            "recordsNumber": "Records Number",
+            "transactionsLimit": "Transactions Limit",
+            "diskSpace": "Disk Space",
+            "computeResourceLimit": "Compute Resource Limit",
+            "type": "Type",
+            "operino": "Operino"
+        }
+    }
+}

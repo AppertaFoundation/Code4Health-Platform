@@ -1,0 +1,10 @@
+{
+    "code4HealthplatformApp": {
+        "OperinoComponentType" : {
+            "null": "",
+            "CDR": "CDR",
+            "DEMOGRAPHICS": "DEMOGRAPHICS",
+            "TERMINOLOGY": "TERMINOLOGY"
+        }
+    }
+}

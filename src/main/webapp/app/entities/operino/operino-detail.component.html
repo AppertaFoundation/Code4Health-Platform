@@ -1,0 +1,33 @@
+
+<div *ngIf="operino">
+    <h2><span jhiTranslate="code4HealthplatformApp.operino.detail.title">Operino</span> {{operino.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="code4HealthplatformApp.operino.name">Name</span></dt>
+        <dd>
+            <span>{{operino.name}}</span>
+        </dd>
+        <dt><span jhiTranslate="code4HealthplatformApp.operino.active">Active</span></dt>
+        <dd>
+            <span>{{operino.active}}</span>
+        </dd>
+        <dt><span jhiTranslate="code4HealthplatformApp.operino.user">User</span></dt>
+        <dd>
+            {{operino.user?.login}}
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'operino/'+ operino.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+    </button>
+</div>

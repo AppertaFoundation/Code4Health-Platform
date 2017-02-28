@@ -7,7 +7,7 @@ import { JhiLoginModalComponent } from './login.component';
 export class LoginModalService {
     private isOpen = false;
     constructor (
-        private modalService: NgbModal,
+        private modalService: NgbModal
     ) {}
 
     open (): NgbModalRef {

@@ -1,0 +1,25 @@
+{
+    "code4HealthplatformApp": {
+        "operino" : {
+            "home": {
+                "title": "Operinos",
+                "createLabel": "Skapa en ny Operino",
+                "createOrEditLabel": "Skapa eller ändra en Operino",
+                "search": "Sök efter Operino"
+            },
+            "created": "En ny Operino är skapad med id {{ param }}",
+            "updated": "En Operino är uppdaterad med id  {{ param }}",
+            "deleted": "En Operino är borttagen med id  {{ param }}",
+            "delete": {
+                "question": "Är du säker på att du vill ta bort Operino {{ id }}?"
+            },
+            "detail": {
+                "title": "Operino"
+            },
+            "name": "Name",
+            "active": "Active",
+            "user": "User",
+            "components": "Components"
+        }
+    }
+}
