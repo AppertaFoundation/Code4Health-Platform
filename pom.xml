@@ -1136,7 +1136,7 @@
                                     <directory>/etc/supervisor/conf.d</directory>
                                     <sources>
                                         <source>
-                                            <location>${project.build.directory}/etc/trialslink-supervisor.conf</location>
+                                            <location>${project.build.directory}/etc/code4health-supervisor.conf</location>
                                         </source>
                                     </sources>
                                 </mapping>
