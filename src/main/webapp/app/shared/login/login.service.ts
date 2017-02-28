@@ -10,6 +10,7 @@ export class LoginService {
     constructor (
         private languageService: JhiLanguageService,
         private principal: Principal,
+        //private auth: Auth
         private authServerProvider: AuthServerProvider
     ) {}
 
@@ -18,6 +19,7 @@ export class LoginService {
 
         return new Promise((resolve, reject) => {
             this.authServerProvider.login(credentials).subscribe(data => {
+            //this.auth.login(credentials).subscribe(data => {
                 this.principal.identity(true).then(account => {
                     // After the login the language will be changed to
                     // the language selected by the user during his registration
@@ -34,12 +36,14 @@ export class LoginService {
             });
         });
     }
+
     loginWithToken(jwt, rememberMe) {
         return this.authServerProvider.loginWithToken(jwt, rememberMe);
     }
 
     logout () {
         this.authServerProvider.logout().subscribe();
+        //this.auth.logout();
         this.principal.authenticate(null);
     }
 }

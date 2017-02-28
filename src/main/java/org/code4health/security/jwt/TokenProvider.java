@@ -69,19 +69,39 @@ public class TokenProvider {
     }
 
     public Authentication getAuthentication(String token) {
+//        Claims claims = Jwts.parser()
+//            .setSigningKey(secretKey)
+//            .parseClaimsJws(token)
+//            .getBody();
+//
+//        Collection<? extends GrantedAuthority> authorities =
+//            Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+//                .map(SimpleGrantedAuthority::new)
+//                .collect(Collectors.toList());
+//
+//        User principal = new User(claims.getSubject(), "", authorities);
+//
+//        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+
         Claims claims = Jwts.parser()
-            .setSigningKey(secretKey)
-            .parseClaimsJws(token)
-            .getBody();
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token)
+                .getBody();
+
+        String principal = claims.getSubject();
+
+        // CHANGES START HERE
+        String roles = claims.get(AUTHORITIES_KEY, Map.class).get("roles").toString();
+        if(roles != null && roles.length() > 0) {
+            roles = roles.substring(1, roles.length() - 1);
+        }
 
         Collection<? extends GrantedAuthority> authorities =
-            Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+                Arrays.asList(roles.split(",")).stream()
+                        .map(authority -> new SimpleGrantedAuthority("ROLE_" + authority.toUpperCase()))
+                        .collect(Collectors.toList());
 
-        User principal = new User(claims.getSubject(), "", authorities);
-
-        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
     public boolean validateToken(String authToken) {
