@@ -1,0 +1,16 @@
+#!/bin/sh -e
+
+#For debugging uncomment these two lines
+set -x
+echo $*
+
+APP_NAME=${project.artifactId}
+
+case $1 in
+	remove|purge)
+		echo "Preparing to remove $APP_NAME"
+		supervisorctl stop $APP_NAME >/dev/null
+		supervisorctl remove $APP_NAME
+		service stop $APP_NAME
+	;;
+esac

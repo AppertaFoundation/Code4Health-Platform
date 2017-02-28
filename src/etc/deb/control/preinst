@@ -1,0 +1,15 @@
+#!/bin/sh -e
+
+#For debugging uncomment these two lines
+set -x
+echo $*
+
+APP_NAME=${project.artifactId}
+
+if ! getent passwd $APP_NAME >/dev/null; then
+  groupadd $APP_NAME
+  adduser --system --no-create-home -g $APP_NAME --home-dir /usr/share/$APP_NAME/data --shell /bin/false $APP_NAME
+fi
+
+supervisorctl stop $APP_NAME || true
+# service $APP_NAME stop || true

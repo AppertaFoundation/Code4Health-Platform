@@ -1,0 +1,9 @@
+Package: [${project.artifactId}]
+Version: [${project.version}]]
+Priority: optional
+Architecture: all
+Depends: nginx, default-jre | java7-runtime
+Maintainer: Noesis Informatica <info@noesisinformatica.com>
+Description: [${project.name}]
+Distribution: stable
+Section: web

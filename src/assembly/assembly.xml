@@ -1,0 +1,82 @@
+<!--
+  #%L
+  Termlogic SNOMED CT Index Generator
+  %%
+  Copyright (C) 2012 - 2014 Noesis Informatica
+  %%
+  All right reserved.
+  
+  Licensed under the Noesis Informatica License;
+  you may not use this file except in compliance with the License.
+  
+  Access to the source code does not represent waiver of the terms of the
+  license. This code is NOT open source. You are not permitted to copy this code!
+  
+  The License Agreement does not in any way grant you any rights over the
+  Intellectual Property of the SOFTWARE PRODUCT. YOU acknowledge that the
+  ownership of the Intellectual Property at all times rest with Noesis Informatica Ltd.
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED,
+  INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF
+  MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR PURPOSE.
+  
+  Contact: info@noesisinformatica.com
+  Website: http://noesisinformatica.com
+  #L%
+  -->
+<assembly>
+    <id>${executable.name.id}</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+
+    <fileSets>
+        <!-- Copy war file -->
+        <fileSet>
+            <directory>${project.build.directory}</directory>
+            <outputDirectory>./</outputDirectory>
+            <includes>
+                <include>${project.build.finalName}.${package.type}</include>
+            </includes>
+        </fileSet>
+        <!-- Copy settings files -->
+        <fileSet>
+            <directory>${project.build.outputDirectory}/config</directory>
+            <outputDirectory>./config</outputDirectory>
+            <includes>
+                <include>**/*.*</include>
+            </includes>
+        </fileSet>
+        <!-- Copy license stuff-->
+        <fileSet>
+            <directory>${staging.dir}</directory>
+            <outputDirectory>./</outputDirectory>
+            <includes>
+                <include>**/*.txt</include>
+                <include>**/*.html</include>
+                <include>**/*.php</include>
+            </includes>
+        </fileSet>
+        <!-- Copy docs stuff-->
+        <!--<fileSet>-->
+            <!--<directory>${project.build.outputDirectory}/static/docs</directory>-->
+            <!--<outputDirectory>./docs</outputDirectory>-->
+            <!--<includes>-->
+                <!--<include>**/*.*</include>-->
+            <!--</includes>-->
+        <!--</fileSet>-->
+        <!-- Copy executable files -->
+        <fileSet>
+            <directory>${basedir}/src/etc</directory>
+            <outputDirectory>./</outputDirectory>
+            <includes>
+                <include>**/*.sh</include>
+                <include>**/*.bat</include>
+            </includes>
+            <filtered>true</filtered>
+            <fileMode>0755</fileMode>
+        </fileSet>
+    </fileSets>
+</assembly>
