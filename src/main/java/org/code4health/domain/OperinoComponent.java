@@ -1,17 +1,16 @@
 package org.code4health.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.code4health.domain.enumeration.HostingType;
+import org.code4health.domain.enumeration.OperinoComponentType;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
-
-import org.code4health.domain.enumeration.HostingType;
-
-import org.code4health.domain.enumeration.OperinoComponentType;
 
 /**
  * A OperinoComponent.
@@ -57,6 +56,7 @@ public class OperinoComponent implements Serializable {
     private OperinoComponentType type;
 
     @ManyToOne
+    @JsonIgnore
     private Operino operino;
 
     public Long getId() {
