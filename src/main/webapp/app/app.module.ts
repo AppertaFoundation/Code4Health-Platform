@@ -47,7 +47,6 @@ import {
     ],
     providers: [
         ProfileService,
-        //Auth,
         { provide: Window, useValue: window },
         { provide: Document, useValue: document },
         customHttpProvider(),

@@ -19,6 +19,7 @@
     "angular2-cookie": "1.2.6",
     "angular2-infinite-scroll": "0.3.0",
     "angular2-jwt": "^0.1.28",
+    "angular2-ui-switch": "^1.2.0",
     "auth0-lock": "^10.11.0",
     "bootstrap": "4.0.0-alpha.6",
     "core-js": "2.4.1",
