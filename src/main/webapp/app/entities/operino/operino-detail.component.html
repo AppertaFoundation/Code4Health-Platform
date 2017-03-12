@@ -1,6 +1,9 @@
 
 <div *ngIf="operino">
-    <h2><span jhiTranslate="code4HealthplatformApp.operino.detail.title">Operino</span> {{operino.id}}</h2>
+    <h2>
+        <span>{{operino.name}}</span>
+        <ui-switch ngbTooltip="Click to toggle status" class="float-right" [(ngModel)]="operino.active" (change)="updateStatus()"></ui-switch>
+    </h2>
     <hr>
     <jhi-alert-error></jhi-alert-error>
     <dl class="row-md jh-entity-details">
