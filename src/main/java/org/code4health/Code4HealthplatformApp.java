@@ -1,17 +1,23 @@
 package org.code4health;
 
+import io.github.jhipster.config.JHipsterConstants;
 import org.code4health.config.ApplicationProperties;
 import org.code4health.config.DefaultProfileUtil;
-
-import io.github.jhipster.config.JHipsterConstants;
-
+import org.code4health.domain.Operino;
+import org.code4health.domain.OperinoComponent;
+import org.code4health.domain.enumeration.HostingType;
+import org.code4health.domain.enumeration.OperinoComponentType;
+import org.code4health.repository.OperinoRepository;
+import org.code4health.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.actuate.autoconfigure.*;
+import org.springframework.boot.actuate.autoconfigure.MetricFilterAutoConfiguration;
+import org.springframework.boot.actuate.autoconfigure.MetricRepositoryAutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
 
@@ -20,6 +26,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @ComponentScan
 @EnableAutoConfiguration(exclude = {MetricFilterAutoConfiguration.class, MetricRepositoryAutoConfiguration.class})
@@ -63,7 +71,8 @@ public class Code4HealthplatformApp {
     public static void main(String[] args) throws UnknownHostException {
         SpringApplication app = new SpringApplication(Code4HealthplatformApp.class);
         DefaultProfileUtil.addDefaultProfile(app);
-        Environment env = app.run(args).getEnvironment();
+        ConfigurableApplicationContext ctx= app.run(args);
+        Environment env = ctx.getEnvironment();
         String protocol = "http";
         if (env.getProperty("server.ssl.key-store") != null) {
             protocol = "https";
@@ -80,5 +89,48 @@ public class Code4HealthplatformApp {
             InetAddress.getLocalHost().getHostAddress(),
             env.getProperty("server.port"),
             env.getActiveProfiles());
+
+        if(Arrays.asList(env.getActiveProfiles()).contains("dev") || Arrays.asList(env.getActiveProfiles()).contains("prod")) {
+            // add sample data if none exists
+            verifyAndImportPlants(ctx);
+        }
+    }
+
+    private static void verifyAndImportPlants(ConfigurableApplicationContext ctx) {
+
+        OperinoRepository operinoRepository = ctx.getBean(OperinoRepository.class);
+        UserRepository userRepository = ctx.getBean(UserRepository.class);
+        List<Operino> operinos = operinoRepository.findAll().stream().collect(Collectors.toList());
+        log.info("operinos.size() = " + operinos.size());
+
+        if(operinos.size() == 0){
+            log.info(String.format("*********** Creating sample operinos as [%s] were found", operinos.size()));
+
+            for(int i=3; i<5; i++){
+                Operino operino = new Operino();
+                operino.setName("Operino " + i);
+                operino.setActive(true);
+                operino.setUser(userRepository.findOne(Long.valueOf(String.valueOf(i))));
+
+                for(int j=1; j<4; j++){
+                    OperinoComponent component = new OperinoComponent();
+                    component.setAvailability(true);
+                    if (i==4) {
+                        component.setHosting(HostingType.NON_N3);
+                    }else {
+                        component.setHosting(HostingType.N3);
+                    }
+                    component.setType(OperinoComponentType.values()[j - 1]);
+                    component.setDiskSpace(Long.valueOf(String.valueOf(j * 1000)));
+                    component.setRecordsNumber(Long.valueOf(String.valueOf(j * 1000)));
+                    component.setTransactionsLimit(Long.valueOf(String.valueOf(j * 1000)));
+                    operino.addComponents(component);
+
+                }
+
+                // save operino
+                operinoRepository.save(operino);
+            }
+        }
     }
 }
