@@ -1,5 +1,6 @@
 package org.code4health.repository;
 
+import org.code4health.domain.Operino;
 import org.code4health.domain.OperinoComponent;
 
 import org.springframework.data.jpa.repository.*;
@@ -12,4 +13,5 @@ import java.util.List;
 @SuppressWarnings("unused")
 public interface OperinoComponentRepository extends JpaRepository<OperinoComponent,Long> {
 
+    List<OperinoComponent> findByOperino(Operino operino);
 }

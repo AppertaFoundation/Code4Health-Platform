@@ -56,7 +56,6 @@ public class OperinoComponent implements Serializable {
     private OperinoComponentType type;
 
     @ManyToOne
-    @JsonIgnore
     private Operino operino;
 
     public Long getId() {

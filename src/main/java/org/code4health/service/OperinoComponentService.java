@@ -1,8 +1,10 @@
 package org.code4health.service;
 
+import org.code4health.domain.Operino;
 import org.code4health.domain.OperinoComponent;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 
 /**
@@ -25,6 +27,14 @@ public interface OperinoComponentService {
      *  @return the list of entities
      */
     Page<OperinoComponent> findAll(Pageable pageable);
+
+    /**
+     *  Get all the components for Operino.
+     *
+     *  @param operino the operino to retrieve components for
+     *  @return the list of components
+     */
+    List<OperinoComponent> findAllByOperino(Operino operino);
 
     /**
      *  Get the "id" operinoComponent.

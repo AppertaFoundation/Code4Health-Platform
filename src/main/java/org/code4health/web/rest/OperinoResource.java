@@ -1,12 +1,14 @@
 package org.code4health.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
+import io.github.jhipster.web.util.ResponseUtil;
+import io.swagger.annotations.ApiParam;
 import org.code4health.domain.Operino;
+import org.code4health.domain.OperinoComponent;
+import org.code4health.service.OperinoComponentService;
 import org.code4health.service.OperinoService;
 import org.code4health.web.rest.util.HeaderUtil;
 import org.code4health.web.rest.util.PaginationUtil;
-import io.swagger.annotations.ApiParam;
-import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -21,10 +23,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing Operino.
@@ -38,9 +36,11 @@ public class OperinoResource {
     private static final String ENTITY_NAME = "operino";
         
     private final OperinoService operinoService;
+    private final OperinoComponentService operinoComponentService;
 
-    public OperinoResource(OperinoService operinoService) {
+    public OperinoResource(OperinoService operinoService, OperinoComponentService operinoComponentService) {
         this.operinoService = operinoService;
+        this.operinoComponentService = operinoComponentService;
     }
 
     /**
@@ -114,6 +114,20 @@ public class OperinoResource {
         log.debug("REST request to get Operino : {}", id);
         Operino operino = operinoService.findOne(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(operino));
+    }
+
+    /**
+     * GET  /operinos/:id/components : get the components linked to the "id" operino.
+     *
+     * @param id the id of the operino to retrieve components for
+     * @return the ResponseEntity with status 200 (OK) and with body the operino, or with status 404 (Not Found)
+     */
+    @GetMapping("/operinos/{id}/components")
+    @Timed
+    public ResponseEntity<List<OperinoComponent>> getOperinoComponents(@PathVariable Long id) {
+        log.debug("REST request to get components for Operino : {}", id);
+        Operino operino = operinoService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(operinoComponentService.findAllByOperino(operino)));
     }
 
     /**

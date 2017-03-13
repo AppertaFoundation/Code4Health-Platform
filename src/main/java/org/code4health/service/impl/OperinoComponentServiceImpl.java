@@ -1,21 +1,20 @@
 package org.code4health.service.impl;
 
-import org.code4health.service.OperinoComponentService;
+import org.code4health.domain.Operino;
 import org.code4health.domain.OperinoComponent;
 import org.code4health.repository.OperinoComponentRepository;
 import org.code4health.repository.search.OperinoComponentSearchRepository;
+import org.code4health.service.OperinoComponentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 /**
  * Service Implementation for managing OperinoComponent.
@@ -60,6 +59,20 @@ public class OperinoComponentServiceImpl implements OperinoComponentService{
     public Page<OperinoComponent> findAll(Pageable pageable) {
         log.debug("Request to get all OperinoComponents");
         Page<OperinoComponent> result = operinoComponentRepository.findAll(pageable);
+        return result;
+    }
+
+    /**
+     *  Get all the components for Operino.
+     *
+     *  @param operino the operino to retrieve components for
+     *  @return the list of components
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<OperinoComponent> findAllByOperino(Operino operino) {
+        log.debug("Request to get all components for Operion {}",operino);
+        List<OperinoComponent> result = operinoComponentRepository.findByOperino(operino);
         return result;
     }
 
