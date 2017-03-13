@@ -1,21 +1,22 @@
 package org.code4health.service.impl;
 
-import org.code4health.service.OperinoService;
+import org.code4health.domain.Authority;
 import org.code4health.domain.Operino;
+import org.code4health.domain.User;
 import org.code4health.repository.OperinoRepository;
 import org.code4health.repository.search.OperinoSearchRepository;
+import org.code4health.security.AuthoritiesConstants;
+import org.code4health.security.SecurityUtils;
+import org.code4health.service.OperinoService;
+import org.code4health.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 /**
  * Service Implementation for managing Operino.
@@ -27,12 +28,15 @@ public class OperinoServiceImpl implements OperinoService{
     private final Logger log = LoggerFactory.getLogger(OperinoServiceImpl.class);
     
     private final OperinoRepository operinoRepository;
-
+    private final UserService userService;
     private final OperinoSearchRepository operinoSearchRepository;
 
-    public OperinoServiceImpl(OperinoRepository operinoRepository, OperinoSearchRepository operinoSearchRepository) {
+    public OperinoServiceImpl(OperinoRepository operinoRepository,
+                              OperinoSearchRepository operinoSearchRepository,
+                              UserService userService) {
         this.operinoRepository = operinoRepository;
         this.operinoSearchRepository = operinoSearchRepository;
+        this.userService = userService;
     }
 
     /**
@@ -59,8 +63,22 @@ public class OperinoServiceImpl implements OperinoService{
     @Transactional(readOnly = true)
     public Page<Operino> findAll(Pageable pageable) {
         log.debug("Request to get all Operinos");
-        Page<Operino> result = operinoRepository.findAll(pageable);
-        return result;
+        User user = userService.getUserWithAuthorities();
+        boolean hasAdmin = false;
+        for(Authority authority : user.getAuthorities()){
+            if(authority.getName().equalsIgnoreCase(AuthoritiesConstants.ADMIN)){
+                hasAdmin =true;
+                break;
+            }
+        }
+
+        if (hasAdmin) {
+            Page<Operino> result = operinoRepository.findAll(pageable);
+            return result;
+        } else {
+            Page<Operino> result = operinoRepository.findByUserIsCurrentUser(SecurityUtils.getCurrentUserLogin(), pageable);
+            return result;
+        }
     }
 
     /**
