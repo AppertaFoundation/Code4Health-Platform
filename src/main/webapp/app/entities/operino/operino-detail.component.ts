@@ -20,6 +20,7 @@ export class OperinoDetailComponent implements OnInit, OnDestroy {
     private subscription: any;
     authorities: any[];
     isSaving: boolean;
+    isEditing: boolean = false;
 
     constructor(
         private jhiLanguageService: JhiLanguageService,
@@ -38,6 +39,8 @@ export class OperinoDetailComponent implements OnInit, OnDestroy {
     }
 
     load (id) {
+        // disable editing if active
+        this.isEditing = false;
         this.operinoService.find(id).subscribe(operino => {
             this.operino = operino;
         });

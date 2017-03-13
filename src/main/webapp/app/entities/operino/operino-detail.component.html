@@ -2,18 +2,16 @@
 <div *ngIf="operino">
     <h2>
         <span>{{operino.name}}</span>
-        <ui-switch ngbTooltip="Click to toggle status" class="float-right" [(ngModel)]="operino.active" (change)="updateStatus()"></ui-switch>
+        <ui-switch ngbTooltip="Click to toggle status" placement="bottom" class="float-right" [(ngModel)]="operino.active" (change)="updateStatus()"></ui-switch>
     </h2>
     <hr>
     <jhi-alert-error></jhi-alert-error>
     <dl class="row-md jh-entity-details">
         <dt><span jhiTranslate="code4HealthplatformApp.operino.name">Name</span></dt>
         <dd>
-            <span>{{operino.name}}</span>
-        </dd>
-        <dt><span jhiTranslate="code4HealthplatformApp.operino.active">Active</span></dt>
-        <dd>
-            <span>{{operino.active}}</span>
+            <input *ngIf="isEditing" type="text" class="form-control" name="name" id="field_name"
+                   [(ngModel)]="operino.name" required />
+            <span *ngIf="!isEditing">{{operino.name}}</span>
         </dd>
         <dt><span jhiTranslate="code4HealthplatformApp.operino.user">User</span></dt>
         <dd>
@@ -49,15 +47,11 @@
                     </div>
                     <div class="form-group">
                         <label class="form-control-label" jhiTranslate="code4HealthplatformApp.operinoComponent.availability" for="field_availability">Availability</label>
-                        <input type="checkbox" class="form-control" name="availability" id="field_availability"
-                               [(ngModel)]="operinoComponent.availability"
-                                />
+                        <ui-switch size="small" class="form-control" name="availability" id="field_availability" [(ngModel)]="operinoComponent.availability"></ui-switch>
                     </div>
                     <div class="form-group">
                         <label class="form-control-label" jhiTranslate="code4HealthplatformApp.operinoComponent.applyLimits" for="field_applyLimits">Apply Limits</label>
-                        <input type="checkbox" class="form-control" name="applyLimits" id="field_applyLimits"
-                               [(ngModel)]="operinoComponent.applyLimits"
-                                />
+                        <ui-switch size="small" class="form-control" name="applyLimits" id="field_applyLimits" [(ngModel)]="operinoComponent.applyLimits"></ui-switch>
                     </div>
                     <div class="form-group">
                         <label class="form-control-label" jhiTranslate="code4HealthplatformApp.operinoComponent.recordsNumber" for="field_recordsNumber">Records Number</label>
@@ -107,7 +101,10 @@
                 class="btn btn-info">
             <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
         </button>
-        <button type="button" class="btn btn-default" (click)="load(operino.id)">
+        <button *ngIf="!isEditing" type="button" class="btn btn-warning" (click)="isEditing = !isEditing">
+            <span class="fa fa-edit"></span>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+        <button *ngIf="isEditing" type="button" class="btn btn-danger" (click)="load(operino.id)">
             <span class="fa fa-ban"></span>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
         </button>
         <button type="button" (click)="save()" class="btn btn-success">
