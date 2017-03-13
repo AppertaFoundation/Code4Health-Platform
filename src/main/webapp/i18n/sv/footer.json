@@ -1,0 +1,13 @@
+{
+    "footer": {
+        "link": {
+            "homepage": "Operon",
+            "stackoverflow": "Operon på Stack Overflow",
+            "bugtracker": "Operon bughanterare",
+            "chat": "Operon public chat room",
+            "follow": "kontakta @operoncloud på Twitter",
+            "github": "GitHub"
+        },
+        "like": "Om du gillar Operon, glöm inte att ge oss en stjärna på"
+    }
+}

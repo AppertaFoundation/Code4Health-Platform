@@ -8,10 +8,11 @@
         "question": "If you have any question on Operon:",
         "link": {
             "homepage": "Operon Cloud homepage",
-            "stackoverflow": "Operon on Stack Overflow",
+            "docs": "Operon Cloud Documentation",
+            "support": "Operon Support",
             "bugtracker": "Operon bug tracker",
             "chat": "Operon public chat room",
-            "follow": "follow @operonsystems on Twitter"
+            "follow": "Follow us on Twitter"
         },
         "like": "If you like Operon, don't forget to give us a star on",
         "github": "GitHub"

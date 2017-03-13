@@ -12,7 +12,7 @@ export class JhiMainComponent implements OnInit {
     constructor(
         private jhiLanguageHelper: JhiLanguageHelper,
         private router: Router,
-        private $storageService: StateStorageService,
+        private $storageService: StateStorageService
     ) {}
 
     private getPageTitle(routeSnapshot: ActivatedRouteSnapshot) {

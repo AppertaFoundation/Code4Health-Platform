@@ -1,0 +1,13 @@
+{
+    "footer": {
+        "link": {
+            "homepage": "Operon Cloud",
+            "stackoverflow": "Operon on Stack Overflow",
+            "bugtracker": "Report issues",
+            "chat": "Operon public chat room",
+            "follow": "Follow us on Twitter",
+            "github": "GitHub"
+        },
+        "like": "If you like Operon, don't forget to give us a star on"
+    }
+}
