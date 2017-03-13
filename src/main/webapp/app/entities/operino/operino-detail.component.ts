@@ -36,6 +36,7 @@ export class OperinoDetailComponent implements OnInit, OnDestroy {
         this.subscription = this.route.params.subscribe(params => {
             this.load(params['id']);
         });
+        this.isEditing = this.route.snapshot.data['isEditing'];
     }
 
     load (id) {
@@ -67,7 +68,7 @@ export class OperinoDetailComponent implements OnInit, OnDestroy {
     }
 
     private onSaveSuccess (result: Operino) {
-        //this.eventManager.broadcast({ name: 'operinoListModification', content: 'OK'});
+          //this.eventManager.broadcast({ name: 'operinoListModification', content: 'OK'});
         for (let component of this.operino.components) {
             if (component.id !== undefined) {
                 this.operinoComponentService.update(component)

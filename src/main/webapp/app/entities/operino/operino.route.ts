@@ -25,30 +25,30 @@ export const operinoRoute: Routes = [
     component: OperinoDetailComponent,
     data: {
         authorities: ['ROLE_USER'],
+        isEditing: false,
         pageTitle: 'code4HealthplatformApp.operino.home.title'
     }
-  }
+  },
+    {
+        path: 'operino-new',
+        component: OperinoDetailComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'code4HealthplatformApp.operino.home.title'
+        }
+    },
+    {
+        path: 'operino/:id/edit',
+        component: OperinoDetailComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            isEditing: true,
+            pageTitle: 'code4HealthplatformApp.operino.home.title'
+        }
+    }
 ];
 
 export const operinoPopupRoute: Routes = [
-  {
-    path: 'operino-new',
-    component: OperinoPopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'code4HealthplatformApp.operino.home.title'
-    },
-    outlet: 'popup'
-  },
-  {
-    path: 'operino/:id/edit',
-    component: OperinoPopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'code4HealthplatformApp.operino.home.title'
-    },
-    outlet: 'popup'
-  },
   {
     path: 'operino/:id/delete',
     component: OperinoDeletePopupComponent,

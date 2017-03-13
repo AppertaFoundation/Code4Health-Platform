@@ -4,6 +4,7 @@ import org.code4health.Code4HealthplatformApp;
 
 import org.code4health.domain.Operino;
 import org.code4health.repository.OperinoRepository;
+import org.code4health.service.OperinoComponentService;
 import org.code4health.service.OperinoService;
 import org.code4health.repository.search.OperinoSearchRepository;
 import org.code4health.web.rest.errors.ExceptionTranslator;
@@ -50,6 +51,8 @@ public class OperinoResourceIntTest {
 
     @Autowired
     private OperinoService operinoService;
+    @Autowired
+    private OperinoComponentService operinoComponentService;
 
     @Autowired
     private OperinoSearchRepository operinoSearchRepository;
@@ -73,7 +76,7 @@ public class OperinoResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        OperinoResource operinoResource = new OperinoResource(operinoService);
+        OperinoResource operinoResource = new OperinoResource(operinoService, operinoComponentService);
         this.restOperinoMockMvc = MockMvcBuilders.standaloneSetup(operinoResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)

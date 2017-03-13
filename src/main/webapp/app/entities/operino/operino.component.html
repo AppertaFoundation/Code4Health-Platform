@@ -53,7 +53,7 @@
                             <span class="hidden-md-down" jhiTranslate="entity.action.view">View</span>
                         </button>
                         <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: 'operino/'+ operino.id + '/edit'} }]"
+                                [routerLink]="['../operino', operino.id, 'edit']"
                                 replaceUrl="true"
                                 class="btn btn-primary btn-sm">
                             <span class="fa fa-pencil"></span>
