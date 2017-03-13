@@ -10,6 +10,14 @@
             <div class="alert alert-success" *ngSwitchCase="true">
                 <span *ngIf="account" jhiTranslate="home.logged.message"
                     translateValues="{username: '{{account.login}}'}"> You are logged in as user "{{account.login}}". </span>
+                <hr>
+                <div>
+                    Click here to view your
+                    <a routerLink="operino" >
+                        <i class="fa fa-bolt" aria-hidden="true"></i>
+                        <span jhiTranslate="global.menu.entities.operino">Operino</span>s
+                    </a>
+                </div>
             </div>
 
             <div class="alert alert-warning" *ngSwitchCase="false">
@@ -24,7 +32,7 @@
         </div>
 
         <p jhiTranslate="home.question">
-            If you have any question on JHipster:
+            If you have any question on Operon Cloud:
         </p>
 
         <ul>
