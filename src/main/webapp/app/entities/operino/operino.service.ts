@@ -31,6 +31,10 @@ export class OperinoService {
         });
     }
 
+    components(id: number): Observable<Response> {
+        return this.http.get(`${this.resourceUrl}/${id}/components`);
+    }
+
     query(req?: any): Observable<Response> {
         let options = this.createRequestOption(req);
         return this.http.get(this.resourceUrl, options)

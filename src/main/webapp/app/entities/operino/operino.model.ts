@@ -6,6 +6,6 @@ export class Operino {
         public name?: string,
         public active?: boolean,
         public user?: User,
-        public components?: OperinoComponent,
+        public components?: OperinoComponent[]
     ) { }
 }
