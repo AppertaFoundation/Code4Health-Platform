@@ -29,7 +29,6 @@
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
-            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="name"><span jhiTranslate="code4HealthplatformApp.operino.name">Name</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="active"><span jhiTranslate="code4HealthplatformApp.operino.active">Active</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="user.login"><span jhiTranslate="code4HealthplatformApp.operino.user">User</span> <span class="fa fa-sort"></span></th>
@@ -38,8 +37,7 @@
             </thead>
             <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
             <tr *ngFor="let operino of operinos ;trackBy: trackId">
-                <td><a [routerLink]="['../operino', operino.id ]">{{operino.id}}</a></td>
-                <td>{{operino.name}}</td>
+                <td><a [routerLink]="['../operino', operino.id ]">{{operino.name}}</a></td>
                 <td>{{operino.active}}</td>
                 <td>
                     {{operino.user?.login}}
@@ -51,13 +49,6 @@
                                 class="btn btn-info btn-sm">
                             <span class="fa fa-eye"></span>
                             <span class="hidden-md-down" jhiTranslate="entity.action.view">View</span>
-                        </button>
-                        <button type="submit"
-                                [routerLink]="['../operino', operino.id, 'edit']"
-                                replaceUrl="true"
-                                class="btn btn-primary btn-sm">
-                            <span class="fa fa-pencil"></span>
-                            <span class="hidden-md-down" jhiTranslate="entity.action.edit">Edit</span>
                         </button>
                         <button type="submit"
                                 [routerLink]="['/', { outlets: { popup: 'operino/'+ operino.id + '/delete'} }]"

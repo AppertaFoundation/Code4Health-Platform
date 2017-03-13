@@ -101,10 +101,13 @@
                 class="btn btn-info">
             <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
         </button>
-        <button *ngIf="!isEditing" type="button" class="btn btn-warning" (click)="isEditing = !isEditing">
+        <button *ngIf="!isEditing" type="button" class="btn btn-warning"
+                [routerLink]="['../', operino.id, 'edit']"
+                replaceUrl="true">
             <span class="fa fa-edit"></span>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
         </button>
-        <button *ngIf="isEditing" type="button" class="btn btn-danger" (click)="load(operino.id)">
+        <button *ngIf="isEditing" type="button" class="btn btn-danger" [routerLink]="['../']"
+                replaceUrl="true">
             <span class="fa fa-ban"></span>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
         </button>
         <button type="button" (click)="save()" class="btn btn-success">
