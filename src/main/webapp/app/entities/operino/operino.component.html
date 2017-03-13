@@ -38,7 +38,9 @@
             <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
             <tr *ngFor="let operino of operinos ;trackBy: trackId">
                 <td><a [routerLink]="['../operino', operino.id ]">{{operino.name}}</a></td>
-                <td>{{operino.active}}</td>
+                <td>
+                    <span *ngIf="operino.active" ><i class="fa fa-circle" style="color:green"></i> Active</span>
+                    <span *ngIf="! operino.active"><i class="fa fa-circle" style="color:red"></i> Inactive</span>
                 <td>
                     {{operino.user?.login}}
                 </td>
