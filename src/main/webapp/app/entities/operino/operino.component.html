@@ -1,7 +1,7 @@
 <div>
     <h2>
         <span jhiTranslate="code4HealthplatformApp.operino.home.title">Operinos</span>
-        <button class="btn btn-primary float-right create-operino" [routerLink]="['/', { outlets: { popup: ['operino-new'] } }]">
+        <button *ngIf="operinos.length > 0" class="btn btn-success float-right create-operino" [routerLink]="['/', { outlets: { popup: ['operino-new'] } }]">
             <span class="fa fa-plus"></span>
             <span class="hidden-sm-down"  jhiTranslate="code4HealthplatformApp.operino.home.createLabel">
             Create new Operino
@@ -9,7 +9,7 @@
         </button>
     </h2>
     <jhi-alert></jhi-alert>
-    <div class="row">
+    <div class="row" *ngIf="operinos.length > 0">
         <div class="col-sm-12 no-padding-right">
             <form name="searchForm" class="form-inline">
                 <div class="input-group w-100 mt-3">
@@ -25,7 +25,49 @@
         </div>
     </div>
     <br/>
-    <div class="table-responsive" *ngIf="operinos">
+    <div *ngIf="operinos.length == 0">
+        <div class="row">
+            <div class="col-sm-8 text-center">
+                <div class="alert alert-warning ">
+                    <span jhiTranslate="code4HealthplatformApp.operino.home.missing">Oh no! You do not have operinos! Would you like to create one?</span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <button class="btn btn-warning create-operino" [routerLink]="['/', { outlets: { popup: ['operino-new'] } }]">
+                    <span class="fa fa-flask"></span>
+                    <span class="hidden-sm-down"  jhiTranslate="code4HealthplatformApp.operino.home.createSandbox">
+                    Create Sandbox Operino
+                    </span>
+                </button>
+                <button class="btn btn-success create-operino" [routerLink]="['/', { outlets: { popup: ['operino-new'] } }]">
+                    <span class="fa fa-plus"></span>
+                    <span class="hidden-sm-down"  jhiTranslate="code4HealthplatformApp.operino.home.createLabel">
+                    Create new Operino
+                    </span>
+                </button>
+            </div>
+        </div>
+        <hr>
+        <div class="alert alert-info ">
+            <h4 jhiTranslate="code4HealthplatformApp.operino.sandbox.what.q">What is a Sandox Operino?</h4>
+            <p jhiTranslate="code4HealthplatformApp.operino.sandbox.what.a"></p>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="code4HealthplatformApp.operino.sandbox.cdr.q">Hosting</span></dt>
+                <dd>
+                    <span jhiTranslate="code4HealthplatformApp.operino.sandbox.cdr.a"></span>
+                </dd>
+                <dt><span jhiTranslate="code4HealthplatformApp.operino.sandbox.demographics.q">Availability</span></dt>
+                <dd>
+                    <span jhiTranslate="code4HealthplatformApp.operino.sandbox.demographics.a">hmmm</span>
+                </dd>
+                <dt><span jhiTranslate="code4HealthplatformApp.operino.sandbox.terminology.q">Apply Limits</span></dt>
+                <dd>
+                    <span jhiTranslate="code4HealthplatformApp.operino.sandbox.terminology.a">hmmmm</span>
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <div class="table-responsive" *ngIf="operinos.length > 0">
         <table class="table table-striped">
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
