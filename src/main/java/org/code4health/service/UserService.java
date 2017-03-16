@@ -1,16 +1,15 @@
 package org.code4health.service;
 
+import org.code4health.config.Constants;
 import org.code4health.domain.Authority;
 import org.code4health.domain.User;
 import org.code4health.repository.AuthorityRepository;
-import org.code4health.config.Constants;
 import org.code4health.repository.UserRepository;
 import org.code4health.repository.search.UserSearchRepository;
 import org.code4health.security.AuthoritiesConstants;
 import org.code4health.security.SecurityUtils;
-import org.code4health.service.util.RandomUtil;
 import org.code4health.service.dto.UserDTO;
-
+import org.code4health.service.util.RandomUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -21,7 +20,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * Service class for managing users.
@@ -70,12 +72,12 @@ public class UserService {
             .filter(user -> {
                 ZonedDateTime oneDayAgo = ZonedDateTime.now().minusHours(24);
                 return user.getResetDate().isAfter(oneDayAgo);
-           })
+            })
            .map(user -> {
-                user.setPassword(passwordEncoder.encode(newPassword));
-                user.setResetKey(null);
-                user.setResetDate(null);
-                return user;
+               user.setPassword(passwordEncoder.encode(newPassword));
+               user.setResetKey(null);
+               user.setResetDate(null);
+               return user;
            });
     }
 
@@ -222,6 +224,19 @@ public class UserService {
         return userRepository.findOneWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin()).orElse(null);
     }
 
+    @Transactional(readOnly = true)
+    public boolean isAdmin() {
+        User user = this.getUserWithAuthorities();
+        boolean hasAdmin = false;
+        for(Authority authority : user.getAuthorities()){
+            if(authority.getName().equalsIgnoreCase(AuthoritiesConstants.ADMIN)){
+                hasAdmin =true;
+                break;
+            }
+        }
+
+        return hasAdmin;
+    }
 
     /**
      * Not activated users should be automatically deleted after 3 days.

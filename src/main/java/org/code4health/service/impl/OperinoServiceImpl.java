@@ -1,11 +1,8 @@
 package org.code4health.service.impl;
 
-import org.code4health.domain.Authority;
 import org.code4health.domain.Operino;
-import org.code4health.domain.User;
 import org.code4health.repository.OperinoRepository;
 import org.code4health.repository.search.OperinoSearchRepository;
-import org.code4health.security.AuthoritiesConstants;
 import org.code4health.security.SecurityUtils;
 import org.code4health.service.OperinoService;
 import org.code4health.service.UserService;
@@ -63,16 +60,7 @@ public class OperinoServiceImpl implements OperinoService{
     @Transactional(readOnly = true)
     public Page<Operino> findAll(Pageable pageable) {
         log.debug("Request to get all Operinos");
-        User user = userService.getUserWithAuthorities();
-        boolean hasAdmin = false;
-        for(Authority authority : user.getAuthorities()){
-            if(authority.getName().equalsIgnoreCase(AuthoritiesConstants.ADMIN)){
-                hasAdmin =true;
-                break;
-            }
-        }
-
-        if (hasAdmin) {
+        if (userService.isAdmin()) {
             Page<Operino> result = operinoRepository.findAll(pageable);
             return result;
         } else {
@@ -89,10 +77,30 @@ public class OperinoServiceImpl implements OperinoService{
      */
     @Override
     @Transactional(readOnly = true)
+    public Operino verifyOwnershipAndGet(Long id) {
+        log.debug("Request to verify ownership and get Operino : {}", id);
+        Operino operino = operinoRepository.findOneByUserAndId(SecurityUtils.getCurrentUserLogin(), id);
+        if(operino != null){
+            return operino;
+        } else if(userService.isAdmin()){
+            return operinoRepository.findOne(id);
+        } else {
+            return null;
+        }
+    }
+
+
+    /**
+     *  Get one operino by id.
+     *
+     *  @param id the id of the entity
+     *  @return the entity
+     */
+    @Override
+    @Transactional(readOnly = true)
     public Operino findOne(Long id) {
         log.debug("Request to get Operino : {}", id);
-        Operino operino = operinoRepository.findOne(id);
-        return operino;
+        return this.verifyOwnershipAndGet(id);
     }
 
     /**

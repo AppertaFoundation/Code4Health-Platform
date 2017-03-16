@@ -3,7 +3,6 @@ package org.code4health.service;
 import org.code4health.domain.Operino;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import java.util.List;
 
 /**
  * Service Interface for managing Operino.
@@ -25,6 +24,14 @@ public interface OperinoService {
      *  @return the list of entities
      */
     Page<Operino> findAll(Pageable pageable);
+
+    /**
+     *  Get the "id" operino if the current user is the owner or has ADMIN role
+     *
+     *  @param id the id of the entity
+     *  @return the entity
+     */
+    Operino verifyOwnershipAndGet(Long id);
 
     /**
      *  Get the "id" operino.

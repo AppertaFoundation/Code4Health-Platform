@@ -79,10 +79,16 @@ public class OperinoResource {
         if (operino.getId() == null) {
             return createOperino(operino);
         }
-        Operino result = operinoService.save(operino);
-        return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, operino.getId().toString()))
-            .body(result);
+        Operino verifiedOperino = operinoService.verifyOwnershipAndGet(operino.getId());
+        if(verifiedOperino != null){
+            Operino result = operinoService.save(operino);
+            return ResponseEntity.ok()
+                    .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, operino.getId().toString()))
+                    .body(result);
+        } else {
+            return ResponseEntity.badRequest()
+                    .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "Not authorized", operino.getId().toString())).build();
+        }
     }
 
     /**
@@ -112,7 +118,7 @@ public class OperinoResource {
     @Timed
     public ResponseEntity<Operino> getOperino(@PathVariable Long id) {
         log.debug("REST request to get Operino : {}", id);
-        Operino operino = operinoService.findOne(id);
+        Operino operino = operinoService.verifyOwnershipAndGet(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(operino));
     }
 
@@ -126,7 +132,7 @@ public class OperinoResource {
     @Timed
     public ResponseEntity<List<OperinoComponent>> getOperinoComponents(@PathVariable Long id) {
         log.debug("REST request to get components for Operino : {}", id);
-        Operino operino = operinoService.findOne(id);
+        Operino operino = operinoService.verifyOwnershipAndGet(id);
         return ResponseUtil.wrapOrNotFound(Optional.ofNullable(operinoComponentService.findAllByOperino(operino)));
     }
 
@@ -140,7 +146,10 @@ public class OperinoResource {
     @Timed
     public ResponseEntity<Void> deleteOperino(@PathVariable Long id) {
         log.debug("REST request to delete Operino : {}", id);
-        operinoService.delete(id);
+        Operino verifiedOperino = operinoService.verifyOwnershipAndGet(id);
+        if(verifiedOperino != null){
+            operinoService.delete(id);
+        }
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 

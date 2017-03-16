@@ -20,4 +20,7 @@ public interface OperinoRepository extends JpaRepository<Operino,Long> {
 
     @Query("select operino from Operino operino where operino.user.login = :username")
     Page<Operino> findByUserIsCurrentUser(@Param("username") String username, Pageable pageable);
+
+    @Query("select operino from Operino operino where operino.user.login = :username and operino.id = :id")
+    Operino findOneByUserAndId(@Param("username") String username, @Param("id") Long operinoId);
 }
