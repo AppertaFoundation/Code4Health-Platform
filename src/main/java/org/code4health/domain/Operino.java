@@ -37,7 +37,7 @@ public class Operino implements Serializable {
     @ManyToOne
     private User user;
 
-    @OneToMany(mappedBy = "operino", cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "operino", cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<OperinoComponent> components = new HashSet<>();

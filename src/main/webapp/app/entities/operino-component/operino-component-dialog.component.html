@@ -17,7 +17,7 @@
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="code4HealthplatformApp.operinoComponent.hosting" for="field_hosting">Hosting</label>
             <select class="form-control" name="hosting" [(ngModel)]="operinoComponent.hosting" id="field_hosting"  required>
-                <option value="N3" jhiTranslate="code4HealthplatformApp.HostingType.N3">N3</option>
+                <!--<option value="N3" jhiTranslate="code4HealthplatformApp.HostingType.N3">N3</option>-->
                 <option value="NON_N3" jhiTranslate="code4HealthplatformApp.HostingType.NON_N3">NON_N3</option>
             </select>
             <div [hidden]="!(editForm.controls.hosting?.dirty && editForm.controls.hosting?.invalid)">
@@ -39,30 +39,33 @@
                 [(ngModel)]="operinoComponent.applyLimits"
              />
         </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="code4HealthplatformApp.operinoComponent.recordsNumber" for="field_recordsNumber">Records Number</label>
-            <input type="number" class="form-control" name="recordsNumber" id="field_recordsNumber"
-                [(ngModel)]="operinoComponent.recordsNumber"
-             />
+        <div  *ngIf="operinoComponent.applyLimits">
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="code4HealthplatformApp.operinoComponent.recordsNumber" for="field_recordsNumber">Records Number</label>
+                <input type="number" class="form-control" name="recordsNumber" id="field_recordsNumber"
+                       [(ngModel)]="operinoComponent.recordsNumber"
+                        />
+            </div>
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="code4HealthplatformApp.operinoComponent.transactionsLimit" for="field_transactionsLimit">Transactions Limit</label>
+                <input type="number" class="form-control" name="transactionsLimit" id="field_transactionsLimit"
+                       [(ngModel)]="operinoComponent.transactionsLimit"
+                        />
+            </div>
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="code4HealthplatformApp.operinoComponent.diskSpace" for="field_diskSpace">Disk Space</label>
+                <input type="number" class="form-control" name="diskSpace" id="field_diskSpace"
+                       [(ngModel)]="operinoComponent.diskSpace"
+                        />
+            </div>
+            <div class="form-group">
+                <label class="form-control-label" jhiTranslate="code4HealthplatformApp.operinoComponent.computeResourceLimit" for="field_computeResourceLimit">Compute Resource Limit</label>
+                <input type="number" class="form-control" name="computeResourceLimit" id="field_computeResourceLimit"
+                       [(ngModel)]="operinoComponent.computeResourceLimit"
+                        />
+            </div>
         </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="code4HealthplatformApp.operinoComponent.transactionsLimit" for="field_transactionsLimit">Transactions Limit</label>
-            <input type="number" class="form-control" name="transactionsLimit" id="field_transactionsLimit"
-                [(ngModel)]="operinoComponent.transactionsLimit"
-             />
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="code4HealthplatformApp.operinoComponent.diskSpace" for="field_diskSpace">Disk Space</label>
-            <input type="number" class="form-control" name="diskSpace" id="field_diskSpace"
-                [(ngModel)]="operinoComponent.diskSpace"
-             />
-        </div>
-        <div class="form-group">
-            <label class="form-control-label" jhiTranslate="code4HealthplatformApp.operinoComponent.computeResourceLimit" for="field_computeResourceLimit">Compute Resource Limit</label>
-            <input type="number" class="form-control" name="computeResourceLimit" id="field_computeResourceLimit"
-                [(ngModel)]="operinoComponent.computeResourceLimit"
-             />
-        </div>
+
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="code4HealthplatformApp.operinoComponent.type" for="field_type">Type</label>
             <select class="form-control" name="type" [(ngModel)]="operinoComponent.type" id="field_type"  required>
@@ -78,13 +81,13 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <label jhiTranslate="code4HealthplatformApp.operinoComponent.operino" for="field_operino">Operino</label>
-            <select class="form-control" id="field_operino" name="operino" [(ngModel)]="operinoComponent.operino" >
-                <option [ngValue]="null"></option>
-                <option [ngValue]="operinoOption.id === operinoComponent.operino?.id ? operinoComponent.operino : operinoOption" *ngFor="let operinoOption of operinos; trackBy: trackOperinoById">{{operinoOption.name}}</option>
-            </select>
-        </div>
+        <!--<div class="form-group">-->
+            <!--<label jhiTranslate="code4HealthplatformApp.operinoComponent.operino" for="field_operino">Operino</label>-->
+            <!--<select class="form-control" id="field_operino" name="operino" [(ngModel)]="operinoComponent.operino" >-->
+                <!--<option [ngValue]="null"></option>-->
+                <!--<option [ngValue]="operinoOption.id === operinoComponent.operino?.id ? operinoComponent.operino : operinoOption" *ngFor="let operinoOption of operinos; trackBy: trackOperinoById">{{operinoOption.name}}</option>-->
+            <!--</select>-->
+        <!--</div>-->
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" (click)="clear()">

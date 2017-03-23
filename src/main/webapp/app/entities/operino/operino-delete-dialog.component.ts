@@ -22,7 +22,7 @@ export class OperinoDeleteDialogComponent {
         public activeModal: NgbActiveModal,
         private eventManager: EventManager
     ) {
-        this.jhiLanguageService.setLocations(['operino']);
+        this.jhiLanguageService.setLocations(['operino', 'foooter']);
     }
 
     clear () {

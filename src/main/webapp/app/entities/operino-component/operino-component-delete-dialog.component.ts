@@ -22,7 +22,7 @@ export class OperinoComponentDeleteDialogComponent {
         public activeModal: NgbActiveModal,
         private eventManager: EventManager
     ) {
-        this.jhiLanguageService.setLocations(['operinoComponent', 'hostingType', 'operinoComponentType']);
+        this.jhiLanguageService.setLocations(['operinoComponent', 'hostingType', 'operinoComponentType', 'operino', 'footer']);
     }
 
     clear () {
@@ -30,13 +30,26 @@ export class OperinoComponentDeleteDialogComponent {
     }
 
     confirmDelete (id: number) {
-        this.operinoComponentService.delete(id).subscribe(response => {
-            this.eventManager.broadcast({
-                name: 'operinoComponentListModification',
-                content: 'Deleted an operinoComponent'
+
+        this.operinoComponentService.find(id).subscribe(operinoComponent => {
+            this.operinoComponent = operinoComponent;
+            console.log("this.operinoComponent  = " , this.operinoComponent );
+            this.operinoComponentService.delete(id, this.operinoComponent.operino.id).subscribe(response => {
+                this.eventManager.broadcast({
+                    name: 'operinoComponentListModification',
+                    content: 'Deleted an operinoComponent'
+                });
+                this.activeModal.dismiss(true);
             });
-            this.activeModal.dismiss(true);
         });
+
+        //this.operinoComponentService.delete(id, this.operinoComponent.operino.id).subscribe(response => {
+        //    this.eventManager.broadcast({
+        //        name: 'operinoComponentListModification',
+        //        content: 'Deleted an operinoComponent'
+        //    });
+        //    this.activeModal.dismiss(true);
+        //});
     }
 }
 

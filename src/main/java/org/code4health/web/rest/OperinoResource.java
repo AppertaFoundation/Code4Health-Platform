@@ -34,7 +34,8 @@ public class OperinoResource {
     private final Logger log = LoggerFactory.getLogger(OperinoResource.class);
 
     private static final String ENTITY_NAME = "operino";
-        
+    private static final String COMPONENT_ENTITY_NAME = "component";
+
     private final OperinoService operinoService;
     private final OperinoComponentService operinoComponentService;
 
@@ -130,10 +131,103 @@ public class OperinoResource {
      */
     @GetMapping("/operinos/{id}/components")
     @Timed
-    public ResponseEntity<List<OperinoComponent>> getOperinoComponents(@PathVariable Long id) {
+    public ResponseEntity<List<OperinoComponent>> getOperinoComponents(@PathVariable Long id, Pageable pageable) throws URISyntaxException {
         log.debug("REST request to get components for Operino : {}", id);
         Operino operino = operinoService.verifyOwnershipAndGet(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(operinoComponentService.findAllByOperino(operino)));
+        if (operino != null) {
+            Page<OperinoComponent> page = operinoComponentService.findAllByOperino(operino, pageable);
+            HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/operino-components");
+            return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        } else {
+            return ResponseEntity.badRequest()
+                    .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "Not authorized", String.valueOf(id))).build();
+        }
+//        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(operinoComponentService.findAllByOperino(operino)));
+    }
+
+    /**
+     * POST  /operinos/:id/components : add the component posted to the "id" operino.
+     *
+     * @param id the id of the operino to add component to
+     * @return the ResponseEntity with status 201 (OK) and with body the operino, or with status 404 (Not Found)
+     */
+    @PostMapping("/operinos/{id}/components")
+    @Timed
+    public ResponseEntity<OperinoComponent> addOperinoComponent(@PathVariable Long id, @Valid @RequestBody OperinoComponent operinoComponent) throws URISyntaxException {
+        log.debug("REST request to get components for Operino : {}", id);
+        Operino operino = operinoService.verifyOwnershipAndGet(id);
+        if (operino != null) {
+            if (operinoComponent.getId() != null) {
+                return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new operinoComponent cannot already have an ID")).body(null);
+            }
+            operinoComponent.setOperino(operino);
+            OperinoComponent result = operinoComponentService.save(operinoComponent);
+            operino.addComponents(result);
+            // also save operino
+            operinoService.save(operino);
+            return ResponseEntity.created(new URI("/api/operino-components/" + result.getId()))
+                    .headers(HeaderUtil.createEntityCreationAlert(COMPONENT_ENTITY_NAME, result.getId().toString()))
+                    .body(result);
+        } else {
+            return ResponseEntity.badRequest()
+                    .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "Not found", String.valueOf(id))).build();
+        }
+    }
+
+    /**
+     * PUT  /operinos/:id/components : update the component posted to the "id" operino.
+     *
+     * @param id the id of the operino to add component to
+     * @return the ResponseEntity with status 200 (OK) and with body the operino, or with status 404 (Not Found)
+     */
+    @PutMapping("/operinos/{id}/components")
+    @Timed
+    public ResponseEntity<OperinoComponent> updateOperinoComponent(@PathVariable Long id, @Valid @RequestBody OperinoComponent operinoComponent) throws URISyntaxException {
+        log.debug("REST request to get components for Operino : {}", id);
+        Operino operino = operinoService.verifyOwnershipAndGet(id);
+        if (operino != null) {
+            if (operinoComponent.getId() == null) {
+                return ResponseEntity.badRequest()
+                        .headers(HeaderUtil.createFailureAlert(COMPONENT_ENTITY_NAME, "Not found", String.valueOf(operinoComponent.getId()))).build();
+            }
+            OperinoComponent result = operinoComponentService.save(operinoComponent);
+            return ResponseEntity.ok()
+                    .headers(HeaderUtil.createEntityUpdateAlert(COMPONENT_ENTITY_NAME, operinoComponent.getId().toString()))
+                    .body(result);
+        } else {
+            return ResponseEntity.badRequest()
+                    .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "Not found", String.valueOf(id))).build();
+        }
+    }
+
+    /**
+     * DELETE  /operinos/:id/components/:componentId : delete the "componentId" component for to the "id" operino.
+     *
+     * @param id the id of the operino to delete component
+     * @param componentId the id of the component to delete
+     * @return the ResponseEntity with status 200 (OK) and with body the operino, or with status 404 (Not Found)
+     */
+    @DeleteMapping("/operinos/{id}/components/{componentId}")
+    @Timed
+    public ResponseEntity<Void> deleteOperinoComponent(@PathVariable Long id, @PathVariable Long componentId) throws URISyntaxException {
+        log.debug("REST request to delete component {} for Operino : {}", componentId, id);
+        Operino operino = operinoService.verifyOwnershipAndGet(id);
+        if (operino != null) {
+            OperinoComponent operinoComponent = operinoComponentService.findOneByOperino(componentId, operino);
+            if (operinoComponent.getId() == null) {
+                return ResponseEntity.badRequest()
+                        .headers(HeaderUtil.createFailureAlert(COMPONENT_ENTITY_NAME, "Not found", String.valueOf(operinoComponent.getId()))).build();
+            }
+            operino = operino.removeComponents(operinoComponent);
+            operinoComponentService.delete(componentId);
+            // also save operino
+            operinoService.save(operino);
+            log.debug("\n\n\n\n\n\n\n Getting components for Operino : {}", operinoService.findOne(id).getComponents());
+            return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(COMPONENT_ENTITY_NAME, componentId.toString())).build();
+        } else {
+            return ResponseEntity.badRequest()
+                    .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "Not found", String.valueOf(id))).build();
+        }
     }
 
     /**

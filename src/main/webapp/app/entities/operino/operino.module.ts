@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 
 import { Code4HealthplatformSharedModule } from '../../shared';
 import { Code4HealthplatformAdminModule } from '../../admin/admin.module';
+import { OperinoComponentListComponent } from '../operino-component/operino-list-component.component';
 
 import {
     OperinoService,
@@ -35,6 +36,7 @@ let ENTITY_STATES = [
         OperinoDeleteDialogComponent,
         OperinoPopupComponent,
         OperinoDeletePopupComponent,
+        OperinoComponentListComponent
     ],
     entryComponents: [
         OperinoComponent,

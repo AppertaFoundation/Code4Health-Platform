@@ -7,15 +7,22 @@ import { OperinoComponent } from './operino-component.model';
 export class OperinoComponentService {
 
     private resourceUrl = 'api/operino-components';
+    private operinoResourceUrl = 'api/operinos';
     private resourceSearchUrl = 'api/_search/operino-components';
 
     constructor(private http: Http) { }
 
     create(operinoComponent: OperinoComponent): Observable<OperinoComponent> {
         let copy: OperinoComponent = Object.assign({}, operinoComponent);
-        return this.http.post(this.resourceUrl, copy).map((res: Response) => {
-            return res.json();
-        });
+        if(operinoComponent.operino != null) {
+            return this.http.post(`${this.operinoResourceUrl}/${operinoComponent.operino.id}/components`, copy).map((res: Response) => {
+                return res.json();
+            });
+        } else {
+            return this.http.post(this.resourceUrl, copy).map((res: Response) => {
+                return res.json();
+            });
+        }
     }
 
     update(operinoComponent: OperinoComponent): Observable<OperinoComponent> {
@@ -33,12 +40,19 @@ export class OperinoComponentService {
 
     query(req?: any): Observable<Response> {
         let options = this.createRequestOption(req);
-        return this.http.get(this.resourceUrl, options)
-        ;
+        return this.http.get(this.resourceUrl, options);
     }
 
-    delete(id: number): Observable<Response> {
-        return this.http.delete(`${this.resourceUrl}/${id}`);
+    componentsForOperino(id: number, req?: any): Observable<Response> {
+        let options = this.createRequestOption(req);
+        return this.http.get(`${this.operinoResourceUrl}/${id}/components`, options);
+    }
+
+    delete(componentId: number, operinoId: number): Observable<Response> {
+        //return this.http.delete(`${this.resourceUrl}/${id}`);
+        console.log("componentId  = " , componentId );
+        console.log("operinoId  = " , operinoId );
+        return this.http.delete(`${this.operinoResourceUrl}/${operinoId}/components/${componentId}`);
     }
 
     search(req?: any): Observable<Response> {
@@ -46,7 +60,6 @@ export class OperinoComponentService {
         return this.http.get(this.resourceSearchUrl, options)
         ;
     }
-
 
     private createRequestOption(req?: any): BaseRequestOptions {
         let options: BaseRequestOptions = new BaseRequestOptions();

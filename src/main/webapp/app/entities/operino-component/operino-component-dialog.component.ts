@@ -28,7 +28,7 @@ export class OperinoComponentDialogComponent implements OnInit {
         private operinoService: OperinoService,
         private eventManager: EventManager
     ) {
-        this.jhiLanguageService.setLocations(['operinoComponent', 'hostingType', 'operinoComponentType']);
+        this.jhiLanguageService.setLocations(['operinoComponent', 'hostingType', 'operinoComponentType', 'operino', 'footer']);
     }
 
     ngOnInit() {
@@ -90,10 +90,10 @@ export class OperinoComponentPopupComponent implements OnInit, OnDestroy {
         this.routeSub = this.route.params.subscribe(params => {
             if ( params['id'] ) {
                 this.modalRef = this.operinoComponentPopupService
-                    .open(OperinoComponentDialogComponent, params['id']);
+                    .open(OperinoComponentDialogComponent, params['id'], false);
             } else {
                 this.modalRef = this.operinoComponentPopupService
-                    .open(OperinoComponentDialogComponent);
+                    .open(OperinoComponentDialogComponent, params['operinoId'], true);
             }
 
         });

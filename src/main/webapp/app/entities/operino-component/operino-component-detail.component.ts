@@ -18,7 +18,7 @@ export class OperinoComponentDetailComponent implements OnInit, OnDestroy {
         private operinoComponentService: OperinoComponentService,
         private route: ActivatedRoute
     ) {
-        this.jhiLanguageService.setLocations(['operinoComponent', 'hostingType', 'operinoComponentType']);
+        this.jhiLanguageService.setLocations(['operinoComponent', 'hostingType', 'operinoComponentType', 'footer', 'operino']);
     }
 
     ngOnInit() {

@@ -101,6 +101,7 @@ export class OperinoDetailComponent implements OnInit, OnDestroy {
     private onSuccess(data, headers) {
         this.operino.components = [];
         for (let i = 0; i < data.length; i++) {
+            data.operino = this.operino;
             this.operino.components.push(data[i]);
         }
     }

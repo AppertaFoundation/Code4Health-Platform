@@ -2,7 +2,9 @@ import { Injectable, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { OperinoComponent } from './operino-component.model';
+import { Operino } from '../operino/operino.model';
 import { OperinoComponentService } from './operino-component.service';
+
 @Injectable()
 export class OperinoComponentPopupService {
     private isOpen = false;
@@ -13,18 +15,21 @@ export class OperinoComponentPopupService {
 
     ) {}
 
-    open (component: Component, id?: number | any): NgbModalRef {
+    open (component: Component, id?: number | any, createNew?: boolean): NgbModalRef {
         if (this.isOpen) {
             return;
         }
         this.isOpen = true;
 
-        if (id) {
+        if (!createNew) {
             this.operinoComponentService.find(id).subscribe(operinoComponent => {
                 this.operinoComponentModalRef(component, operinoComponent);
             });
         } else {
-            return this.operinoComponentModalRef(component, new OperinoComponent());
+            let operinoComponent = new OperinoComponent();
+            operinoComponent.operino = new Operino();
+            operinoComponent.operino.id = id;
+            return this.operinoComponentModalRef(component, operinoComponent);
         }
     }
 

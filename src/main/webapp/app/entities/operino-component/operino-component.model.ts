@@ -23,6 +23,6 @@ export class OperinoComponent {
         public diskSpace?: number,
         public computeResourceLimit?: number,
         public type?: OperinoComponentType,
-        public operino?: Operino,
+        public operino?: Operino
     ) { }
 }

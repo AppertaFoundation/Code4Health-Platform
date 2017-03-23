@@ -32,7 +32,7 @@ export const operinoComponentRoute: Routes = [
 
 export const operinoComponentPopupRoute: Routes = [
   {
-    path: 'operino-component-new',
+    path: 'operino-component-new/:operinoId/create',
     component: OperinoComponentPopupComponent,
     data: {
         authorities: ['ROLE_USER'],
@@ -48,7 +48,18 @@ export const operinoComponentPopupRoute: Routes = [
         pageTitle: 'code4HealthplatformApp.operinoComponent.home.title'
     },
     outlet: 'popup'
-  },
+  }
+  //  ,
+  //{
+  //  path: 'operino-component/:operinoId/delete/:id',
+  //  component: OperinoComponentDeletePopupComponent,
+  //  data: {
+  //      authorities: ['ROLE_USER'],
+  //      pageTitle: 'code4HealthplatformApp.operinoComponent.home.title'
+  //  },
+  //  outlet: 'popup'
+  //}
+    ,
   {
     path: 'operino-component/:id/delete',
     component: OperinoComponentDeletePopupComponent,

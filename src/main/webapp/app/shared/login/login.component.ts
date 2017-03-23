@@ -33,7 +33,8 @@ export class JhiLoginModalComponent implements OnInit, AfterViewInit {
     }
 
     ngOnInit() {
-        this.languageService.addLocation('login');
+        //this.languageService.addLocation('login', 'footer');
+        this.jhiLanguageService.setLocations(['login', 'footer']);
     }
 
     ngAfterViewInit() {

@@ -12,8 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 
 /**
@@ -70,9 +68,9 @@ public class OperinoComponentServiceImpl implements OperinoComponentService{
      */
     @Override
     @Transactional(readOnly = true)
-    public List<OperinoComponent> findAllByOperino(Operino operino) {
+    public Page<OperinoComponent> findAllByOperino(Operino operino, Pageable pageable) {
         log.debug("Request to get all components for Operion {}",operino);
-        List<OperinoComponent> result = operinoComponentRepository.findByOperino(operino);
+        Page<OperinoComponent> result = operinoComponentRepository.findByOperino(operino, pageable);
         return result;
     }
 
@@ -87,6 +85,19 @@ public class OperinoComponentServiceImpl implements OperinoComponentService{
     public OperinoComponent findOne(Long id) {
         log.debug("Request to get OperinoComponent : {}", id);
         OperinoComponent operinoComponent = operinoComponentRepository.findOne(id);
+        return operinoComponent;
+    }
+
+    /**
+     *  Get one operinoComponent by id and operino.
+     *
+     *  @param id the id of the component
+     *  @param operino the operino to which the 'id' component belongs
+     */
+    @Override
+    public OperinoComponent findOneByOperino(Long id, Operino operino) {
+        log.debug("Request to delete OperinoComponent : {}", id);
+        OperinoComponent operinoComponent = operinoComponentRepository.findByIdAndOperino(id, operino);
         return operinoComponent;
     }
 

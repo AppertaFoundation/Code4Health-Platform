@@ -45,6 +45,7 @@ public class OperinoServiceImpl implements OperinoService{
     @Override
     public Operino save(Operino operino) {
         log.debug("Request to save Operino : {}", operino);
+        operino.setUser(userService.getUserWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin()).get());
         Operino result = operinoRepository.save(operino);
         operinoSearchRepository.save(result);
         return result;

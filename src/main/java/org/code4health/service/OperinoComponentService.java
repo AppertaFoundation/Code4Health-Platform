@@ -5,8 +5,6 @@ import org.code4health.domain.OperinoComponent;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-
 /**
  * Service Interface for managing OperinoComponent.
  */
@@ -34,7 +32,7 @@ public interface OperinoComponentService {
      *  @param operino the operino to retrieve components for
      *  @return the list of components
      */
-    List<OperinoComponent> findAllByOperino(Operino operino);
+    Page<OperinoComponent> findAllByOperino(Operino operino, Pageable pageable);
 
     /**
      *  Get the "id" operinoComponent.
@@ -43,6 +41,8 @@ public interface OperinoComponentService {
      *  @return the entity
      */
     OperinoComponent findOne(Long id);
+
+    OperinoComponent findOneByOperino(Long id, Operino operino);
 
     /**
      *  Delete the "id" operinoComponent.

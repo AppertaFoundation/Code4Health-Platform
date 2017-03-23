@@ -32,7 +32,7 @@ export class OperinoDialogComponent implements OnInit {
         private operinoComponentService: OperinoComponentService,
         private eventManager: EventManager
     ) {
-        this.jhiLanguageService.setLocations(['operino']);
+        this.jhiLanguageService.setLocations(['operino','footer']);
     }
 
     ngOnInit() {
