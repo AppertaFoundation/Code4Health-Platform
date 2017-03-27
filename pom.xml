@@ -108,6 +108,7 @@
         <log.folder.location>/var/log/${project.artifactId}</log.folder.location>
         <data.folder.location>${app.home}/data</data.folder.location>
         <config.folder.location>${app.home}/config</config.folder.location>
+        <index.folder.location>${app.home}/index</index.folder.location>
         <staging.dir>${project.build.directory}/staging</staging.dir>
         <executable.name>${project.artifactId}</executable.name>
         <executable.name.id>main</executable.name.id>
@@ -1175,6 +1176,9 @@
                                 </mapping>
                                 <mapping>
                                     <directory>${config.folder.location}</directory>
+                                </mapping>
+                                <mapping>
+                                    <directory>${index.folder.location}</directory>
                                 </mapping>
                                 <!-- Symbolic Links -->
                                 <mapping>
