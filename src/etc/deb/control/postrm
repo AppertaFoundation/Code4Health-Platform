@@ -1,0 +1,29 @@
+#!/bin/sh -e
+
+#For debugging uncomment these two lines
+set -x
+echo $*
+
+APP_NAME=${project.artifactId}
+
+case $1 in
+	purge)
+		echo "Preparing to purge $APP_NAME"
+		if getent passwd $APP_NAME >/dev/null; then
+  			userdel $APP_NAME
+  			groupdel $APP_NAME
+		fi
+		if test -d /var/opt/$APP_NAME; then
+			rm -r /var/opt/$APP_NAME
+		fi
+		if test -d /opt/$APP_NAME; then
+			rm -r /opt/$APP_NAME
+		fi
+		if test -f /etc/init.d/$APP_NAME; then
+			rm /etc/init.d/$APP_NAME
+		fi
+		if test -f /etc/supervisor/conf.d/$APP_NAME-supervisor.conf; then
+			rm /etc/supervisor/conf.d/$APP_NAME-supervisor.conf
+		fi
+	;;
+esac

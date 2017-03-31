@@ -1,0 +1,170 @@
+<div>
+    <h2>
+        <span jhiTranslate="operonCloudPlatformApp.operinoComponent.home.title">Operino Components</span>
+        <button class="btn btn-success float-right create-operino-component" [routerLink]="['/', { outlets: { popup: 'operino-component-new/'+ operino.id + '/create'} }]">
+            <span class="fa fa-plus"></span>
+            <span class="hidden-sm-down"  jhiTranslate="operonCloudPlatformApp.operinoComponent.home.createLabel">
+            Create new Operino Component
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <!--<div class="row">-->
+        <!--<div class="col-sm-12 no-padding-right">-->
+            <!--<form name="searchForm" class="form-inline">-->
+                <!--<div class="input-group w-100 mt-3">-->
+                    <!--<input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="{{ 'operonCloudPlatformApp.operinoComponent.home.search' | translate }}">-->
+                    <!--<button class="input-group-addon btn btn-info" (click)="search(currentSearch)">-->
+                        <!--<span class="fa fa-search"></span>-->
+                    <!--</button>-->
+                    <!--<button class="input-group-addon btn btn-danger" (click)="clear()" *ngIf="currentSearch">-->
+                        <!--<span class="fa fa-trash-o"></span>-->
+                    <!--</button>-->
+                <!--</div>-->
+            <!--</form>-->
+        <!--</div>-->
+    <!--</div>-->
+    <br/>
+    <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
+        <ngb-panel *ngFor="let operinoComponent of operinoComponents; let i = index; trackBy: trackByFn">
+            <template ngbPanelTitle>
+                <span *ngIf="operinoComponent.type === 'CDR'" class="fa fa-database"></span>
+                <span *ngIf="operinoComponent.type === 'DEMOGRAPHICS'" class="fa fa-users"></span>
+                <span *ngIf="operinoComponent.type === 'TERMINOLOGY'" class="fa fa-code-fork"></span>
+                &nbsp;
+                <span><b>{{operinoComponent.type}}</b></span>
+                <button class="btn btn-danger btn-sm float-right create-operino-component" [routerLink]="['/', { outlets: { popup: 'operino-component/'+ operinoComponent.id + '/delete'}  }]">
+                    <span class="fa fa-remove"></span>
+                    <span class="hidden-md-down" jhiTranslate="entity.action.delete">Delete</span>
+                </button>
+            </template>
+            <template ngbPanelContent>
+                <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+                    <div class="form-group">
+                        <label class="form-control-label" jhiTranslate="operonCloudPlatformApp.operinoComponent.hosting" for="field_hosting">Hosting</label>
+                        <select class="form-control" name="hosting" [(ngModel)]="operinoComponent.hosting" id="field_hosting"  required>
+                            <option value="N3" jhiTranslate="operonCloudPlatformApp.HostingType.N3">N3</option>
+                            <option value="NON_N3" jhiTranslate="operonCloudPlatformApp.HostingType.NON_N3">NON_N3</option>
+                        </select>
+                        <div [hidden]="!(editForm.controls.hosting?.dirty && editForm.controls.hosting?.invalid)">
+                            <small class="form-text text-danger"
+                                   [hidden]="!editForm.controls.hosting?.errors?.required" jhiTranslate="entity.validation.required">
+                                This field is required.
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" jhiTranslate="operonCloudPlatformApp.operinoComponent.availability" for="field_availability">Availability</label>
+                        <ui-switch size="small" class="form-control" name="availability" id="field_availability" [(ngModel)]="operinoComponent.availability"></ui-switch>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" jhiTranslate="operonCloudPlatformApp.operinoComponent.applyLimits" for="field_applyLimits">Apply Limits</label>
+                        <ui-switch size="small" class="form-control" name="applyLimits" id="field_applyLimits" [(ngModel)]="operinoComponent.applyLimits"></ui-switch>
+                    </div>
+                    <div  *ngIf="operinoComponent.applyLimits">
+                        <div class="form-group">
+                            <label class="form-control-label" jhiTranslate="operonCloudPlatformApp.operinoComponent.recordsNumber" for="field_recordsNumber">Records Number</label>
+                            <input type="number" class="form-control" name="recordsNumber" id="field_recordsNumber"
+                                   [(ngModel)]="operinoComponent.recordsNumber"
+                                    />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-control-label" jhiTranslate="operonCloudPlatformApp.operinoComponent.transactionsLimit" for="field_transactionsLimit">Transactions Limit</label>
+                            <input type="number" class="form-control" name="transactionsLimit" id="field_transactionsLimit"
+                                   [(ngModel)]="operinoComponent.transactionsLimit"
+                                    />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-control-label" jhiTranslate="operonCloudPlatformApp.operinoComponent.diskSpace" for="field_diskSpace">Disk Space</label>
+                            <input type="number" class="form-control" name="diskSpace" id="field_diskSpace"
+                                   [(ngModel)]="operinoComponent.diskSpace"
+                                    />
+                        </div>
+                        <div class="form-group">
+                            <label class="form-control-label" jhiTranslate="operonCloudPlatformApp.operinoComponent.computeResourceLimit" for="field_computeResourceLimit">Compute Resource Limit</label>
+                            <input type="number" class="form-control" name="computeResourceLimit" id="field_computeResourceLimit"
+                                   [(ngModel)]="operinoComponent.computeResourceLimit"
+                                    />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" jhiTranslate="operonCloudPlatformApp.operinoComponent.type" for="field_type">Type</label>
+                        <select class="form-control" name="type" [(ngModel)]="operinoComponent.type" id="field_type"  required>
+                            <option value="CDR" jhiTranslate="operonCloudPlatformApp.OperinoComponentType.CDR">CDR</option>
+                            <option value="DEMOGRAPHICS" jhiTranslate="operonCloudPlatformApp.OperinoComponentType.DEMOGRAPHICS">DEMOGRAPHICS</option>
+                            <option value="TERMINOLOGY" jhiTranslate="operonCloudPlatformApp.OperinoComponentType.TERMINOLOGY">TERMINOLOGY</option>
+                        </select>
+                        <div [hidden]="!(editForm.controls.type?.dirty && editForm.controls.type?.invalid)">
+                            <small class="form-text text-danger"
+                                   [hidden]="!editForm.controls.type?.errors?.required" jhiTranslate="entity.validation.required">
+                                This field is required.
+                            </small>
+                        </div>
+                    </div>
+                </form>
+            </template>
+        </ngb-panel>
+    </ngb-accordion>
+
+    <!--<div class="table-responsive" *ngIf="operinoComponents">-->
+        <!--<table class="table table-striped">-->
+            <!--<thead>-->
+            <!--<tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">-->
+            <!--<th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <span class="fa fa-sort"></span></th>-->
+            <!--<th jhiSortBy="hosting"><span jhiTranslate="operonCloudPlatformApp.operinoComponent.hosting">Hosting</span> <span class="fa fa-sort"></span></th>-->
+            <!--<th jhiSortBy="availability"><span jhiTranslate="operonCloudPlatformApp.operinoComponent.availability">Availability</span> <span class="fa fa-sort"></span></th>-->
+            <!--<th jhiSortBy="applyLimits"><span jhiTranslate="operonCloudPlatformApp.operinoComponent.applyLimits">Apply Limits</span> <span class="fa fa-sort"></span></th>-->
+            <!--<th jhiSortBy="recordsNumber"><span jhiTranslate="operonCloudPlatformApp.operinoComponent.recordsNumber">Records Number</span> <span class="fa fa-sort"></span></th>-->
+            <!--<th jhiSortBy="transactionsLimit"><span jhiTranslate="operonCloudPlatformApp.operinoComponent.transactionsLimit">Transactions Limit</span> <span class="fa fa-sort"></span></th>-->
+            <!--<th jhiSortBy="diskSpace"><span jhiTranslate="operonCloudPlatformApp.operinoComponent.diskSpace">Disk Space</span> <span class="fa fa-sort"></span></th>-->
+            <!--<th jhiSortBy="computeResourceLimit"><span jhiTranslate="operonCloudPlatformApp.operinoComponent.computeResourceLimit">Compute Resource Limit</span> <span class="fa fa-sort"></span></th>-->
+            <!--<th jhiSortBy="type"><span jhiTranslate="operonCloudPlatformApp.operinoComponent.type">Type</span> <span class="fa fa-sort"></span></th>-->
+            <!--<th jhiSortBy="operino.name"><span jhiTranslate="operonCloudPlatformApp.operinoComponent.operino">Operino</span> <span class="fa fa-sort"></span></th>-->
+            <!--<th></th>-->
+            <!--</tr>-->
+            <!--</thead>-->
+            <!--<tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">-->
+            <!--<tr *ngFor="let operinoComponent of operinoComponents ;trackBy: trackId">-->
+                <!--<td><a [routerLink]="['../operino-component', operinoComponent.id ]">{{operinoComponent.id}}</a></td>-->
+                <!--<td jhiTranslate="{{'operonCloudPlatformApp.HostingType.' + operinoComponent.hosting}}">{{operinoComponent.hosting}}</td>-->
+                <!--<td>{{operinoComponent.availability}}</td>-->
+                <!--<td>{{operinoComponent.applyLimits}}</td>-->
+                <!--<td>{{operinoComponent.recordsNumber}}</td>-->
+                <!--<td>{{operinoComponent.transactionsLimit}}</td>-->
+                <!--<td>{{operinoComponent.diskSpace}}</td>-->
+                <!--<td>{{operinoComponent.computeResourceLimit}}</td>-->
+                <!--<td jhiTranslate="{{'operonCloudPlatformApp.OperinoComponentType.' + operinoComponent.type}}">{{operinoComponent.type}}</td>-->
+                <!--<td>-->
+                    <!--<div *ngIf="operinoComponent.operino">-->
+                        <!--<a [routerLink]="['../operino', operinoComponent.operino?.id ]" >{{operinoComponent.operino?.name}}</a>-->
+                    <!--</div>-->
+                <!--</td>-->
+                <!--<td class="text-right">-->
+                    <!--<div class="btn-group flex-btn-group-container">-->
+                        <!--<button type="submit"-->
+                                <!--[routerLink]="['../operino-component', operinoComponent.id ]"-->
+                                <!--class="btn btn-info btn-sm">-->
+                            <!--<span class="fa fa-eye"></span>-->
+                            <!--<span class="hidden-md-down" jhiTranslate="entity.action.view">View</span>-->
+                        <!--</button>-->
+                        <!--<button type="submit"-->
+                                <!--[routerLink]="['/', { outlets: { popup: 'operino-component/'+ operinoComponent.id + '/edit'} }]"-->
+                                <!--replaceUrl="true"-->
+                                <!--class="btn btn-primary btn-sm">-->
+                            <!--<span class="fa fa-pencil"></span>-->
+                            <!--<span class="hidden-md-down" jhiTranslate="entity.action.edit">Edit</span>-->
+                        <!--</button>-->
+                        <!--<button type="submit"-->
+                                <!--[routerLink]="['/', { outlets: { popup: 'operino-component/'+ operinoComponent.id + '/delete'} }]"-->
+                                <!--replaceUrl="true"-->
+                                <!--class="btn btn-danger btn-sm">-->
+                            <!--<span class="fa fa-remove"></span>-->
+                            <!--<span class="hidden-md-down" jhiTranslate="entity.action.delete">Delete</span>-->
+                        <!--</button>-->
+                    <!--</div>-->
+                <!--</td>-->
+            <!--</tr>-->
+            <!--</tbody>-->
+        <!--</table>-->
+    <!--</div>-->
+</div>

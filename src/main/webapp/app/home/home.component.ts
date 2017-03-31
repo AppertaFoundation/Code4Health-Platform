@@ -22,7 +22,7 @@ export class HomeComponent implements OnInit {
         private loginModalService: LoginModalService,
         private eventManager: EventManager
     ) {
-        this.jhiLanguageService.setLocations(['home']);
+        this.jhiLanguageService.setLocations(['home', 'footer']);
     }
 
     ngOnInit() {

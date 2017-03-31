@@ -5,7 +5,7 @@ import { TranslateService } from 'ng2-translate';
 import { AlertService } from 'ng-jhipster';
 
 import {
-    Code4HealthplatformSharedLibsModule,
+    OperonCloudPlatformSharedLibsModule,
     JhiLanguageHelper,
     FindLanguageFromKeyPipe,
     JhiAlertComponent,
@@ -21,7 +21,7 @@ export function alertServiceProvider(sanitizer: Sanitizer, translateService: Tra
 
 @NgModule({
     imports: [
-        Code4HealthplatformSharedLibsModule
+        OperonCloudPlatformSharedLibsModule
     ],
     declarations: [
         FindLanguageFromKeyPipe,
@@ -38,10 +38,10 @@ export function alertServiceProvider(sanitizer: Sanitizer, translateService: Tra
         Title
     ],
     exports: [
-        Code4HealthplatformSharedLibsModule,
+        OperonCloudPlatformSharedLibsModule,
         FindLanguageFromKeyPipe,
         JhiAlertComponent,
         JhiAlertErrorComponent
     ]
 })
-export class Code4HealthplatformSharedCommonModule {}
+export class OperonCloudPlatformSharedCommonModule {}

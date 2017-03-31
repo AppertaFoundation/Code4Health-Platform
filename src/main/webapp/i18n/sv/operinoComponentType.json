@@ -1,0 +1,10 @@
+{
+    "operonCloudPlatformApp": {
+        "OperinoComponentType" : {
+            "null": "",
+            "CDR": "CDR",
+            "DEMOGRAPHICS": "DEMOGRAPHICS",
+            "TERMINOLOGY": "TERMINOLOGY"
+        }
+    }
+}

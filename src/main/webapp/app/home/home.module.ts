@@ -1,14 +1,14 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { Code4HealthplatformSharedModule } from '../shared';
+import { OperonCloudPlatformSharedModule } from '../shared';
 
 import { HOME_ROUTE, HomeComponent } from './';
 
 
 @NgModule({
     imports: [
-        Code4HealthplatformSharedModule,
+        OperonCloudPlatformSharedModule,
         RouterModule.forRoot([ HOME_ROUTE ], { useHash: true })
     ],
     declarations: [
@@ -20,4 +20,4 @@ import { HOME_ROUTE, HomeComponent } from './';
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class Code4HealthplatformHomeModule {}
+export class OperonCloudPlatformHomeModule {}

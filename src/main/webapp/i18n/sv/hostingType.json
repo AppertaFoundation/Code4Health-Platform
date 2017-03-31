@@ -1,0 +1,9 @@
+{
+    "operonCloudPlatformApp": {
+        "HostingType" : {
+            "null": "",
+            "N3": "N3",
+            "NON_N3": "NON_N3"
+        }
+    }
+}

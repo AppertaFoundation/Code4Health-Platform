@@ -3,8 +3,8 @@ import { DatePipe } from '@angular/common';
 
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 import {
-    Code4HealthplatformSharedLibsModule,
-    Code4HealthplatformSharedCommonModule,
+    OperonCloudPlatformSharedLibsModule,
+    OperonCloudPlatformSharedCommonModule,
     CSRFService,
     AuthService,
     AuthServerProvider,
@@ -22,8 +22,8 @@ import {
 
 @NgModule({
     imports: [
-        Code4HealthplatformSharedLibsModule,
-        Code4HealthplatformSharedCommonModule
+        OperonCloudPlatformSharedLibsModule,
+        OperonCloudPlatformSharedCommonModule
     ],
     declarations: [
         JhiSocialComponent,
@@ -46,7 +46,7 @@ import {
     ],
     entryComponents: [JhiLoginModalComponent],
     exports: [
-        Code4HealthplatformSharedCommonModule,
+        OperonCloudPlatformSharedCommonModule,
         JhiSocialComponent,
         JhiLoginModalComponent,
         HasAnyAuthorityDirective,
@@ -55,4 +55,4 @@ import {
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 
 })
-export class Code4HealthplatformSharedModule {}
+export class OperonCloudPlatformSharedModule {}

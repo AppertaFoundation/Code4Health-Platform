@@ -16,12 +16,12 @@
 
 spring:
     application:
-        name: code4healthplatform
+        name: operoncloudplatform
     jackson:
         serialization.write_dates_as_timestamps: false
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:h2:mem:code4healthplatform;DB_CLOSE_DELAY=-1
+        url: jdbc:h2:mem:operoncloudplatform;DB_CLOSE_DELAY=-1
         name:
         username:
         password:

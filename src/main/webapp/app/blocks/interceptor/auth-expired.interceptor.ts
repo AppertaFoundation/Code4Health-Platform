@@ -3,6 +3,7 @@ import { RequestOptionsArgs, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Injector } from '@angular/core';
 import { AuthService } from '../../shared/auth/auth.service';
+//import { Auth } from '../../shared/auth/auth0.service';
 import { Principal } from '../../shared/auth/principal.service';
 import { AuthServerProvider } from '../../shared/auth/auth-jwt.service';
 
@@ -25,6 +26,7 @@ export class AuthExpiredInterceptor extends HttpInterceptor {
 
                 if (principal.isAuthenticated()) {
                     let auth: AuthService = self.injector.get(AuthService);
+                    //let auth: Auth = self.injector.get(Auth);
                     auth.authorize(true);
                 }
             }

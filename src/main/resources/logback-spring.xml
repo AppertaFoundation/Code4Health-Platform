@@ -22,7 +22,7 @@
     </appender>
 -->
 
-    <logger name="org.code4health" level="#logback.loglevel#"/>
+    <logger name="cloud.platform" level="#logback.loglevel#"/>
 
     <logger name="io.github.jhipster" level="DEBUG"/>
 

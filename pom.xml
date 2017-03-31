@@ -9,11 +9,11 @@
         <relativePath />
     </parent>
 
-    <groupId>org.code4health</groupId>
-    <artifactId>code-4-healthplatform</artifactId>
+    <groupId>cloud.operon</groupId>
+    <artifactId>platform</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
-    <name>Code 4 Healthplatform</name>
+    <name>Operon Cloud Platform</name>
 
     <prerequisites>
         <maven>${maven.version}</maven>
@@ -101,6 +101,22 @@
         <undertow.version>1.4.10.Final</undertow.version>
         <validation-api.version>1.1.0.Final</validation-api.version>
         <yarn.version>v0.20.3</yarn.version>
+
+        <!-- RPM settings -->
+        <execFinalName>${project.build.finalName}.war</execFinalName>
+        <app.home>/opt/${project.artifactId}</app.home>
+        <log.folder.location>/var/log/${project.artifactId}</log.folder.location>
+        <data.folder.location>${app.home}/data</data.folder.location>
+        <config.folder.location>${app.home}/config</config.folder.location>
+        <index.folder.location>${app.home}/index</index.folder.location>
+        <staging.dir>${project.build.directory}/staging</staging.dir>
+        <executable.name>${project.artifactId}</executable.name>
+        <executable.name.id>main</executable.name.id>
+        <!-- Disable license plugin downloads -->
+        <skip.third.party.license>true</skip.third.party.license>
+        <skip.license.download>true</skip.license.download>
+        <rpm.plugin.version>2.1.5</rpm.plugin.version>
+        <assembly.plugin.version>2.4</assembly.plugin.version>
     </properties>
 
 
@@ -441,6 +457,7 @@
         <!-- jhipster-needle-maven-add-dependency -->
     </dependencies>
     <build>
+        <finalName>${executable.name}</finalName>
         <defaultGoal>spring-boot:run</defaultGoal>
         <testResources>
             <testResource>
@@ -574,6 +591,25 @@
                             </resources>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>copy-etc-resources</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <encoding>UTF-8</encoding>
+                            <!-- Spring boot overrides the default delimiters, so we have to set this explicitly!! -->
+                            <useDefaultDelimiters>true</useDefaultDelimiters>
+                            <outputDirectory>${project.build.directory}/etc</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/src/etc</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
@@ -650,9 +686,9 @@
                     <driver></driver>
                     <url></url>
                     <defaultSchemaName></defaultSchemaName>
-                    <username>code4healthplatform</username>
+                    <username>operoncloudplatform</username>
                     <password></password>
-                    <referenceUrl>hibernate:spring:org.code4health.domain?dialect=&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
+                    <referenceUrl>hibernate:spring:cloud.operon.platform.domain?dialect=&amp;hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy</referenceUrl>
                     <verbose>true</verbose>
                     <logging>debug</logging>
                 </configuration>
@@ -696,7 +732,7 @@
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>${docker-maven-plugin.version}</version>
                 <configuration>
-                    <imageName>code4healthplatform</imageName>
+                    <imageName>operoncloudplatform</imageName>
                     <dockerDirectory>src/main/docker</dockerDirectory>
                     <resources>
                         <resource>
@@ -1034,6 +1070,143 @@
                     <artifactId>metrics-graphite</artifactId>
                 </dependency>
             </dependencies>
+        </profile>
+        <!-- Used for packaging as an rpm -->
+        <profile>
+            <id>rpm</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <package.type>war</package.type>
+                <spring.profile>prod</spring.profile>
+                <!-- Enable license plugin downloads -->
+                <skip.third.party.license>false</skip.third.party.license>
+                <skip.license.download>false</skip.license.download>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>rpm-maven-plugin</artifactId>
+                        <version>${rpm.plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>generate-rpm</id>
+                                <goals>
+                                    <goal>rpm</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <license>Operon Health (C) 2012 - 2017</license>
+                            <distribution>Operon Health Ltd</distribution>
+                            <group>Development</group>
+                            <description>${project.description}</description>
+                            <version>${project.version}</version>
+                            <release>${timestamp}</release>
+                            <!--<icon>src/main/resources/icon.gif</icon>-->
+                            <packager>Operon Health</packager>
+                            <!--<prefix>/usr/local</prefix>-->
+                            <!--<changelogFile>CHANGELOG.md</changelogFile>-->
+                            <defineStatements>
+                                <defineStatement>_unpackaged_files_terminate_build 0</defineStatement>
+                            </defineStatements>
+                            <provides>
+                                <provide>${project.artifactId}</provide>
+                            </provides>
+                            <defaultUsername>${project.artifactId}</defaultUsername>
+                            <defaultGroupname>${project.artifactId}</defaultGroupname>
+                            <defaultFilemode>750</defaultFilemode>
+                            <mappings>
+                                <mapping>
+                                    <directory>${app.home}</directory>
+                                    <sources>
+                                        <source>
+                                            <location>${project.build.directory}/${executable.name}.${package.type}</location>
+                                        </source>
+                                    </sources>
+                                </mapping>
+                                <mapping>
+                                    <directory>/etc/supervisor/conf.d</directory>
+                                    <sources>
+                                        <source>
+                                            <location>${project.build.directory}/etc/platform-supervisor.conf</location>
+                                        </source>
+                                    </sources>
+                                </mapping>
+                                <mapping>
+                                    <directory>${app.home}</directory>
+                                    <sources>
+                                        <source>
+                                            <location>${project.build.directory}/etc/run.sh</location>
+                                        </source>
+                                        <source>
+                                            <location>${project.basedir}/LICENSE.txt</location>
+                                        </source>
+                                    </sources>
+                                </mapping>
+                                <mapping>
+                                    <directory>${config.folder.location}</directory>
+                                    <configuration>true</configuration>
+                                    <filemode>755</filemode>
+                                    <sources>
+                                        <source>
+                                            <location>${project.build.outputDirectory}/config</location>
+                                        </source>
+                                        <source>
+                                            <location>${project.build.outputDirectory}/logback-spring.xml</location>
+                                        </source>
+                                    </sources>
+                                </mapping>
+                                <mapping>
+                                    <directory>${log.folder.location}</directory>
+                                </mapping>
+                                <mapping>
+                                    <directory>${data.folder.location}</directory>
+                                </mapping>
+                                <mapping>
+                                    <directory>${config.folder.location}</directory>
+                                </mapping>
+                                <mapping>
+                                    <directory>${index.folder.location}</directory>
+                                </mapping>
+                                <!-- Symbolic Links -->
+                                <mapping>
+                                    <directory>${app.home}/${project.artifactId}</directory>
+                                    <sources>
+                                        <softlinkSource>
+                                            <location>/usr/local/bin/${project.artifactId}</location>
+                                        </softlinkSource>
+                                    </sources>
+                                </mapping>
+                            </mappings>
+                            <preinstallScriptlet>
+                                <scriptFile>${project.build.directory}/etc/deb/control/preinst</scriptFile>
+                                <fileEncoding>utf-8</fileEncoding>
+                            </preinstallScriptlet>
+                            <postinstallScriptlet>
+                                <scriptFile>${project.build.directory}/etc/deb/control/postinst</scriptFile>
+                                <fileEncoding>utf-8</fileEncoding>
+                            </postinstallScriptlet>
+                            <preremoveScriptlet>
+                                <scriptFile>${project.build.directory}/etc/deb/control/prerm</scriptFile>
+                                <fileEncoding>utf-8</fileEncoding>
+                            </preremoveScriptlet>
+                            <postremoveScriptlet>
+                                <scriptFile>${project.build.directory}/etc/deb/control/postrm</scriptFile>
+                                <fileEncoding>utf-8</fileEncoding>
+                            </postremoveScriptlet>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
         <profile>
             <!--

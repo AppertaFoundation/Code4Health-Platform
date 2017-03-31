@@ -14,6 +14,7 @@ module.exports = {
             '@ng-bootstrap/ng-bootstrap',
             'angular2-cookie',
             'angular2-infinite-scroll',
+            'angular2-ui-switch',
             'jquery',
             'ng-jhipster',
             'ng2-webstorage',

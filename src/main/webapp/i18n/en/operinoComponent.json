@@ -1,0 +1,30 @@
+{
+    "operonCloudPlatformApp": {
+        "operinoComponent" : {
+            "home": {
+                "title": "Operino Components",
+                "createLabel": "Create a new Operino Component",
+                "createOrEditLabel": "Create or edit a Operino Component",
+                "search": "Search for Operino Component"
+            },
+            "created": "A new Operino Component is created with identifier {{ param }}",
+            "updated": "A Operino Component is updated with identifier {{ param }}",
+            "deleted": "A Operino Component is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Operino Component {{ id }}?"
+            },
+            "detail": {
+                "title": "Operino Component"
+            },
+            "hosting": "Hosting",
+            "availability": "Active",
+            "applyLimits": "Apply Limits",
+            "recordsNumber": "Records Number",
+            "transactionsLimit": "Transactions Limit",
+            "diskSpace": "Disk Space",
+            "computeResourceLimit": "Compute Resource Limit",
+            "type": "Type",
+            "operino": "Operino"
+        }
+    }
+}

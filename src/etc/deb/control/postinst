@@ -1,0 +1,26 @@
+#!/bin/sh -e
+
+#For debugging uncomment these two lines
+set -x
+echo $*
+
+APP_NAME=${project.artifactId}
+
+mkdir -p ${data.folder.location} || true
+chown -Rf ${project.artifactId}:${project.artifactId} ${data.folder.location}
+
+mkdir -p ${log.folder.location} || true
+chown -Rf ${project.artifactId}:${project.artifactId} ${log.folder.location}
+
+mkdir -p ${index.folder.location} || true
+chown -Rf ${project.artifactId}:${project.artifactId} ${index.folder.location}
+
+# Database command safe to run both on install and upgrade
+echo "Creating ${project.artifactId} mysql database and user with permissions to access all ${project.artifactId}_db schemas"
+mysql -u root -e "CREATE DATABASE IF NOT EXISTS ${project.artifactId}_db DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci; GRANT ALL  ON ${project.artifactId}_db.* TO '${project.artifactId}'@'localhost' IDENTIFIED BY '${project.artifactId}'; FLUSH PRIVILEGES;"
+
+supervisorctl update $APP_NAME || true
+supervisorctl start $APP_NAME || true
+
+# mv /tmp/${project.artifactId} /etc/init.d/${project.artifactId} || true
+# service ${project.artifactId} restart || true

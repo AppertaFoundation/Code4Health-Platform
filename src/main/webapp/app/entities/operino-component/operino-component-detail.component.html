@@ -1,0 +1,59 @@
+
+<div *ngIf="operinoComponent">
+    <h2><span jhiTranslate="operonCloudPlatformApp.operinoComponent.detail.title">Operino Component</span> {{operinoComponent.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="operonCloudPlatformApp.operinoComponent.hosting">Hosting</span></dt>
+        <dd>
+            <span jhiTranslate="{{'operonCloudPlatformApp.HostingType.' + operinoComponent.hosting}}">{{operinoComponent.hosting}}</span>
+        </dd>
+        <dt><span jhiTranslate="operonCloudPlatformApp.operinoComponent.availability">Availability</span></dt>
+        <dd>
+            <span>{{operinoComponent.availability}}</span>
+        </dd>
+        <dt><span jhiTranslate="operonCloudPlatformApp.operinoComponent.applyLimits">Apply Limits</span></dt>
+        <dd>
+            <span>{{operinoComponent.applyLimits}}</span>
+        </dd>
+        <dt><span jhiTranslate="operonCloudPlatformApp.operinoComponent.recordsNumber">Records Number</span></dt>
+        <dd>
+            <span>{{operinoComponent.recordsNumber}}</span>
+        </dd>
+        <dt><span jhiTranslate="operonCloudPlatformApp.operinoComponent.transactionsLimit">Transactions Limit</span></dt>
+        <dd>
+            <span>{{operinoComponent.transactionsLimit}}</span>
+        </dd>
+        <dt><span jhiTranslate="operonCloudPlatformApp.operinoComponent.diskSpace">Disk Space</span></dt>
+        <dd>
+            <span>{{operinoComponent.diskSpace}}</span>
+        </dd>
+        <dt><span jhiTranslate="operonCloudPlatformApp.operinoComponent.computeResourceLimit">Compute Resource Limit</span></dt>
+        <dd>
+            <span>{{operinoComponent.computeResourceLimit}}</span>
+        </dd>
+        <dt><span jhiTranslate="operonCloudPlatformApp.operinoComponent.type">Type</span></dt>
+        <dd>
+            <span jhiTranslate="{{'operonCloudPlatformApp.OperinoComponentType.' + operinoComponent.type}}">{{operinoComponent.type}}</span>
+        </dd>
+        <dt><span jhiTranslate="operonCloudPlatformApp.operinoComponent.operino">Operino</span></dt>
+        <dd>
+            <div *ngIf="operinoComponent.operino">
+                <a [routerLink]="['/operino', operinoComponent.operino?.id]">{{operinoComponent.operino?.name}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'operino-component/'+ operinoComponent.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+    </button>
+</div>

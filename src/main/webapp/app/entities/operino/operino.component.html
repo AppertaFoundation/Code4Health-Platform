@@ -1,0 +1,110 @@
+<div>
+    <h2>
+        <span jhiTranslate="operonCloudPlatformApp.operino.home.title">Operinos</span>
+        <button *ngIf="operinos.length > 0" class="btn btn-success float-right create-operino" [routerLink]="['/', { outlets: { popup: ['operino-new'] } }]">
+            <span class="fa fa-plus"></span>
+            <span class="hidden-sm-down"  jhiTranslate="operonCloudPlatformApp.operino.home.createLabel">
+            Create new Operino
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <div class="row" *ngIf="operinos.length > 0">
+        <div class="col-sm-12 no-padding-right">
+            <form name="searchForm" class="form-inline">
+                <div class="input-group w-100 mt-3">
+                    <input type="text" class="form-control" [(ngModel)]="currentSearch" id="currentSearch" name="currentSearch" placeholder="{{ 'operonCloudPlatformApp.operino.home.search' | translate }}">
+                    <button class="input-group-addon btn btn-info" (click)="search(currentSearch)">
+                        <span class="fa fa-search"></span>
+                    </button>
+                    <button class="input-group-addon btn btn-danger" (click)="clear()" *ngIf="currentSearch">
+                        <span class="fa fa-trash-o"></span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br/>
+    <div *ngIf="operinos.length == 0">
+        <div class="row">
+            <div class="col-sm-8 text-center">
+                <div class="alert alert-warning ">
+                    <span jhiTranslate="operonCloudPlatformApp.operino.home.missing">Oh no! You do not have operinos! Would you like to create one?</span>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <button class="btn btn-warning create-operino" [routerLink]="['/', { outlets: { popup: ['operino-new'] } }]">
+                    <span class="fa fa-flask"></span>
+                    <span class="hidden-sm-down"  jhiTranslate="operonCloudPlatformApp.operino.home.createSandbox">
+                    Create Sandbox Operino
+                    </span>
+                </button>
+                <button class="btn btn-success create-operino" [routerLink]="['/', { outlets: { popup: ['operino-new'] } }]">
+                    <span class="fa fa-plus"></span>
+                    <span class="hidden-sm-down"  jhiTranslate="operonCloudPlatformApp.operino.home.createLabel">
+                    Create new Operino
+                    </span>
+                </button>
+            </div>
+        </div>
+        <hr>
+        <div class="alert alert-info ">
+            <h4 jhiTranslate="operonCloudPlatformApp.operino.sandbox.what.q">What is a Sandox Operino?</h4>
+            <p jhiTranslate="operonCloudPlatformApp.operino.sandbox.what.a"></p>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="operonCloudPlatformApp.operino.sandbox.cdr.q">Hosting</span></dt>
+                <dd>
+                    <span jhiTranslate="operonCloudPlatformApp.operino.sandbox.cdr.a"></span>
+                </dd>
+                <dt><span jhiTranslate="operonCloudPlatformApp.operino.sandbox.demographics.q">Availability</span></dt>
+                <dd>
+                    <span jhiTranslate="operonCloudPlatformApp.operino.sandbox.demographics.a">hmmm</span>
+                </dd>
+                <dt><span jhiTranslate="operonCloudPlatformApp.operino.sandbox.terminology.q">Apply Limits</span></dt>
+                <dd>
+                    <span jhiTranslate="operonCloudPlatformApp.operino.sandbox.terminology.a">hmmmm</span>
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <div class="table-responsive" *ngIf="operinos.length > 0">
+        <table class="table table-striped">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
+            <th jhiSortBy="name"><span jhiTranslate="operonCloudPlatformApp.operino.name">Name</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="active"><span jhiTranslate="operonCloudPlatformApp.operino.active">Active</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="user.login"><span jhiTranslate="operonCloudPlatformApp.operino.user">User</span> <span class="fa fa-sort"></span></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
+            <tr *ngFor="let operino of operinos ;trackBy: trackId">
+                <td><a [routerLink]="['../operino', operino.id ]">{{operino.name}}</a></td>
+                <td>
+                    <span *ngIf="operino.active" ><i class="fa fa-circle" style="color:green"></i> Active</span>
+                    <span *ngIf="! operino.active"><i class="fa fa-circle" style="color:red"></i> Inactive</span>
+                <td>
+                    {{operino.user?.login}}
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['../operino', operino.id ]"
+                                class="btn btn-info btn-sm">
+                            <span class="fa fa-eye"></span>
+                            <span class="hidden-md-down" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'operino/'+ operino.id + '/delete'} }]"
+                                replaceUrl="true"
+                                class="btn btn-danger btn-sm">
+                            <span class="fa fa-remove"></span>
+                            <span class="hidden-md-down" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
