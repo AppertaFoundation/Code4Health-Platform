@@ -1,19 +1,19 @@
 version: '2'
 services:
-    code4healthplatform-app:
-        image: code4healthplatform
+    operoncloudplatform-app:
+        image: operoncloudplatform
         environment:
             - SPRING_PROFILES_ACTIVE=prod,swagger
-            - SPRING_DATASOURCE_URL=jdbc:mariadb://code4healthplatform-mariadb:3306/code4healthplatform
+            - SPRING_DATASOURCE_URL=jdbc:mariadb://operoncloudplatform-mariadb:3306/operoncloudplatform
             - JHIPSTER_SLEEP=10 # gives time for the database to boot before the application
-            - SPRING_DATA_ELASTICSEARCH_CLUSTER_NODES=code4healthplatform-elasticsearch:9300
+            - SPRING_DATA_ELASTICSEARCH_CLUSTER_NODES=operoncloudplatform-elasticsearch:9300
         ports:
             - 8080:8080
-    code4healthplatform-mariadb:
+    operoncloudplatform-mariadb:
         extends:
             file: mariadb.yml
-            service: code4healthplatform-mariadb
-    code4healthplatform-elasticsearch:
+            service: operoncloudplatform-mariadb
+    operoncloudplatform-elasticsearch:
         extends:
             file: elasticsearch.yml
-            service: code4healthplatform-elasticsearch
+            service: operoncloudplatform-elasticsearch

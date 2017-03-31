@@ -1,8 +1,8 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { Code4HealthplatformSharedModule } from '../../shared';
-import { Code4HealthplatformAdminModule } from '../../admin/admin.module';
+import { OperonCloudPlatformSharedModule } from '../../shared';
+import { OperonCloudPlatformAdminModule } from '../../admin/admin.module';
 import { OperinoComponentListComponent } from '../operino-component/operino-list-component.component';
 
 import {
@@ -25,8 +25,8 @@ let ENTITY_STATES = [
 
 @NgModule({
     imports: [
-        Code4HealthplatformSharedModule,
-        Code4HealthplatformAdminModule,
+        OperonCloudPlatformSharedModule,
+        OperonCloudPlatformAdminModule,
         RouterModule.forRoot(ENTITY_STATES, { useHash: true })
     ],
     declarations: [
@@ -51,4 +51,4 @@ let ENTITY_STATES = [
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class Code4HealthplatformOperinoModule {}
+export class OperonCloudPlatformOperinoModule {}

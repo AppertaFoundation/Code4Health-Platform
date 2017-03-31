@@ -28,4 +28,4 @@ import { UiSwitchModule } from 'angular2-ui-switch';
         UiSwitchModule
     ]
 })
-export class Code4HealthplatformSharedLibsModule {}
+export class OperonCloudPlatformSharedLibsModule {}

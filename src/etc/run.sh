@@ -1,33 +1,5 @@
 #!/bin/sh
 
-###
-# #%L
-# ${project.artifactId} Server
-# %%
-# Copyright (C) 2012 - 2015 Noesis Informatica
-# %%
-# All right reserved.
-#
-# Licensed under the Noesis Informatica License;
-# you may not use this file except in compliance with the License.
-#
-# Access to the source code does not represent waiver of the terms of the
-# license. This code is NOT open source. You are not permitted to copy this code!
-#
-# The License Agreement does not in any way grant you any rights over the
-# Intellectual Property of the SOFTWARE PRODUCT. YOU acknowledge that the
-# ownership of the Intellectual Property at all times rest with Noesis Informatica Ltd.
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED,
-# INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF
-# MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR PURPOSE.
-#
-# Contact: info@noesisinformatica.com
-# Website: http://noesisinformatica.com
-# #L%
-###
 SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
   DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"

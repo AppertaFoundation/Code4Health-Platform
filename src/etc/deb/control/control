@@ -3,7 +3,7 @@ Version: [${project.version}]]
 Priority: optional
 Architecture: all
 Depends: nginx, default-jre | java7-runtime
-Maintainer: Noesis Informatica <info@noesisinformatica.com>
+Maintainer: Jay Kola <jay@operon.systems>
 Description: [${project.name}]
 Distribution: stable
 Section: web

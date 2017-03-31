@@ -1,6 +1,6 @@
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { ProdConfig } from './blocks/config/prod.config';
-import { Code4HealthplatformAppModule } from './app.module';
+import { OperonCloudPlatformAppModule } from './app.module';
 
 ProdConfig();
 
@@ -8,4 +8,4 @@ if (module['hot']) {
     module['hot'].accept();
 }
 
-platformBrowserDynamic().bootstrapModule(Code4HealthplatformAppModule);
+platformBrowserDynamic().bootstrapModule(OperonCloudPlatformAppModule);

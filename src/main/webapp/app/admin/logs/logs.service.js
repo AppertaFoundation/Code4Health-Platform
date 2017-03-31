@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('code4HealthplatformApp')
+        .module('operoncloudplatformApp')
         .factory('LogsService', LogsService);
 
     LogsService.$inject = ['$resource'];

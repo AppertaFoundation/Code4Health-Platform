@@ -24,7 +24,7 @@ describe('Operino e2e test', () => {
     it('should load Operinos', () => {
         entityMenu.click();
         element.all(by.css('[routerLink="operino"]')).first().click().then(() => {
-            const expectVal = /code4HealthplatformApp.operino.home.title/;
+            const expectVal = /operonCloudPlatformApp.operino.home.title/;
             element.all(by.css('h2 span')).first().getAttribute('jhiTranslate').then((value) => {
                 expect(value).toMatch(expectVal);
             });
@@ -33,7 +33,7 @@ describe('Operino e2e test', () => {
 
     it('should load create Operino dialog', function () {
         element(by.css('button.create-operino')).click().then(() => {
-            const expectVal = /code4HealthplatformApp.operino.home.createOrEditLabel/;
+            const expectVal = /operonCloudPlatformApp.operino.home.createOrEditLabel/;
             element.all(by.css('h4.modal-title')).first().getAttribute('jhiTranslate').then((value) => {
                 expect(value).toMatch(expectVal);
             });

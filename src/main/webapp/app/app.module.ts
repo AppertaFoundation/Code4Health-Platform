@@ -5,11 +5,11 @@ import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { Ng2Webstorage } from 'ng2-webstorage';
 
-import { Code4HealthplatformSharedModule, UserRouteAccessService } from './shared';
-import { Code4HealthplatformHomeModule } from './home/home.module';
-import { Code4HealthplatformAdminModule } from './admin/admin.module';
-import { Code4HealthplatformAccountModule } from './account/account.module';
-import { Code4HealthplatformEntityModule } from './entities/entity.module';
+import { OperonCloudPlatformSharedModule, UserRouteAccessService } from './shared';
+import { OperonCloudPlatformHomeModule } from './home/home.module';
+import { OperonCloudPlatformAdminModule } from './admin/admin.module';
+import { OperonCloudPlatformAccountModule } from './account/account.module';
+import { OperonCloudPlatformEntityModule } from './entities/entity.module';
 
 import { LayoutRoutingModule } from './layouts';
 import { customHttpProvider } from './blocks/interceptor/http.provider';
@@ -31,11 +31,11 @@ import {
         BrowserModule,
         LayoutRoutingModule,
         Ng2Webstorage.forRoot({ prefix: 'jhi', separator: '-'}),
-        Code4HealthplatformSharedModule,
-        Code4HealthplatformHomeModule,
-        Code4HealthplatformAdminModule,
-        Code4HealthplatformAccountModule,
-        Code4HealthplatformEntityModule
+        OperonCloudPlatformSharedModule,
+        OperonCloudPlatformHomeModule,
+        OperonCloudPlatformAdminModule,
+        OperonCloudPlatformAccountModule,
+        OperonCloudPlatformEntityModule
     ],
     declarations: [
         JhiMainComponent,
@@ -55,4 +55,4 @@ import {
     ],
     bootstrap: [ JhiMainComponent ]
 })
-export class Code4HealthplatformAppModule {}
+export class OperonCloudPlatformAppModule {}

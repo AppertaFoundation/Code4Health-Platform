@@ -2,7 +2,7 @@
     'use strict';
 
     angular
-        .module('code4HealthplatformApp')
+        .module('operoncloudplatformApp')
         .controller('LogsController', LogsController);
 
     LogsController.$inject = ['LogsService'];
