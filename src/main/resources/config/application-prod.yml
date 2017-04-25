@@ -21,9 +21,9 @@ spring:
             enabled: false
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:mariadb://localhost:3306/c4hplatform_db
-        username: c4hplatform
-        password: c4hplatform
+        url: jdbc:mariadb://localhost:3306/platform_db
+        username: platform
+        password: platform
         hikari:
             data-source-properties:
                 cachePrepStmts: true
