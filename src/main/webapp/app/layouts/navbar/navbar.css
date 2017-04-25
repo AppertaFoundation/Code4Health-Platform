@@ -7,7 +7,7 @@ Navbar
 }
 
 .jh-navbar {
-    background-color: #353d47;
+    background-color: #1A5281;
     padding: .2em 1em;
 }
 
@@ -19,7 +19,7 @@ Navbar
 }
 
 .jh-navbar .dropdown-item.active, .jh-navbar .dropdown-item.active:focus, .jh-navbar .dropdown-item.active:hover {
-    background-color: #353d47;
+    background-color: #1A5281;
 }
 
 .jh-navbar .dropdown-toggle::after {

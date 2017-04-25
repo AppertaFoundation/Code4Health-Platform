@@ -1,20 +1,20 @@
 {
     "home": {
-        "title": "Välkommen Operon User!",
+        "title": "Välkommen Code4Health User!",
         "subtitle": "Det här är din hemsida",
         "logged": {
             "message": "Du är inloggad som \"{{username}}\"."
         },
         "question": "Om du har några frågor om Operon:",
         "link": {
-            "homepage": "Operon hemsida",
-            "docs": "Operon dokument",
-            "support": "Operon på Stack Overflow",
-            "bugtracker": "Operon bughanterare",
-            "chat": "Operon public chat room",
-            "follow": "kontakta @operonsystems på Twitter"
+            "homepage": "Code4Health hemsida",
+            "docs": "Code4Health dokument",
+            "support": "Code4Health på Stack Overflow",
+            "bugtracker": "Code4Health bughanterare",
+            "chat": "Code4Health public chat room",
+            "follow": "kontakta @code4health på Twitter"
         },
-        "like": "Om du gillar Operon, glöm inte att ge oss en stjärna på",
+        "like": "Om du gillar Code4Health, glöm inte att ge oss en stjärna på",
         "github": "GitHub"
     }
 }

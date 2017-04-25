@@ -1,13 +1,13 @@
 {
     "footer": {
         "link": {
-            "homepage": "Operon",
-            "stackoverflow": "Operon på Stack Overflow",
-            "bugtracker": "Operon bughanterare",
-            "chat": "Operon public chat room",
-            "follow": "kontakta @operoncloud på Twitter",
+            "homepage": "Code4Health",
+            "stackoverflow": "Code4Health på Stack Overflow",
+            "bugtracker": "Code4Health bughanterare",
+            "chat": "Code4Health public chat room",
+            "follow": "kontakta @Code4Health på Twitter",
             "github": "GitHub"
         },
-        "like": "Om du gillar Operon, glöm inte att ge oss en stjärna på"
+        "like": "Om du gillar Code4Health, glöm inte att ge oss en stjärna på"
     }
 }
