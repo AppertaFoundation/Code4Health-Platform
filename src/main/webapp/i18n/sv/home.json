@@ -1,6 +1,6 @@
 {
     "home": {
-        "title": "Välkommen Code4Health User!",
+        "title": "Välkommen pa Code4Health Platform!",
         "subtitle": "Det här är din hemsida",
         "logged": {
             "message": "Du är inloggad som \"{{username}}\"."

@@ -1,12 +1,9 @@
 <div class="row">
-    <div class="col-md-12">
-        <h1 class="display-4" jhiTranslate="home.title">Welcome, Operon User!</h1>
-        <p class="lead" jhiTranslate="home.subtitle">This is your homepage</p>
-
+    <div class="col-md-4">
         <div [ngSwitch]="isAuthenticated()">
             <div class="alert alert-success" *ngSwitchCase="true">
                 <span *ngIf="account" jhiTranslate="home.logged.message"
-                    translateValues="{username: '{{account.login}}'}"> You are logged in as user "{{account.login}}". </span>
+                      translateValues="{username: '{{account.login}}'}"> You are logged in as user "{{account.login}}". </span>
                 <hr>
                 <div>
                     Click here to view your
@@ -27,18 +24,36 @@
                 <a class="alert-link" routerLink="register" jhiTranslate="global.messages.info.register.link">Register a new account</a>
             </div>
         </div>
-
-        <p jhiTranslate="home.question">
-            If you have any question on Code4Health Cloud:
-        </p>
-
-        <ul>
-            <li><i class="fa fa-book" aria-hidden="true"></i>&nbsp;<a href="https://docs.code4health.org" target="_blank" jhiTranslate="home.link.docs">Operon Cloud Documentation</a></li>
-            <li><i class="fa fa-ticket" aria-hidden="true"></i>&nbsp;<a href="https://support.operon.cloud" target="_blank" jhiTranslate="home.link.support">Operon Cloud Support</a></li>
-        </ul>
-
-        <p>
-            <span jhiTranslate="home.like">If you like JHipster, don't forget to give us a star on</span> <a href="https://github.com/operonsystems" target="_blank" jhiTranslate="home.github">Github</a>!
-        </p>
+        <div class="alert alert-info">
+            <p jhiTranslate="home.question">
+                If you have any question on Code4Health Platform:
+            </p>
+            <ul>
+                <li><i class="fa fa-book" aria-hidden="true"></i>&nbsp;<a href="https://docs.code4health.org" target="_blank" jhiTranslate="home.link.docs">Code4Health Documentation</a></li>
+                <li><i class="fa fa-ticket" aria-hidden="true"></i>&nbsp;<a href="https://support.code4health.org" target="_blank" jhiTranslate="home.link.support">Code4Health Support</a></li>
+            </ul>
+            <p>
+                <span jhiTranslate="home.like">If you like Code4Health Platform, don't forget to give us a star on</span> <a href="https://github.com/AppertaFoundation/Code4Health-Platform" target="_blank" jhiTranslate="home.github">Github</a>!
+            </p>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <h3 jhiTranslate="home.title">Welcome, Code4Health User!</h3>
+        <div >
+            The Code4Health Platform provides an open sandbox environment for anyone who wants to discover,
+            demonstrate, test or build health and care solutions by simulating a wide range of open systems and
+            services you are increasingly likely to find in UK health and care.
+        </div>
+        <br>
+        <!--<img width="100%" src="https://code4health.org/_attachment/c4hplatform/Code4Health_Platform_Diagram.png">-->
+        <img width="100%" src="/content/images/platform-diagram.png">
+        <br>
+        <div>
+            The Code4Health Platform is for <b>non-operational use only</b> and does not store any personal data.
+            Access to the data and services available via the Code4Health Platform is free to all registered users
+            subject to agreement with a simple set of terms and conditions. The Code4Health Platform includes items
+            that may also be freely available for use in an operational environment, while the operational use other
+            items may require that you enter into a commercial agreement with the owner.
+        </div>
     </div>
 </div>
