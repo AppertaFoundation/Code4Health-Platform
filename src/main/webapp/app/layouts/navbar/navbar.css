@@ -8,6 +8,7 @@ Navbar
 
 .jh-navbar {
     background-color: #1A5281;
+    font-family: 'Arimo', sans-serif;
     padding: .2em 1em;
 }
 
@@ -38,9 +39,23 @@ Navbar
     font-weight: 400;
 }
 
+.navbar li > a:hover {
+    color: #ffffff;
+    background-color: #6f777b;
+    text-decoration: underline;
+}
+
+.navbar a.navbar-brand:hover {
+    color: #ffffff;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+.navbar li.active a { color: #ffffff; }
+
 .jh-navbar .jh-navbar-toggler {
     color: #ccc;
-    font-size: 1.5em;
+    font-size: 2.5em;
     padding: 10px;
 }
 
@@ -65,19 +80,24 @@ Navbar
 Logo styles
 ========================================================================== */
 .navbar-brand.logo {
-    padding: 5px 15px;
+    padding: 1px 1px;
+}
+
+.jh-logo-container > a:hover {
+    background-color: transparent;
+    text-decoration: none;
 }
 
 .logo .logo-img {
-    height: 45px;
+    height: 85px;
     display: inline-block;
     vertical-align: middle;
-    width: 70px;
+    width: 126px;
 }
 
 .logo-img {
     height: 100%;
-    background: url("../../../content/images/logo-jhipster.png") no-repeat center center;
+    background: url("../../../content/images/logo-c4h.png") no-repeat center center;
     background-size: contain;
     width: 100%;
 }

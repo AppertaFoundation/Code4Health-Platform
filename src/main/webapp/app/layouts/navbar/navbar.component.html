@@ -4,8 +4,8 @@
             <i class="fa fa-bars"></i>
         </a>
         <a class="navbar-brand logo float-left" routerLink="/" (click)="collapseNavbar()">
-            <!--<span class="logo-img"></span>-->
-            <span jhiTranslate="global.title" class="navbar-title">Operon Cloud Platform</span> <span class="navbar-version">{{version}}</span>
+            <span class="logo-img"></span>
+            <span class="navbar-version">{{version}}</span>
         </a>
     </div>
     <div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed" [ngSwitch]="isAuthenticated()">
