@@ -23,6 +23,7 @@ export class NavbarComponent implements OnInit {
     swaggerEnabled: boolean;
     modalRef: NgbModalRef;
     version: string;
+    showLanguageBar: boolean;
 
     constructor(
         private loginService: LoginService,
@@ -35,6 +36,7 @@ export class NavbarComponent implements OnInit {
     ) {
         this.version = DEBUG_INFO_ENABLED ? 'v' + VERSION : '';
         this.isNavbarCollapsed = true;
+        this.showLanguageBar = false;
         this.languageService.addLocation('home');
         this.languageService.addLocation('footer');
     }
