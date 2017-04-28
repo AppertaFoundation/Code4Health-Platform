@@ -1,0 +1,147 @@
+/**
+ * Stylesheet overrides
+ */
+h3 {
+    color: #337AB7;
+}
+
+ .tweets ul > li { max-width: 100%; }
+ .tweets {
+    background-color: #1a5281;
+    padding-top: 20px;
+    padding-bottom: 10px;
+    margin-bottom: -30px;
+ }
+ 
+ .tweets a.more, .tweets a.more:hover, .tweets a.more:focus,
+ .tweets a.more:active {
+     color: #fff;
+ }
+ 
+ .tweets .recent-tweets { border-right: none; }
+ 
+ .filterable {
+    margin-top: 15px;
+}
+.filterable .panel-heading .pull-right {
+    margin-top: -20px;
+}
+.filterable .filters input[disabled] {
+    background-color: transparent;
+    border: none;
+    cursor: auto;
+    box-shadow: none;
+    padding: 0;
+    height: auto;
+}
+.filterable .filters input[disabled]::-webkit-input-placeholder {
+    color: #333;
+}
+.filterable .filters input[disabled]::-moz-placeholder {
+    color: #333;
+}
+.filterable .filters input[disabled]:-ms-input-placeholder {
+    color: #333;
+}
+
+/* BUTTON OVERIDES */
+
+.btn {
+	color: #0b0c0c;
+	border: 0px solid #ef7a34;
+	border-radius: 0;
+	background-color: #ef7a34;
+	-webkit-box-shadow: 0 0px 0 #003618;
+    -moz-box-shadow: 0 0px 0 #003618;
+    box-shadow: 0 0px 0 #ef7a34;
+    font-weight: 600;
+}
+.btn:hover {
+	color: #fff;
+	border: 0px solid #DB6E30;
+}
+.btn:hover {
+	background-color: #DB6E30;
+}
+
+.btn.active.focus, .btn.active:focus, .btn.focus, .btn:active.focus,
+.btn:active:focus, .btn:focus, .btn:active, .btn.active, .btn.active:active {
+	border: 0px solid #ffbf47;
+	background-color: #00692f;
+	outline: none;
+    outline-offset: 0;
+    color: #fff;
+}
+
+.btn-default.active.focus,
+.btn-default.active:focus,
+.btn-default.active:hover,
+.btn-default:active.focus,
+.btn-default:active:focus,
+.btn-default:active:hover,
+.open>.dropdown-toggle.btn-default.focus,
+.open>.dropdown-toggle.btn-default:focus,
+.open>.dropdown-toggle.btn-default:hover {
+	border: none;
+}
+
+.input-group-btn:last-child>.btn {
+	height: 40px;
+}
+
+.btn-group {
+	margin-bottom: 10px;
+}
+
+.btn-apply {
+	padding: 20px;
+	background-color: #28A197;
+	color: #fff;
+	text-align: center;
+}
+
+.btn-apply a, .btn-apply a:hover, .btn-apply a:focus, .btn-apply a:active {
+	color: #fff;
+	font-family: inherit;
+    font-weight: 700;
+    line-height: 1.1;
+    color: inherit;
+    font-size: 24px;
+}
+
+.promo-banner {
+    background-color: #BBDEFB;
+}
+
+.autocomplete-suggestions {
+    border: 1px solid rgba(0,0,0,.15);
+    background: #FFF;
+    overflow: auto;
+    min-width: 160px;
+    padding: 5px 0;
+    background-clip: padding-box;
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+}
+.autocomplete-suggestion {
+    padding: 3px 15px;
+    color: #333;
+    clear: both;
+}
+.autocomplete-selected {
+    background: #F0F0F0;
+}
+.autocomplete-suggestions strong {
+    font-weight: normal;
+    color: #3399FF;
+}
+.autocomplete-group {
+    padding: 2px 5px;
+}
+.autocomplete-group strong {
+    display: block;
+    border-bottom: 1px solid #000;
+}
+
+.js-template {
+    display: none;
+}
