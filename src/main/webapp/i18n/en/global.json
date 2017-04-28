@@ -48,7 +48,7 @@
         "messages": {
             "info": {
                 "authenticated": {
-                    "prefix": "If you want to ",
+                    "prefix": "If you already have an account, use link to ",
                     "link": "sign in",
                     "suffix": ", you can try the default accounts:<br/>- Administrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\")."
                 },
