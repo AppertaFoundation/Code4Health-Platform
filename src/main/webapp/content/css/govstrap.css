@@ -259,10 +259,9 @@ a.btn { color: #fff; }
 }
 
 @media(max-width:767px) {
-	body {
-		padding-top: 76px;
-	}
-
+	/*body {*/
+		/*padding-top: 76px;*/
+	/*}*/
 	.tweets ul, .tweets .more { padding-left: 0; }
 }
 
