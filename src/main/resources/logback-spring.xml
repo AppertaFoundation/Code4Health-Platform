@@ -5,7 +5,7 @@
 
 <!-- The FILE and ASYNC appenders are here as examples for a production configuration -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>./logs/platform.log</file>
+        <file>./logs/app.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>./logs/app.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
             <maxHistory>90</maxHistory>
