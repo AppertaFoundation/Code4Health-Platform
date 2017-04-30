@@ -12,6 +12,10 @@ chown -Rf ${project.artifactId}:${project.artifactId} ${data.folder.location}
 mkdir -p ${log.folder.location} || true
 chown -Rf ${project.artifactId}:${project.artifactId} ${log.folder.location}
 
+mkdir -p ${app.home}/logs || true
+touch ${app.home}/logs/${project.artifactId}.log || true
+chown -Rf ${project.artifactId}:${project.artifactId} ${log.folder.location}
+
 mkdir -p ${index.folder.location} || true
 chown -Rf ${project.artifactId}:${project.artifactId} ${index.folder.location}
 

@@ -10,7 +10,7 @@
     </parent>
 
     <groupId>cloud.operon</groupId>
-    <artifactId>platform</artifactId>
+    <artifactId>operonplatform</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Operon Cloud Platform</name>
@@ -1137,7 +1137,7 @@
                                     <directory>/etc/supervisor/conf.d</directory>
                                     <sources>
                                         <source>
-                                            <location>${project.build.directory}/etc/platform-supervisor.conf</location>
+                                            <location>${project.build.directory}/etc/${project.artifactId}-supervisor.conf</location>
                                         </source>
                                     </sources>
                                 </mapping>
