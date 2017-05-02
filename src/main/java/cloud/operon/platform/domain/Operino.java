@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * A Operino.
@@ -33,6 +34,9 @@ public class Operino implements Serializable {
 
     @Column(name = "active")
     private Boolean active;
+
+    @Column(name = "domain")
+    private String domain = UUID.randomUUID().toString();
 
     @ManyToOne
     private User user;
@@ -112,6 +116,14 @@ public class Operino implements Serializable {
 
     public void setComponents(Set<OperinoComponent> operinoComponents) {
         this.components = operinoComponents;
+    }
+
+    public String getDomain() {
+        return domain;
+    }
+
+    public void setDomain(String domain) {
+        this.domain = domain;
     }
 
     @Override
