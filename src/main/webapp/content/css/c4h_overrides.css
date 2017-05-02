@@ -145,3 +145,15 @@ h3 {
 .js-template {
     display: none;
 }
+
+.alert-orange {
+    color: #dd4b39;
+    background-color: #f7bc6f;
+    border-color: #ebccd1;
+}
+.alert-orange hr {
+    border-top-color: #e4b9c0;
+}
+.alert-orange .alert-link {
+    color: #dd4b39;
+}

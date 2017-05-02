@@ -4,14 +4,14 @@
             <div class="alert alert-success" *ngSwitchCase="true">
                 <span *ngIf="account" jhiTranslate="home.logged.message"
                       translateValues="{username: '{{account.login}}'}"> You are logged in as user "{{account.login}}". </span>
-                <hr>
-                <div>
-                    Click here to view your
-                    <a routerLink="operino" >
+            </div>
+            <div class="alert alert-orange" *ngSwitchCase="true">
+                <h4>
+                    <a routerLink="operino" class="align-middle">
                         <i class="fa fa-bolt" aria-hidden="true"></i>
-                        <span jhiTranslate="global.menu.entities.operino">Operino</span>s
+                        View your <span jhiTranslate="global.menu.entities.operino">Operino</span>s
                     </a>
-                </div>
+                </h4>
             </div>
 
             <div class="alert alert-warning" *ngSwitchCase="false">
