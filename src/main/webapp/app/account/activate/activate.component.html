@@ -5,13 +5,13 @@
 
             <div class="alert alert-success" *ngIf="success">
                 <span jhiTranslate="activate.messages.success">
-                    <strong>Your user has been activated.</strong> Please
+                    <strong>Your account has been activated.</strong> Please
                     <a class="alert-link" (click)="login()" jhiTranslate="global.messages.info.authenticated.link">sign in</a>.
                 </span>
             </div>
 
             <div class="alert alert-danger" *ngIf="error" jhiTranslate="activate.messages.error">
-                <strong>Your user could not be activated.</strong> Please use the registration form to sign up.
+                <strong>Your account could not be activated.</strong> Please use the registration form to sign up.
             </div>
 
         </div>
