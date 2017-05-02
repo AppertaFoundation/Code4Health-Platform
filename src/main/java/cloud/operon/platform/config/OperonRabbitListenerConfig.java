@@ -1,6 +1,5 @@
 package cloud.operon.platform.config;
 
-import cloud.operon.platform.service.impl.OperinoProvisionerImpl;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.annotation.RabbitListenerConfigurer;
@@ -9,6 +8,7 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistrar;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory;
 
@@ -17,10 +17,16 @@ import org.springframework.messaging.handler.annotation.support.DefaultMessageHa
  */
 
 @EnableRabbit
+@Configuration
+//@EnableConfigurationProperties(value = {ProvisionerProperties.class})
+//@ConfigurationProperties(prefix = "provisioner")
 public class OperonRabbitListenerConfig implements RabbitListenerConfigurer {
 
     @Autowired
     public ConnectionFactory connectionFactory;
+//    String username;
+//    String password;
+//    String url;
 
     @Bean
     public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory() {
@@ -49,12 +55,7 @@ public class OperonRabbitListenerConfig implements RabbitListenerConfigurer {
     }
 
     @Bean
-    public Queue fooQueue() {
+    public Queue operinosQueue() {
         return new Queue("operinos");
-    }
-
-    @Bean
-    public OperinoProvisionerImpl operinoProvisioner() {
-        return new OperinoProvisionerImpl();
     }
 }

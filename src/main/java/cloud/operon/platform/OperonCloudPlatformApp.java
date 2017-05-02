@@ -2,13 +2,13 @@ package cloud.operon.platform;
 
 import cloud.operon.platform.config.ApplicationProperties;
 import cloud.operon.platform.config.DefaultProfileUtil;
-import cloud.operon.platform.domain.enumeration.HostingType;
-import cloud.operon.platform.domain.enumeration.OperinoComponentType;
-import cloud.operon.platform.repository.UserRepository;
-import io.github.jhipster.config.JHipsterConstants;
 import cloud.operon.platform.domain.Operino;
 import cloud.operon.platform.domain.OperinoComponent;
+import cloud.operon.platform.domain.enumeration.HostingType;
+import cloud.operon.platform.domain.enumeration.OperinoComponentType;
 import cloud.operon.platform.repository.OperinoRepository;
+import cloud.operon.platform.repository.UserRepository;
+import io.github.jhipster.config.JHipsterConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -17,9 +17,12 @@ import org.springframework.boot.actuate.autoconfigure.MetricRepositoryAutoConfig
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
 import java.net.InetAddress;
@@ -132,5 +135,10 @@ public class OperonCloudPlatformApp {
                 operinoRepository.save(operino);
             }
         }
+    }
+
+    @Bean
+    public RestTemplate restTemplate(RestTemplateBuilder builder) {
+        return builder.build();
     }
 }
