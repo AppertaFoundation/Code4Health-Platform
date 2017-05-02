@@ -1,13 +1,14 @@
 package cloud.operon.platform.service.impl;
 
-import cloud.operon.platform.repository.search.OperinoSearchRepository;
 import cloud.operon.platform.domain.Operino;
 import cloud.operon.platform.repository.OperinoRepository;
+import cloud.operon.platform.repository.search.OperinoSearchRepository;
 import cloud.operon.platform.security.SecurityUtils;
 import cloud.operon.platform.service.OperinoService;
 import cloud.operon.platform.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,13 +28,16 @@ public class OperinoServiceImpl implements OperinoService{
     private final OperinoRepository operinoRepository;
     private final UserService userService;
     private final OperinoSearchRepository operinoSearchRepository;
+    private final RabbitTemplate rabbitTemplate;
 
     public OperinoServiceImpl(OperinoRepository operinoRepository,
                               OperinoSearchRepository operinoSearchRepository,
-                              UserService userService) {
+                              UserService userService,
+                              RabbitTemplate rabbitTemplate) {
         this.operinoRepository = operinoRepository;
         this.operinoSearchRepository = operinoSearchRepository;
         this.userService = userService;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     /**
@@ -48,6 +52,8 @@ public class OperinoServiceImpl implements OperinoService{
         operino.setUser(userService.getUserWithAuthoritiesByLogin(SecurityUtils.getCurrentUserLogin()).get());
         Operino result = operinoRepository.save(operino);
         operinoSearchRepository.save(result);
+        rabbitTemplate.convertAndSend("operinos", result);
+        log.info("Sent off result to rabbitmq");
         return result;
     }
 
