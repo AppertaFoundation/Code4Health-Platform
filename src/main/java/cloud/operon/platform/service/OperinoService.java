@@ -3,6 +3,9 @@ package cloud.operon.platform.service;
 import cloud.operon.platform.domain.Operino;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Map;
 
 /**
  * Service Interface for managing Operino.
@@ -57,4 +60,7 @@ public interface OperinoService {
      *  @return the list of entities
      */
     Page<Operino> search(String query, Pageable pageable);
+
+    @Transactional(readOnly = true)
+    Map<String, String> getConfigForOperino(Operino operino);
 }

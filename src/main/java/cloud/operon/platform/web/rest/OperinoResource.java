@@ -22,6 +22,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -142,7 +143,25 @@ public class OperinoResource {
             return ResponseEntity.badRequest()
                     .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "Not authorized", String.valueOf(id))).build();
         }
-//        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(operinoComponentService.findAllByOperino(operino)));
+    }
+
+    /**
+     * GET  /operinos/:id/config : get the config linked to the "id" operino.
+     *
+     * @param id the id of the operino to retrieve config for
+     * @return the ResponseEntity with status 200 (OK) and with body the operino, or with status 404 (Not Found)
+     */
+    @GetMapping("/operinos/{id}/config")
+    @Timed
+    public ResponseEntity<Map<String, String>> getOperinoConfig(@PathVariable Long id) {
+        log.debug("REST request to get Operino : {}", id);
+        Operino operino = operinoService.verifyOwnershipAndGet(id);
+        if (operino != null) {
+            return new ResponseEntity<>(operinoService.getConfigForOperino(operino), HttpStatus.OK);
+        } else {
+            return ResponseEntity.badRequest()
+                    .headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "Not authorized", String.valueOf(id))).build();
+        }
     }
 
     /**

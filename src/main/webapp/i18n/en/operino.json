@@ -18,6 +18,13 @@
             "detail": {
                 "title": "Operino"
             },
+            "config": {
+                "token": "API Token",
+                "username": "Username",
+                "password": "Password",
+                "domain": "Domain",
+                "domainId": "Domain Id"
+            },
             "sandbox": {
                 "what": {
                     "q": "What is an Operino?",
@@ -39,7 +46,8 @@
             "name": "Name",
             "active": "Active",
             "user": "User",
-            "components": "Components"
+            "components": "Components",
+            "domain": "Domain"
         }
     }
 }

@@ -45,6 +45,10 @@ export class OperinoDetailComponent implements OnInit, OnDestroy {
         this.operinoService.find(id).subscribe(operino => {
             this.operino = operino;
         });
+        this.operinoService.config(id).subscribe(config => {
+            console.log("config  = " , config );
+            this.operino.config = config;
+        });
         this.operinoService.components(id).subscribe(
             (res: Response) => this.onSuccess(res.json(), res.headers),
             (res: Response) => this.onError(res.json())

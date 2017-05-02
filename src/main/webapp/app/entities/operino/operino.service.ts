@@ -31,6 +31,12 @@ export class OperinoService {
         });
     }
 
+    config(id: number): Observable<Object> {
+        return this.http.get(`${this.resourceUrl}/${id}/config`).map((res: Response) => {
+            return res.json();
+        });
+    }
+
     components(id: number): Observable<Response> {
         return this.http.get(`${this.resourceUrl}/${id}/components`);
     }

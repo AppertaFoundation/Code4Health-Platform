@@ -1,23 +1,42 @@
 
 <div *ngIf="operino">
     <h2>
-        <span>{{operino.name}}</span>
+        <input *ngIf="isEditing" type="text" class="form-control" name="name" id="field_name"
+               [(ngModel)]="operino.name" required />
+        <span *ngIf="!isEditing">{{operino.name}}</span>
         <ui-switch ngbTooltip="Click to toggle status" placement="bottom" class="float-right" [(ngModel)]="operino.active" (change)="updateStatus()"></ui-switch>
     </h2>
     <hr>
     <jhi-alert-error></jhi-alert-error>
-    <dl class="row-md jh-entity-details">
-        <dt><span jhiTranslate="operonCloudPlatformApp.operino.name">Name</span></dt>
-        <dd>
-            <input *ngIf="isEditing" type="text" class="form-control" name="name" id="field_name"
-                   [(ngModel)]="operino.name" required />
-            <span *ngIf="!isEditing">{{operino.name}}</span>
-        </dd>
-        <dt><span jhiTranslate="operonCloudPlatformApp.operino.user">User</span></dt>
-        <dd>
-            {{operino.user?.login}}
-        </dd>
-    </dl>
+    <div *ngIf="operino.config" class="row">
+        <!--<h4>API Configuration</h4>-->
+        <h4 class="col-sm-3" jhiTranslate="operonCloudPlatformApp.operino.config.token">Token</h4>
+        <pre class="col-sm-9">{{operino.config.token}}</pre>
+        <div class="col-sm-6">
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="operonCloudPlatformApp.operino.domain">Domain</span></dt>
+                <dd>
+                    {{operino.domain}}
+                </dd>
+                <dt><span jhiTranslate="operonCloudPlatformApp.operino.config.username">Usename</span></dt>
+                <dd>
+                    {{operino.config.username}}
+                </dd>
+            </dl>
+        </div>
+        <div class="col-sm-6">
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="operonCloudPlatformApp.operino.config.domainId">Domain Id</span></dt>
+                <dd>
+                    {{operino.config.domainSystemId}}
+                </dd>
+                <dt><span jhiTranslate="operonCloudPlatformApp.operino.config.password">Password</span></dt>
+                <dd>
+                    {{operino.config.password}}
+                </dd>
+            </dl>
+        </div>
+    </div>
     <hr>
     <jhi-operino-list-component [operino]="operino"></jhi-operino-list-component>
     <div class="modal-footer">
