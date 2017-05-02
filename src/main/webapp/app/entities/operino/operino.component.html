@@ -1,7 +1,7 @@
 <div>
     <h2>
         <span jhiTranslate="operonCloudPlatformApp.operino.home.title">Operinos</span>
-        <button *ngIf="operinos.length > 0" class="btn btn-success float-right create-operino" [routerLink]="['/', { outlets: { popup: ['operino-new'] } }]">
+        <button class="btn btn-success float-right create-operino" [routerLink]="['/', { outlets: { popup: ['operino-new'] } }]">
             <span class="fa fa-plus"></span>
             <span class="hidden-sm-down"  jhiTranslate="operonCloudPlatformApp.operino.home.createLabel">
             Create new Operino
