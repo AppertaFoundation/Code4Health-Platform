@@ -2,7 +2,6 @@ package cloud.operon.platform.service.impl;
 
 import cloud.operon.platform.domain.Operino;
 import cloud.operon.platform.service.OperinoService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
@@ -45,7 +45,7 @@ public class OperinoProvisionerImpl {
     }
 
     @RabbitHandler
-    public void receive(@Payload Operino operino) throws JsonProcessingException {
+    public void receive(@Payload Operino operino) {
         log.info("Received operino {}", operino);
         // now build variables for posting to ehrscape provisioner
         String plainCreds = username + ":" + password;
@@ -65,13 +65,29 @@ public class OperinoProvisionerImpl {
         // post data to api
         HttpEntity<Map<String, String>> getRequst = new HttpEntity<>(headers);
         log.info("getRequest = " + getRequst);
-        int statusCode = restTemplate.exchange("http://explorer.termlex.com/ehrscape-manager/rest/domain", HttpMethod.GET, getRequst, Object.class).getStatusCodeValue();
-        log.info("statusCode = " + statusCode);
+        ResponseEntity getResponse = null;
+        int statusCode;
+        try {
+            getResponse = restTemplate.exchange("http://explorer.termlex.com/ehrscape-manager/rest/domain/"+operino.getDomain(), HttpMethod.GET, getRequst, Object.class);
+        }
+        catch (HttpClientErrorException e) {
+            log.error("Error looking up domain using domain id {}. Nested exception is : {}", operino.getDomain(), e);
+        } finally {
+            if (getResponse != null) {
+                statusCode = getResponse.getStatusCodeValue();
+                log.info("statusCode = " + statusCode);
 
-        HttpEntity<Map<String, String>> request = new HttpEntity<>(data, headers);
-        log.info("request = " + request);
-        ResponseEntity response = restTemplate.postForEntity(url, request, HttpEntity.class);
-        log.info("response = " + response);
+                // do post only if the corresponding entity does not exist
+                if(statusCode == 404) {
+
+                    HttpEntity<Map<String, String>> request = new HttpEntity<>(data, headers);
+                    log.info("request = " + request);
+                    ResponseEntity response = restTemplate.postForEntity(url, request, HttpEntity.class);
+                    log.info("response = " + response);
+                }
+            }
+        }
+
     }
 
     public String getUsername() {
