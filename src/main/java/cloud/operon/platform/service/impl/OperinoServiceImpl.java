@@ -149,7 +149,8 @@ public class OperinoServiceImpl implements OperinoService{
     @Override
     @Transactional(readOnly = true)
     public Map<String, String> getConfigForOperino(Operino operino) {
-        String name = operino.getUser().getFirstName().concat(operino.getUser().getLastName());
+
+        String name = operino.getUser().getFirstName() + operino.getUser().getLastName();
         if(name.length() < 1){
             name = operino.getDomain();
         }
