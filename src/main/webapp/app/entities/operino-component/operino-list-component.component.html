@@ -10,6 +10,34 @@
     </h4>
     <jhi-alert></jhi-alert>
     <br/>
+    <div *ngIf="operinoComponents.length == 0">
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <div class="alert alert-warning ">
+                    <span jhiTranslate="operonCloudPlatformApp.operinoComponent.home.missing">Oh no! You do not have operino components! Would you like to create one?</span>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="alert alert-info ">
+            <h4 jhiTranslate="operonCloudPlatformApp.operino.sandbox.what.q">What is a Sandox Operino?</h4>
+            <p jhiTranslate="operonCloudPlatformApp.operino.sandbox.what.a"></p>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="operonCloudPlatformApp.operino.sandbox.cdr.q">CDR</span></dt>
+                <dd>
+                    <span jhiTranslate="operonCloudPlatformApp.operino.sandbox.cdr.a"></span>
+                </dd>
+                <dt><span jhiTranslate="operonCloudPlatformApp.operino.sandbox.demographics.q">Demographics</span></dt>
+                <dd>
+                    <span jhiTranslate="operonCloudPlatformApp.operino.sandbox.demographics.a">hmmm</span>
+                </dd>
+                <dt><span jhiTranslate="operonCloudPlatformApp.operino.sandbox.terminology.q">Terminology</span></dt>
+                <dd>
+                    <span jhiTranslate="operonCloudPlatformApp.operino.sandbox.terminology.a">hmmmm</span>
+                </dd>
+            </dl>
+        </div>
+    </div>
     <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
         <ngb-panel *ngFor="let operinoComponent of operinoComponents; let i = index; trackBy: trackByFn">
             <template ngbPanelTitle>

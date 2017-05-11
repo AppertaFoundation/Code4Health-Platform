@@ -43,6 +43,21 @@
                     "a": "Use this module to give your users easy access to terms in their records. This makes searching and standardization of data easier."
                 }
             },
+            "resources": {
+                "header": "Resources",
+                "explorer": {
+                    "title": "Manage resources (archetypes, templates) for your Operino CDR",
+                    "url": "https://explorer.code4health.org/explorer"
+                },
+                "api": {
+                    "title": "Explore API for CDR",
+                    "url": "https://explorer.code4health.org/api-explorer"
+                },
+                "docs": {
+                    "title": "Explore Documentation",
+                    "url": "https://docs.code4health.org"
+                }
+            },
             "name": "Name",
             "active": "Active",
             "user": "User",

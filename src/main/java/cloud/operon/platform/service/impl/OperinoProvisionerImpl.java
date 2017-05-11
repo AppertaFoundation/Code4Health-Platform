@@ -30,7 +30,7 @@ import java.util.Map;
 @Transactional
 @RabbitListener(queues = "operinos")
 @ConfigurationProperties(prefix = "provisioner", ignoreUnknownFields = false)
-public class OperinoProvisionerImpl implements InitializingBean {
+public class OperinoProvisionerImpl implements InitializingBean, cloud.operon.platform.service.OperinoProvisioner {
 
     private final Logger log = LoggerFactory.getLogger(OperinoProvisionerImpl.class);
     String domainUrl;
@@ -45,6 +45,7 @@ public class OperinoProvisionerImpl implements InitializingBean {
     @Autowired
     public OperinoService operinoService;
 
+    @Override
     @RabbitHandler
     public void receive(@Payload Operino operino) {
         log.info("Received operino {}", operino);
@@ -56,7 +57,7 @@ public class OperinoProvisionerImpl implements InitializingBean {
         // set headers
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Basic " + base64Creds);
-        headers.add("Content-Type", "application/json");
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
         // create Map of data to be posted for domain creation
         Map<String, String> data= operinoService.getConfigForOperino(operino);
@@ -114,7 +115,7 @@ public class OperinoProvisionerImpl implements InitializingBean {
         // set headers
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Basic " + base64Creds);
-        headers.add("Content-Type", "application/json");
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
         // connect to api
         HttpEntity<Map<String, String>> getRequst = new HttpEntity<>(headers);

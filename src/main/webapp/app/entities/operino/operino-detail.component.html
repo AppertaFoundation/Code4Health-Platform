@@ -54,8 +54,37 @@
                 replaceUrl="true">
             <span class="fa fa-ban"></span>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
         </button>
-        <button type="button" (click)="save()" class="btn btn-success">
+        <button *ngIf="isEditing" type="button" (click)="save()" class="btn btn-success">
             <span class="fa fa-save"></span>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
         </button>
+    </div>
+    <hr>
+    <div>
+        <h4 jhiTranslate="operonCloudPlatformApp.operino.resources.header">Resources</h4>
+        <p>
+            If needed, use the username and password provided above to login.
+        </p>
+        <div class="col-sm-10">
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="operonCloudPlatformApp.operino.resources.explorer.title">Manage resources (archetypes, templates) for your Operino CDR</span></dt>
+                <dd>
+                    <a href="https://explorer.code4health.org/explorer" target="_blank"><span jhiTranslate="operonCloudPlatformApp.operino.resources.explorer.url">
+                        https://explorer.code4health.org/explorer
+                    </span></a>
+                </dd>
+                <dt><span jhiTranslate="operonCloudPlatformApp.operino.resources.api.title">Explore API for CDR</span></dt>
+                <dd>
+                    <a href="https://explorer.code4health.org/api-explorer" target="_blank">
+                        <span jhiTranslate="operonCloudPlatformApp.operino.resources.api.url">https://explorer.code4health.org/api-explorer</span>
+                    </a>
+                </dd>
+                <dt><span jhiTranslate="operonCloudPlatformApp.operino.resources.docs.title">Explore Documentation</span></dt>
+                <dd>
+                    <a href="https://docs.code4health.org" target="_blank">
+                        <span jhiTranslate="operonCloudPlatformApp.operino.resources.docs.url">https://docs.code4health.org</span>
+                    </a>
+                </dd>
+            </dl>
+        </div>
     </div>
 </div>

@@ -3,9 +3,10 @@
         "operinoComponent" : {
             "home": {
                 "title": "Operino Components",
-                "createLabel": "Create a new Operino Component",
+                "createLabel": "Add an Operino Component",
                 "createOrEditLabel": "Create or edit a Operino Component",
-                "search": "Search for Operino Component"
+                "search": "Search for Operino Component",
+                "missing": "Oh no! You don't have any operino components! You can add a component using the green button 'Add an Operino Component' button."
             },
             "created": "A new Operino Component is created with identifier {{ param }}",
             "updated": "A Operino Component is updated with identifier {{ param }}",
