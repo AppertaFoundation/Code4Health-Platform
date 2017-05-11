@@ -150,6 +150,7 @@ application:
 
 # Provisioner settings
 provisioner:
-    url: http://explorer.termlex.com/ehrscape-manager/rest/domain
+    domainUrl: https://explorer.code4health.org/ehrscape-manager/rest/domain/
+    templateUrl: http://cdr.termlex.com/rest/v1/template/
     username:
     password:
