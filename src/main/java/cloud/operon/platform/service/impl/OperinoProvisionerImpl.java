@@ -21,6 +21,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -69,22 +70,32 @@ public class OperinoProvisionerImpl implements InitializingBean, cloud.operon.pl
         // post data to api
         HttpEntity<Map<String, String>> getRequst = new HttpEntity<>(headers);
         log.info("getRequest = " + getRequst);
+        try {
+            ResponseEntity<List> getResponse = restTemplate.exchange(domainUrl, HttpMethod.GET, getRequst, List.class);
+            log.info("getResponse = " + getResponse);
+            if(getResponse.getStatusCode() == HttpStatus.OK && !getResponse.getBody().contains(operino.getDomain())){
 
-        HttpEntity<Map<String, String>> domainRequest = new HttpEntity<>(data, headers);
-        log.info("domainRequest = " + domainRequest);
-        ResponseEntity<String> domainResponse = restTemplate.postForEntity(domainUrl, domainRequest, String.class);
-        log.info("domainResponse = " + domainResponse);
-        if(domainResponse.getStatusCode() == HttpStatus.CREATED) {
-            // create template headers for xml data post
-            HttpHeaders templateHeaders = new HttpHeaders();
-            templateHeaders.setContentType(MediaType.APPLICATION_XML);
-            templateHeaders.add("Authorization", "Basic " + token);
-            HttpEntity<String> templateRequest = new HttpEntity<>(templateToSubmit, templateHeaders);
-            log.info("templateRequest = " + templateRequest);
-            ResponseEntity templateResponse = restTemplate.postForEntity(templateUrl, templateRequest, String.class);
-            log.info("templateResponse = " + templateResponse);
-        } else {
-            log.error("Unable to create domain for operino {}", operino);
+                HttpEntity<Map<String, String>> domainRequest = new HttpEntity<>(data, headers);
+                log.info("domainRequest = " + domainRequest);
+                ResponseEntity<String> domainResponse = restTemplate.postForEntity(domainUrl, domainRequest, String.class);
+                log.info("domainResponse = " + domainResponse);
+                if(domainResponse.getStatusCode() == HttpStatus.CREATED) {
+                    // create template headers for xml data post
+                    HttpHeaders templateHeaders = new HttpHeaders();
+                    templateHeaders.setContentType(MediaType.APPLICATION_XML);
+                    templateHeaders.add("Authorization", "Basic " + token);
+                    HttpEntity<String> templateRequest = new HttpEntity<>(templateToSubmit, templateHeaders);
+                    log.info("templateRequest = " + templateRequest);
+                    ResponseEntity templateResponse = restTemplate.postForEntity(templateUrl, templateRequest, String.class);
+                    log.info("templateResponse = " + templateResponse);
+                } else {
+                    log.error("Unable to create domain for operino {}", operino);
+                }
+            } else {
+                log.info("Unable to verify domain {} does not already exist. So operino will NOT be processed.", operino.getDomain());
+            }
+        } catch (HttpClientErrorException e) {
+            log.error("Error looking up domain using domain id {}. Nested exception is : {}", operino.getDomain(), e);
         }
 
     }
@@ -120,9 +131,9 @@ public class OperinoProvisionerImpl implements InitializingBean, cloud.operon.pl
         // connect to api
         HttpEntity<Map<String, String>> getRequst = new HttpEntity<>(headers);
         log.info("getRequest = " + getRequst);
-        ResponseEntity getResponse;
+        ResponseEntity<List> getResponse;
         try {
-            getResponse = restTemplate.exchange(domainUrl, HttpMethod.GET, getRequst, Object.class);
+            getResponse = restTemplate.exchange(domainUrl, HttpMethod.GET, getRequst, List.class);
         }
         catch (HttpClientErrorException e) {
             throw new RuntimeException("Unable to connect to ThinkEHR backend specified by: " + domainUrl);
