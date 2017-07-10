@@ -95,6 +95,7 @@ public class OperinoComponentServiceImpl implements OperinoComponentService {
      *  @param operino the operino to which the 'id' component belongs
      */
     @Override
+    @Transactional(readOnly = true)
     public OperinoComponent findOneByOperino(Long id, Operino operino) {
         log.debug("Request to delete OperinoComponent : {}", id);
         OperinoComponent operinoComponent = operinoComponentRepository.findByIdAndOperino(id, operino);

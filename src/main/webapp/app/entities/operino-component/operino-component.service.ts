@@ -50,8 +50,6 @@ export class OperinoComponentService {
 
     delete(componentId: number, operinoId: number): Observable<Response> {
         //return this.http.delete(`${this.resourceUrl}/${id}`);
-        console.log("componentId  = " , componentId );
-        console.log("operinoId  = " , operinoId );
         return this.http.delete(`${this.operinoResourceUrl}/${operinoId}/components/${componentId}`);
     }
 
