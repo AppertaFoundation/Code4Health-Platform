@@ -1,6 +1,7 @@
 package cloud.operon.platform.service.impl;
 
 import cloud.operon.platform.domain.Operino;
+import cloud.operon.platform.service.OperinoProvisioner;
 import cloud.operon.platform.service.OperinoService;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
@@ -31,7 +32,7 @@ import java.util.Map;
 @Transactional
 @RabbitListener(queues = "operinos")
 @ConfigurationProperties(prefix = "provisioner", ignoreUnknownFields = false)
-public class OperinoProvisionerImpl implements InitializingBean, cloud.operon.platform.service.OperinoProvisioner {
+public class OperinoProvisionerImpl implements InitializingBean, OperinoProvisioner {
 
     private final Logger log = LoggerFactory.getLogger(OperinoProvisionerImpl.class);
     String domainUrl;
@@ -72,22 +73,22 @@ public class OperinoProvisionerImpl implements InitializingBean, cloud.operon.pl
         log.info("getRequest = " + getRequst);
         try {
             ResponseEntity<List> getResponse = restTemplate.exchange(domainUrl, HttpMethod.GET, getRequst, List.class);
-            log.info("getResponse = " + getResponse);
+            log.debug("getResponse = " + getResponse);
             if(getResponse.getStatusCode() == HttpStatus.OK && !getResponse.getBody().contains(operino.getDomain())){
 
                 HttpEntity<Map<String, String>> domainRequest = new HttpEntity<>(data, headers);
-                log.info("domainRequest = " + domainRequest);
+                log.debug("domainRequest = " + domainRequest);
                 ResponseEntity<String> domainResponse = restTemplate.postForEntity(domainUrl, domainRequest, String.class);
-                log.info("domainResponse = " + domainResponse);
+                log.debug("domainResponse = " + domainResponse);
                 if(domainResponse.getStatusCode() == HttpStatus.CREATED) {
                     // create template headers for xml data post
                     HttpHeaders templateHeaders = new HttpHeaders();
                     templateHeaders.setContentType(MediaType.APPLICATION_XML);
                     templateHeaders.add("Authorization", "Basic " + token);
                     HttpEntity<String> templateRequest = new HttpEntity<>(templateToSubmit, templateHeaders);
-                    log.info("templateRequest = " + templateRequest);
+                    log.debug("templateRequest = " + templateRequest);
                     ResponseEntity templateResponse = restTemplate.postForEntity(templateUrl, templateRequest, String.class);
-                    log.info("templateResponse = " + templateResponse);
+                    log.debug("templateResponse = " + templateResponse);
                 } else {
                     log.error("Unable to create domain for operino {}", operino);
                 }
@@ -129,11 +130,11 @@ public class OperinoProvisionerImpl implements InitializingBean, cloud.operon.pl
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         // connect to api
-        HttpEntity<Map<String, String>> getRequst = new HttpEntity<>(headers);
-        log.info("getRequest = " + getRequst);
+        HttpEntity<Map<String, String>> getRequest = new HttpEntity<>(headers);
+        log.info("getRequest = " + getRequest);
         ResponseEntity<List> getResponse;
         try {
-            getResponse = restTemplate.exchange(domainUrl, HttpMethod.GET, getRequst, List.class);
+            getResponse = restTemplate.exchange(domainUrl, HttpMethod.GET, getRequest, List.class);
         }
         catch (HttpClientErrorException e) {
             throw new RuntimeException("Unable to connect to ThinkEHR backend specified by: " + domainUrl);
