@@ -1,14 +1,32 @@
 package cloud.operon.platform.domain;
 
+import cloud.operon.platform.domain.enumeration.NotificationStatus;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.elasticsearch.annotations.Document;
+
+import javax.persistence.*;
 import java.util.Set;
 
 /**
  * A generic class representing a notification
  */
+@Entity
+@Table(name = "notification")
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Document(indexName = "notification")
 public class Notification {
 
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ElementCollection
     Set<String> recipients;
 
+    @ElementCollection
     Set<String> confirmationReceivers;
 
     String body;
@@ -17,7 +35,10 @@ public class Notification {
 
     String recordComponentId;
 
+    @ManyToOne
     Operino operino;
+
+    NotificationStatus status;
 
     public Set<String> getRecipients() {
         return recipients;
@@ -85,5 +106,21 @@ public class Notification {
 
     public void setSubject(String subject) {
         this.subject = subject;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public NotificationStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(NotificationStatus status) {
+        this.status = status;
     }
 }

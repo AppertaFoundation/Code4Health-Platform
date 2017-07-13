@@ -1,6 +1,8 @@
 package cloud.operon.platform.service.impl;
 
 import cloud.operon.platform.domain.Notification;
+import cloud.operon.platform.domain.enumeration.NotificationStatus;
+import cloud.operon.platform.repository.NotificationRepository;
 import cloud.operon.platform.service.MailService;
 import cloud.operon.platform.service.OperinoService;
 import org.apache.commons.codec.binary.Base64;
@@ -37,6 +39,8 @@ public class NotifactionProcessorImpl {
 
     @Autowired
     private RestTemplate restTemplate;
+    @Autowired
+    private NotificationRepository notificationRepository;
 
     @Autowired
     private OperinoService operinoService;
@@ -62,7 +66,7 @@ public class NotifactionProcessorImpl {
         HttpEntity<Map<String, String>> getRequst = new HttpEntity<>(headers);
         log.info("getRequest = " + getRequst);
         try {
-            ResponseEntity<Resource> getResponse = restTemplate.exchange(openEhrUrl, HttpMethod.GET, getRequst, Resource.class);
+            ResponseEntity<Resource> getResponse = restTemplate.exchange(openEhrUrl+notification.getRecordComponentId(), HttpMethod.GET, getRequst, Resource.class);
             log.debug("getResponse = " + getResponse);
             if(getResponse.getStatusCode() == HttpStatus.OK){
                 // create input stream form rest call
@@ -84,15 +88,26 @@ public class NotifactionProcessorImpl {
                     builder.append("Regards,").append("\n").append(teamName);
                     mailService.sendEmail(recipient, "Delivery confirmation", builder.toString(), false, false);
                 });
+                // update notification status
+                notification.setStatus(NotificationStatus.SENT);
 
             } else {
+                // update notification status
+                notification.setStatus(NotificationStatus.FAILED);
                 log.error("Unable to verify access composition with id {}. So.", notification.getRecordComponentId());
             }
         } catch (HttpClientErrorException e) {
+            // update notification status
+            notification.setStatus(NotificationStatus.FAILED);
             log.error("Error accessing openEhrUrl for notification {}. Nested exception is : {}", notification, e);
         } catch (IOException e) {
+            // update notification status
+            notification.setStatus(NotificationStatus.FAILED);
             log.error("Error reading response from rest call. Nested exception is : ", e);
         }
+
+        //save notification
+        notificationRepository.save(notification);
     }
 
     public void setOpenEhrUrl(String openEhrUrl) {
@@ -101,5 +116,9 @@ public class NotifactionProcessorImpl {
 
     public void setTeamName(String teamName) {
         this.teamName = teamName;
+    }
+
+    public void setNotificationRepository(NotificationRepository notificationRepository) {
+        this.notificationRepository = notificationRepository;
     }
 }
