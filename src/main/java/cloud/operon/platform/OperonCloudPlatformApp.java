@@ -95,11 +95,11 @@ public class OperonCloudPlatformApp {
 
         if(Arrays.asList(env.getActiveProfiles()).contains("dev") || Arrays.asList(env.getActiveProfiles()).contains("prod")) {
             // add sample data if none exists
-            verifyAndImportPlants(ctx);
+            verifyAndImportOperinos(ctx);
         }
     }
 
-    private static void verifyAndImportPlants(ConfigurableApplicationContext ctx) {
+    private static void verifyAndImportOperinos(ConfigurableApplicationContext ctx) {
 
         OperinoRepository operinoRepository = ctx.getBean(OperinoRepository.class);
         UserRepository userRepository = ctx.getBean(UserRepository.class);

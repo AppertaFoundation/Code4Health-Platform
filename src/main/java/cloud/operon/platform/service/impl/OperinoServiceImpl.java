@@ -1,6 +1,9 @@
 package cloud.operon.platform.service.impl;
 
+import cloud.operon.platform.domain.Notification;
 import cloud.operon.platform.domain.Operino;
+import cloud.operon.platform.domain.enumeration.NotificationStatus;
+import cloud.operon.platform.repository.NotificationRepository;
 import cloud.operon.platform.repository.OperinoRepository;
 import cloud.operon.platform.repository.search.OperinoSearchRepository;
 import cloud.operon.platform.security.SecurityUtils;
@@ -30,16 +33,19 @@ public class OperinoServiceImpl implements OperinoService{
     private final Logger log = LoggerFactory.getLogger(OperinoServiceImpl.class);
     
     private final OperinoRepository operinoRepository;
+    private final NotificationRepository notificationRepository;
     private final UserService userService;
     private final OperinoSearchRepository operinoSearchRepository;
     private final RabbitTemplate rabbitTemplate;
 
     public OperinoServiceImpl(OperinoRepository operinoRepository,
+                              NotificationRepository notificationRepository,
                               OperinoSearchRepository operinoSearchRepository,
                               UserService userService,
                               RabbitTemplate rabbitTemplate) {
         this.operinoRepository = operinoRepository;
         this.operinoSearchRepository = operinoSearchRepository;
+        this.notificationRepository = notificationRepository;
         this.userService = userService;
         this.rabbitTemplate = rabbitTemplate;
     }
@@ -173,6 +179,29 @@ public class OperinoServiceImpl implements OperinoService{
         data.put("token", base64Creds);
 
         return data;
+    }
+
+    @Override
+    public Notification sendNotification(Notification notification) {
+        // save notification
+        notification.setStatus(NotificationStatus.INPROGRESS);
+        notification = notificationRepository.save(notification);
+        rabbitTemplate.convertAndSend("notifications", notification);
+        log.info("Notification sent to rabbitmq");
+
+        return notification;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Notification> getNotifications(Pageable pageable) {
+        if (userService.isAdmin()) {
+            Page<Notification> result = notificationRepository.findAll(pageable);
+            return result;
+        } else {
+            Page<Notification> result = notificationRepository.findByUserIsCurrentUser(SecurityUtils.getCurrentUserLogin(), pageable);
+            return result;
+        }
     }
 
 }

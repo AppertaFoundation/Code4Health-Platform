@@ -149,6 +149,10 @@ application:
 # Provisioner settings
 provisioner:
     domainUrl: https://explorer.code4health.org/ehrscape-manager/rest/domain/
-    templateUrl: http://cdr.termlex.com/rest/v1/template/
+    templateUrl: https://cdr.code4health.org/rest/v1/template/
     username:
     password:
+# Notifier settings
+notifier:
+    openEhrUrl: https://cdr.code4health.org/rest/v1/composition/
+    teamName: Code4Health team

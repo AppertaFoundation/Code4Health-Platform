@@ -1,5 +1,6 @@
 package cloud.operon.platform.service;
 
+import cloud.operon.platform.domain.Notification;
 import cloud.operon.platform.domain.Operino;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -61,6 +62,10 @@ public interface OperinoService {
      */
     Page<Operino> search(String query, Pageable pageable);
 
-    @Transactional(readOnly = true)
     Map<String, String> getConfigForOperino(Operino operino);
+
+    Notification sendNotification(Notification notification);
+
+    @Transactional(readOnly = true)
+    Page<Notification> getNotifications(Pageable pageable);
 }

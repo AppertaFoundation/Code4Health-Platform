@@ -18,15 +18,10 @@ import org.springframework.messaging.handler.annotation.support.DefaultMessageHa
 
 @EnableRabbit
 @Configuration
-//@EnableConfigurationProperties(value = {ProvisionerProperties.class})
-//@ConfigurationProperties(prefix = "provisioner")
 public class OperonRabbitListenerConfig implements RabbitListenerConfigurer {
 
     @Autowired
     public ConnectionFactory connectionFactory;
-//    String username;
-//    String password;
-//    String url;
 
     @Bean
     public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory() {
@@ -57,5 +52,10 @@ public class OperonRabbitListenerConfig implements RabbitListenerConfigurer {
     @Bean
     public Queue operinosQueue() {
         return new Queue("operinos");
+    }
+
+    @Bean
+    public Queue notificationsQueue() {
+        return new Queue("notifications");
     }
 }
