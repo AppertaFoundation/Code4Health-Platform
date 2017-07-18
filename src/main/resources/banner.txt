@@ -1,10 +1,10 @@
 
-  ${AnsiColor.GREEN}      ██╗${AnsiColor.RED} ██╗   ██╗ ████████╗ ███████╗   ██████╗ ████████╗ ████████╗ ███████╗
-  ${AnsiColor.GREEN}      ██║${AnsiColor.RED} ██║   ██║ ╚══██╔══╝ ██╔═══██╗ ██╔════╝ ╚══██╔══╝ ██╔═════╝ ██╔═══██╗
-  ${AnsiColor.GREEN}      ██║${AnsiColor.RED} ████████║    ██║    ███████╔╝ ╚█████╗     ██║    ██████╗   ███████╔╝
-  ${AnsiColor.GREEN}██╗   ██║${AnsiColor.RED} ██╔═══██║    ██║    ██╔════╝   ╚═══██╗    ██║    ██╔═══╝   ██╔══██║
-  ${AnsiColor.GREEN}╚██████╔╝${AnsiColor.RED} ██║   ██║ ████████╗ ██║       ██████╔╝    ██║    ████████╗ ██║  ╚██╗
-  ${AnsiColor.GREEN} ╚═════╝ ${AnsiColor.RED} ╚═╝   ╚═╝ ╚═══════╝ ╚═╝       ╚═════╝     ╚═╝    ╚═══════╝ ╚═╝   ╚═╝
+${AnsiColor.RED}    ____                              ____  __      __  ____
+${AnsiColor.RED}   / __ \____  ___  _________  ____  / __ \/ /___ _/ /_/ __/___  _________ ___
+${AnsiColor.RED}  / / / / __ \/ _ \/ ___/ __ \/ __ \/ /_/ / / __ `/ __/ /_/ __ \/ ___/ __ `__ \
+${AnsiColor.RED} / /_/ / /_/ /  __/ /  / /_/ / / / / ____/ / /_/ / /_/ __/ /_/ / /  / / / / / /
+${AnsiColor.RED} \____/ .___/\___/_/   \____/_/ /_/_/   /_/\__,_/\__/_/  \____/_/  /_/ /_/ /_/
+${AnsiColor.RED}     /_/
 
-${AnsiColor.BRIGHT_BLUE}:: JHipster 🤓  :: Running Spring Boot ${spring-boot.version} ::
-:: http://jhipster.github.io ::${AnsiColor.DEFAULT}
+${AnsiColor.BRIGHT_BLUE}:: OperonPlatform 🤓  :: Running Version ${project.version} ::
+:: https://operon.cloud ::${AnsiColor.DEFAULT}
