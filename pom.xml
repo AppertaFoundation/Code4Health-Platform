@@ -459,6 +459,13 @@
             <version>${cucumber.version}</version>
             <scope>test</scope>
         </dependency>
+        <!-- iText-->
+        <!-- https://mvnrepository.com/artifact/com.lowagie/itext -->
+        <dependency>
+            <groupId>com.lowagie</groupId>
+            <artifactId>itext</artifactId>
+            <version>2.1.7</version>
+        </dependency>
         <!-- jhipster-needle-maven-add-dependency -->
     </dependencies>
     <build>

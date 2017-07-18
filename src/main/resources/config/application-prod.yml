@@ -160,3 +160,4 @@ provisioner:
 notifier:
     openEhrUrl: https://cdr.code4health.org/rest/v1/composition/
     teamName: Code4Health team
+    skipCompositionIdValidation: true

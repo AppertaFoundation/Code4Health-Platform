@@ -31,7 +31,7 @@ public class NotificationsResource {
 
     private static final String ENTITY_NAME = "operino";
     private static final String NOTIFICATION_ENTITY_NAME = "notification";
-
+    private final boolean validateOperinoId = false;
     private final OperinoService operinoService;
 
     public NotificationsResource(OperinoService operinoService) {
@@ -70,7 +70,7 @@ public class NotificationsResource {
     public ResponseEntity<Notification> sendNotification(@PathVariable Long id, @Valid @RequestBody Notification notification) throws URISyntaxException {
         log.debug("REST request to send notification for Operino : {}", id);
         Operino operino = operinoService.verifyOwnershipAndGet(id);
-        if (operino != null) {
+        if (validateOperinoId || operino != null) {
             notification.setOperino(operino);
             // now send notification using operino service and return call
             Notification result = operinoService.sendNotification(notification);

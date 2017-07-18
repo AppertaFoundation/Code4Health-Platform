@@ -5,6 +5,8 @@ import cloud.operon.platform.domain.enumeration.NotificationStatus;
 import cloud.operon.platform.repository.NotificationRepository;
 import cloud.operon.platform.service.MailService;
 import cloud.operon.platform.service.OperinoService;
+import cloud.operon.platform.service.util.PdfReportGenerator;
+import com.lowagie.text.DocumentException;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +25,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Service Implementation for processing notifications.
@@ -31,11 +34,12 @@ import java.util.Map;
 @Transactional
 @RabbitListener(queues = "notifications")
 @ConfigurationProperties(prefix = "notifier", ignoreUnknownFields = false)
-public class NotifactionProcessorImpl {
+public class NotificationProcessorImpl {
 
-    private final Logger log = LoggerFactory.getLogger(NotifactionProcessorImpl.class);
+    private final Logger log = LoggerFactory.getLogger(NotificationProcessorImpl.class);
     String openEhrUrl;
     String teamName;
+    boolean skipCompositionIdValidation;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -66,27 +70,23 @@ public class NotifactionProcessorImpl {
         HttpEntity<Map<String, String>> getRequst = new HttpEntity<>(headers);
         log.info("getRequest = " + getRequst);
         try {
-            ResponseEntity<Resource> getResponse = restTemplate.exchange(openEhrUrl+notification.getRecordComponentId(), HttpMethod.GET, getRequst, Resource.class);
+            // create input stream with pdf as content
+            String reportFileName = UUID.randomUUID().toString();
+            InputStream inputStream = PdfReportGenerator.createPdf(reportFileName);
+            ResponseEntity<Resource> getResponse = restTemplate.exchange(openEhrUrl + notification.getRecordComponentId(), HttpMethod.GET, getRequst, Resource.class);
             log.debug("getResponse = " + getResponse);
-            if(getResponse.getStatusCode() == HttpStatus.OK){
-                // create input stream form rest call
-                InputStream inputStream = getResponse.getBody().getInputStream();
+            if(getResponse.getStatusCode() == HttpStatus.OK || skipCompositionIdValidation){
                 // now loop though recipients and send emails to all
-                notification.getRecipients().forEach(recipient -> {
-                    mailService.sendEmail(recipient, notification.getSubject(), notification.getBody(), true, true);
-                    mailService.sendEmailWithAttachment(recipient, notification.getSubject(), notification.getBody(),
-                            "report.json", inputStream, "application/json", true, true);
+                notification.getEmail().getRecipients().forEach(recipient -> {
+                    mailService.sendEmailWithAttachment(recipient, notification.getEmail().getReportEmail().getSubject(),
+                            notification.getEmail().getConfirmationEmail().getBody(),
+                            reportFileName + ".pdf", inputStream, "application/pdf", true, true);
                 });
 
                 // now loop through confirmation receivers and notify all
-                notification.getConfirmationReceivers().forEach(recipient -> {
-                    StringBuilder builder = new StringBuilder();
-                    builder.append("Your notification was successfully sent to the following recipients:");
-                    notification.getRecipients().forEach(r -> {
-                        builder.append(r).append("\n");
-                    });
-                    builder.append("Regards,").append("\n").append(teamName);
-                    mailService.sendEmail(recipient, "Delivery confirmation", builder.toString(), false, false);
+                notification.getEmail().getConfirmationReceivers().forEach(recipient -> {
+                    mailService.sendEmail(recipient, notification.getEmail().getConfirmationEmail().getSubject(),
+                            notification.getEmail().getConfirmationEmail().getBody(), false, false);
                 });
                 // update notification status
                 notification.setStatus(NotificationStatus.SENT);
@@ -104,6 +104,8 @@ public class NotifactionProcessorImpl {
             // update notification status
             notification.setStatus(NotificationStatus.FAILED);
             log.error("Error reading response from rest call. Nested exception is : ", e);
+        } catch (DocumentException e) {
+            log.error("Error generating pdf from rest call. Nested exception is : ", e);
         }
 
         //save notification
@@ -120,5 +122,9 @@ public class NotifactionProcessorImpl {
 
     public void setNotificationRepository(NotificationRepository notificationRepository) {
         this.notificationRepository = notificationRepository;
+    }
+
+    public void setSkipCompositionIdValidation(boolean skipCompositionIdValidation) {
+        this.skipCompositionIdValidation = skipCompositionIdValidation;
     }
 }

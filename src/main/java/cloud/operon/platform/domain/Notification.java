@@ -6,7 +6,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
-import java.util.Set;
 
 /**
  * A generic class representing a notification
@@ -23,15 +22,11 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ElementCollection
-    Set<String> recipients;
+    @Embedded
+    Email email;
 
-    @ElementCollection
-    Set<String> confirmationReceivers;
-
-    String body;
-
-    String subject;
+    @Embedded
+    FormData formData;
 
     String recordComponentId;
 
@@ -39,42 +34,6 @@ public class Notification {
     Operino operino;
 
     NotificationStatus status;
-
-    public Set<String> getRecipients() {
-        return recipients;
-    }
-
-    public void setRecipients(Set<String> recipients) {
-        this.recipients = recipients;
-    }
-
-    public Set<String> addRecipient(String recipient) {
-        this.recipients.add(recipient);
-        return this.recipients;
-    }
-
-    public Set<String> removeRecipient(String recipient) {
-        this.recipients.remove(recipient);
-        return this.recipients;
-    }
-
-    public Set<String> getConfirmationReceivers() {
-        return confirmationReceivers;
-    }
-
-    public void setConfirmationReceivers(Set<String> confirmationReceivers) {
-        this.confirmationReceivers = confirmationReceivers;
-    }
-
-    public Set<String> addConfirmationReceiver(String confirmationReceiever) {
-        this.confirmationReceivers.add(confirmationReceiever);
-        return this.confirmationReceivers;
-    }
-
-    public Set<String> removeConfirmationReceiver(String confirmationReceiever) {
-        this.confirmationReceivers.remove(confirmationReceiever);
-        return this.confirmationReceivers;
-    }
 
     public String getRecordComponentId() {
         return recordComponentId;
@@ -92,22 +51,6 @@ public class Notification {
         this.operino = operino;
     }
 
-    public String getBody() {
-        return body;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
     public Long getId() {
         return id;
     }
@@ -122,5 +65,21 @@ public class Notification {
 
     public void setStatus(NotificationStatus status) {
         this.status = status;
+    }
+
+    public Email getEmail() {
+        return email;
+    }
+
+    public void setEmail(Email email) {
+        this.email = email;
+    }
+
+    public FormData getFormData() {
+        return formData;
+    }
+
+    public void setFormData(FormData formData) {
+        this.formData = formData;
     }
 }
