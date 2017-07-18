@@ -22,6 +22,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +38,8 @@ public class OperinoProvisionerImpl implements InitializingBean, OperinoProvisio
     private final Logger log = LoggerFactory.getLogger(OperinoProvisionerImpl.class);
     String domainUrl;
     String templateUrl;
+    String provisionerUrl;
+    String subjectNamespace;
     String username;
     String password;
     String templateToSubmit;
@@ -89,6 +92,28 @@ public class OperinoProvisionerImpl implements InitializingBean, OperinoProvisio
                     log.debug("templateRequest = " + templateRequest);
                     ResponseEntity templateResponse = restTemplate.postForEntity(templateUrl, templateRequest, String.class);
                     log.debug("templateResponse = " + templateResponse);
+
+                    // now call provisioner url with parameters to populate dummy data against problem diagnosis template
+                    // create data for submission
+                    Map<String, String> map = new HashMap<>();
+                    map.put("username", data.get("username"));
+                    map.put("password", data.get("password"));
+                    map.put("baseUrl", data.get(templateUrl));
+                    map.put("subjectNamespace", subjectNamespace);
+
+                    // now call ehrscape_provisioner endpoint with map and a parameter for data file
+                    for(int i=0; i< 5; i++) {
+                        map.put("patientsFile", "patients"+(i+1)+".csv");
+                        // update header to specify data is map
+                        templateHeaders.setContentType(MediaType.APPLICATION_JSON);
+
+                        log.info("provisionerUrl = {}", provisionerUrl);
+                        HttpEntity<Map<String, String>> dummyDataRequest = new HttpEntity<>(map, templateHeaders);
+                        log.info("dummyDataRequest = {}", dummyDataRequest);
+                        templateResponse = restTemplate.postForEntity(provisionerUrl, dummyDataRequest, String.class);
+                        log.debug("templateResponse = " + templateResponse);
+                    }
+
                 } else {
                     log.error("Unable to create domain for operino {}", operino);
                 }
@@ -162,19 +187,19 @@ public class OperinoProvisionerImpl implements InitializingBean, OperinoProvisio
         this.password = password;
     }
 
-    public String getTemplateUrl() {
-        return templateUrl;
-    }
-
     public void setTemplateUrl(String templateUrl) {
         this.templateUrl = templateUrl;
     }
 
-    public String getDomainUrl() {
-        return domainUrl;
-    }
-
     public void setDomainUrl(String domainUrl) {
         this.domainUrl = domainUrl;
+    }
+
+    public void setProvisionerUrl(String provisionerUrl) {
+        this.provisionerUrl = provisionerUrl;
+    }
+
+    public void setSubjectNamespace(String subjectNamespace) {
+        this.subjectNamespace = subjectNamespace;
     }
 }

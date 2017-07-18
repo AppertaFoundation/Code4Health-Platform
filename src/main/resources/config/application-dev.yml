@@ -150,6 +150,8 @@ application:
 provisioner:
     domainUrl: https://explorer.code4health.org/ehrscape-manager/rest/domain/
     templateUrl: https://cdr.code4health.org/rest/v1/template/
+    provisionerUrl: http://ep.termlex.com/api/provision/multiple-patient
+    subjectNamespace: uk.nhs.nhs_number
     username:
     password:
 # Notifier settings
