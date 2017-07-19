@@ -76,7 +76,7 @@ public class NotificationProcessorImpl {
         try {
             // create input stream with pdf as content
             String reportFileName = UUID.randomUUID().toString();
-            InputStream inputStream = PdfReportGenerator.createPdf(reportFileName, notification.getFormData());
+            String reportPath = PdfReportGenerator.createPdf(reportFileName, notification.getFormData());
             ResponseEntity<Resource> getResponse = null;
             if (!skipCompositionIdValidation) {
                 getResponse = restTemplate.exchange(openEhrUrl + notification.getRecordComponentId(), HttpMethod.GET, getRequst, Resource.class);
@@ -88,7 +88,7 @@ public class NotificationProcessorImpl {
                 notification.getEmail().getRecipients().forEach(recipient -> {
                     mailService.sendEmailWithAttachment(recipient, notification.getEmail().getReportEmail().getSubject(),
                             notification.getEmail().getConfirmationEmail().getBody(),
-                            reportFileName + ".pdf", inputStream, "application/pdf", true, true);
+                            reportFileName + ".pdf", reportPath, "application/pdf", true, true);
                     log.info("Sent report to recipient = {}", recipient);
                 });
 

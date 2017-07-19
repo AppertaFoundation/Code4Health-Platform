@@ -3,6 +3,7 @@ package cloud.operon.platform.service.util;
 import cloud.operon.platform.domain.FormData;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
+import com.lowagie.text.Font;
 import com.lowagie.text.Phrase;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
@@ -20,6 +21,10 @@ import java.nio.file.Path;
 public class PdfReportGenerator {
 
     private static final Logger log = LoggerFactory.getLogger(PdfReportGenerator.class);
+    private static Font titleFont = new Font(Font.TIMES_ROMAN, 18, Font.BOLD);
+    private static Font subFont = new Font(Font.TIMES_ROMAN, 16, Font.BOLD);
+    private static Font smallBold = new Font(Font.TIMES_ROMAN, 12, Font.BOLD);
+    public static final Font BOLD_UNDERLINED = new Font(Font.TIMES_ROMAN, 12, Font.BOLD | Font.UNDERLINE);
 
     /**
      * Creates a PDF with information about the movies
@@ -27,7 +32,7 @@ public class PdfReportGenerator {
      * @throws    DocumentException
      * @throws    IOException
      */
-    public static InputStream createPdf(String filename, FormData formData) throws IOException, DocumentException {
+    public static String createPdf(String filename, FormData formData) throws IOException, DocumentException {
         // step 1
         Document document = new Document();
         String reportPath = createTempFile(filename);
@@ -41,7 +46,7 @@ public class PdfReportGenerator {
         document.close();
         log.info("Report path = {}", reportPath);
         // return file as input stream
-        return new FileInputStream(reportPath);
+        return reportPath;
     }
 
     /**

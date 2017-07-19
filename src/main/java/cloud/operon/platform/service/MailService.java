@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
-import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -16,7 +16,6 @@ import org.thymeleaf.context.Context;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
 import javax.mail.internet.MimeMessage;
-import java.io.InputStream;
 import java.util.Locale;
 
 /**
@@ -73,7 +72,7 @@ public class MailService {
 
     @Async
     public void sendEmailWithAttachment(String to, String subject, String content, String fileName,
-                                        InputStream inputStream, String contentType,
+                                        String reportPath, String contentType,
                                         boolean isMultipart, boolean isHtml) {
         log.debug("Send e-mail[multipart '{}' and html '{}'] to '{}' with subject '{}' and content={}",
             isMultipart, isHtml, to, subject, content);
@@ -86,7 +85,7 @@ public class MailService {
             message.setFrom(jHipsterProperties.getMail().getFrom());
             message.setSubject(subject);
             message.setText(content, isHtml);
-            message.addAttachment(fileName, new InputStreamResource(inputStream), contentType);
+            message.addAttachment(fileName, new FileSystemResource(reportPath), contentType);
             // now send message
             javaMailSender.send(mimeMessage);
             log.debug("Sent e-mail to User '{}'", to);
