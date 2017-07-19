@@ -4,6 +4,7 @@ import org.hibernate.annotations.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -19,7 +20,7 @@ public class FormItem implements Serializable {
     String comment;
     @OneToMany
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    Set<FormItem> childItems;
+    Set<FormItem> childItems = new HashSet<>();
 
     public String getLabel() {
         return label;
