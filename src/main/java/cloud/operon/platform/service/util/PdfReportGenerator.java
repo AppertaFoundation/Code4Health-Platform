@@ -13,6 +13,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A class that generates a Pdf report for a given composition and {@link cloud.operon.platform.domain.Notification}.
@@ -25,6 +27,7 @@ public class PdfReportGenerator {
     private static Font SUBTITLE_FONT = new Font(Font.HELVETICA, 16, Font.BOLD);
     private static Font FOOTER_FONT = new Font(Font.HELVETICA, 8, Font.NORMAL);
     public static final Font LABEL_FONT = new Font(Font.HELVETICA, 12, Font.ITALIC);
+    public static final Font HYPERLINK_FONT = new Font(Font.HELVETICA, 12, Font.UNDERLINE, Color.BLUE);
 
     /**
      * Creates a PDF with information about the movies
@@ -80,14 +83,49 @@ public class PdfReportGenerator {
         // loop through conditional body items and add as paragraph
         formData.getConditionalBody().keySet().forEach(key -> {
             try {
-                Paragraph cBodyPara = new Paragraph(formData.getConditionalBody().get(key), BODY_FONT);
-                cBodyPara.setSpacingAfter(20);
-                document.add(cBodyPara);
+                // horrible hack for detecting html link elements :( :(
+                String text = formData.getConditionalBody().get(key);
+                Pattern p = Pattern.compile("<a href=\"(.*?)\"");
+                Matcher m = p.matcher(text);
+                String url = null;
+                if (m.find()) {
+                    url = m.group(1);
+                    log.info("url = {}", url);
+                    // we now have to remove the <a href="url"> bit and identify the linked text
+                    String textToStrip = "<a href=\""+url+"\">";
+                    log.info("textToStrip = {}", textToStrip);
+                    String[] parts = text.split(textToStrip);
+                    log.info("parts = {}", parts);
+                    // now suffix should have the part after our url, we process it to match for </a> closing tag
+                    String suffix = parts[1];
+                    String linkedText = suffix.substring(0, suffix.indexOf("</a>"));
+                    log.info("linkedText = {}", linkedText);
+                    // now update suffix to the bit after the closing tag
+                    suffix = suffix.substring(suffix.indexOf("</a>") +4);
+                    log.info("suffix = {}", suffix);
+
+                    Paragraph phrase = new Paragraph();
+                    phrase.setFont(BODY_FONT);
+                    phrase.add(text.substring(0, text.indexOf(textToStrip)));
+                    Chunk chunk = new Chunk(linkedText);
+                    chunk.setFont(HYPERLINK_FONT);
+                    chunk.setAnchor(url);
+                    phrase.add(chunk);
+                    phrase.add(suffix);
+
+                    phrase.setSpacingAfter(20);
+                    document.add(phrase);
+                } else {
+                    Paragraph cBodyPara = new Paragraph(formData.getConditionalBody().get(key), BODY_FONT);
+                    cBodyPara.setSpacingAfter(20);
+                    document.add(cBodyPara);
+                }
             } catch (DocumentException e) {
                 log.error("Unable to add conditional body. Nested exception is : ", e);
             }
         });
-        // step 5
+
+        // close document
         document.close();
         log.info("Report path = {}", reportPath);
         // return file as input stream
