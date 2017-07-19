@@ -22,7 +22,6 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Map;
 import java.util.UUID;
 
@@ -87,7 +86,7 @@ public class NotificationProcessorImpl {
                 // now loop though recipients and send emails to all
                 notification.getEmail().getRecipients().forEach(recipient -> {
                     mailService.sendEmailWithAttachment(recipient, notification.getEmail().getReportEmail().getSubject(),
-                            notification.getEmail().getConfirmationEmail().getBody(),
+                            notification.getEmail().getReportEmail().getBody(),
                             reportFileName + ".pdf", reportPath, "application/pdf", true, true);
                     log.info("Sent report to recipient = {}", recipient);
                 });
@@ -95,7 +94,7 @@ public class NotificationProcessorImpl {
                 // now loop through confirmation receivers and notify all
                 notification.getEmail().getConfirmationReceivers().forEach(recipient -> {
                     mailService.sendEmail(recipient, notification.getEmail().getConfirmationEmail().getSubject(),
-                            notification.getEmail().getConfirmationEmail().getBody(), false, false);
+                            notification.getEmail().getConfirmationEmail().getBody(), true, true);
                     log.info("Sent confirmation to recipient = {}", recipient);
                 });
                 // update notification status
