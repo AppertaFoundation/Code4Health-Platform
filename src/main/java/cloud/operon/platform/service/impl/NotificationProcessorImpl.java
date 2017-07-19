@@ -10,8 +10,7 @@ import com.lowagie.text.DocumentException;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.rabbit.annotation.RabbitHandler;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.io.Resource;
@@ -32,7 +31,8 @@ import java.util.UUID;
  */
 @Service
 @Transactional
-@RabbitListener(queues = "notifications")
+//@RabbitListener(queues = "notifications")
+@RabbitListener(bindings = @QueueBinding(value = @Queue(value = "notifications", durable = "true") , exchange = @Exchange(value = "exch", autoDelete = "true") , key = "key") )
 @ConfigurationProperties(prefix = "notifier", ignoreUnknownFields = false)
 public class NotificationProcessorImpl {
 
@@ -52,19 +52,23 @@ public class NotificationProcessorImpl {
     @Autowired
     private MailService mailService;
 
+//    @RabbitListener(queues = "notifications")
     @RabbitHandler
     public void receive(@Payload Notification notification) {
         log.info("Received notification {}", notification);
 
         //build call to open ehr backend
-        String plainCreds = operinoService.getConfigForOperino(notification.getOperino()).get("username") +
-                ":" + operinoService.getConfigForOperino(notification.getOperino()).get("password");
-        byte[] plainCredsBytes = plainCreds.getBytes();
-        byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
-        String base64Creds = new String(base64CredsBytes);
         // set headers
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Basic " + base64Creds);
+        if (!skipCompositionIdValidation) {
+            String plainCreds = operinoService.getConfigForOperino(notification.getOperino()).get("username") +
+                    ":" + operinoService.getConfigForOperino(notification.getOperino()).get("password");
+            byte[] plainCredsBytes = plainCreds.getBytes();
+            byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
+            String base64Creds = new String(base64CredsBytes);
+
+            headers.add("Authorization", "Basic " + base64Creds);
+        }
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<Map<String, String>> getRequst = new HttpEntity<>(headers);
@@ -72,21 +76,27 @@ public class NotificationProcessorImpl {
         try {
             // create input stream with pdf as content
             String reportFileName = UUID.randomUUID().toString();
-            InputStream inputStream = PdfReportGenerator.createPdf(reportFileName);
-            ResponseEntity<Resource> getResponse = restTemplate.exchange(openEhrUrl + notification.getRecordComponentId(), HttpMethod.GET, getRequst, Resource.class);
-            log.debug("getResponse = " + getResponse);
-            if(getResponse.getStatusCode() == HttpStatus.OK || skipCompositionIdValidation){
+            InputStream inputStream = PdfReportGenerator.createPdf(reportFileName, notification.getFormData());
+            ResponseEntity<Resource> getResponse = null;
+            if (!skipCompositionIdValidation) {
+                getResponse = restTemplate.exchange(openEhrUrl + notification.getRecordComponentId(), HttpMethod.GET, getRequst, Resource.class);
+                log.debug("getResponse = " + getResponse);
+            }
+            // now process notification and send emails
+            if((getResponse != null && getResponse.getStatusCode() == HttpStatus.OK) || skipCompositionIdValidation){
                 // now loop though recipients and send emails to all
                 notification.getEmail().getRecipients().forEach(recipient -> {
                     mailService.sendEmailWithAttachment(recipient, notification.getEmail().getReportEmail().getSubject(),
                             notification.getEmail().getConfirmationEmail().getBody(),
                             reportFileName + ".pdf", inputStream, "application/pdf", true, true);
+                    log.info("Sent report to recipient = {}", recipient);
                 });
 
                 // now loop through confirmation receivers and notify all
                 notification.getEmail().getConfirmationReceivers().forEach(recipient -> {
                     mailService.sendEmail(recipient, notification.getEmail().getConfirmationEmail().getSubject(),
                             notification.getEmail().getConfirmationEmail().getBody(), false, false);
+                    log.info("Sent confirmation to recipient = {}", recipient);
                 });
                 // update notification status
                 notification.setStatus(NotificationStatus.SENT);
@@ -94,7 +104,7 @@ public class NotificationProcessorImpl {
             } else {
                 // update notification status
                 notification.setStatus(NotificationStatus.FAILED);
-                log.error("Unable to verify access composition with id {}. So.", notification.getRecordComponentId());
+                log.error("Unable to verify access composition with id {}.", notification.getRecordComponentId());
             }
         } catch (HttpClientErrorException e) {
             // update notification status
@@ -109,7 +119,7 @@ public class NotificationProcessorImpl {
         }
 
         //save notification
-        notificationRepository.save(notification);
+//        notificationRepository.save(notification);
     }
 
     public void setOpenEhrUrl(String openEhrUrl) {

@@ -1,8 +1,10 @@
 package cloud.operon.platform.domain;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Embeddable;
-import javax.persistence.Embedded;
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.CascadeType;
+
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -10,18 +12,32 @@ import java.util.Set;
  */
 
 @Embeddable
-public class Email {
+public class Email implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @ElementCollection
+    @Cascade(CascadeType.ALL)
     Set<String> recipients;
 
     @ElementCollection
+    @Cascade(CascadeType.ALL)
     Set<String> confirmationReceivers;
 
     @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name="body",column=@Column(name="confirm_body")),
+            @AttributeOverride(name="subject",column=@Column(name="confirm_subject"))
+    })
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     EmailHeader confirmationEmail;
 
     @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name="body",column=@Column(name="report_body")),
+            @AttributeOverride(name="subject",column=@Column(name="report_subject"))
+    })
+    @Cascade(CascadeType.ALL)
     EmailHeader reportEmail;
 
     public Set<String> getRecipients() {

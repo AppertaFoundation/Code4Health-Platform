@@ -185,7 +185,7 @@ public class OperinoServiceImpl implements OperinoService{
     public Notification sendNotification(Notification notification) {
         // save notification
         notification.setStatus(NotificationStatus.INPROGRESS);
-        notification = notificationRepository.save(notification);
+//        notification = notificationRepository.save(notification);
         rabbitTemplate.convertAndSend("notifications", notification);
         log.info("Notification sent to rabbitmq");
 

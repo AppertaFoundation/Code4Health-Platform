@@ -31,7 +31,7 @@ public class NotificationsResource {
 
     private static final String ENTITY_NAME = "operino";
     private static final String NOTIFICATION_ENTITY_NAME = "notification";
-    private final boolean validateOperinoId = false;
+    private final boolean skipOperinoValidation = true;
     private final OperinoService operinoService;
 
     public NotificationsResource(OperinoService operinoService) {
@@ -60,22 +60,22 @@ public class NotificationsResource {
     }
 
     /**
-     * POST  /operinos/:id/notifications : send composition as notification for the "id" operino.
+     * POST  /notifications/:id : send composition as notification for the "id" operino.
      *
      * @param id the id of the operino that contains the composition id
      * @return the ResponseEntity with status 201 (OK) and with body the notification, or with status 404 (Not Found)
      */
-    @PostMapping("/operinos/{id}/notifications")
+    @PostMapping("/notifications/{id}")
     @Timed
     public ResponseEntity<Notification> sendNotification(@PathVariable Long id, @Valid @RequestBody Notification notification) throws URISyntaxException {
-        log.debug("REST request to send notification for Operino : {}", id);
+        log.debug("REST request to send notification for Operino : {} ", id);
         Operino operino = operinoService.verifyOwnershipAndGet(id);
-        if (validateOperinoId || operino != null) {
+        if (skipOperinoValidation || operino != null) {
             notification.setOperino(operino);
             // now send notification using operino service and return call
             Notification result = operinoService.sendNotification(notification);
-            return ResponseEntity.created(new URI("/api/notifications/" + result.getId()))
-                    .headers(HeaderUtil.createEntityCreationAlert(NOTIFICATION_ENTITY_NAME, result.getId().toString()))
+            return ResponseEntity.created(new URI("/api/notifications/"))
+                    .headers(HeaderUtil.createEntityCreationAlert(NOTIFICATION_ENTITY_NAME, "xxxxx"))
                     .body(result);
         } else {
             return ResponseEntity.badRequest()

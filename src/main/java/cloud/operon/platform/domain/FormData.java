@@ -1,32 +1,40 @@
 package cloud.operon.platform.domain;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
+import javax.persistence.ElementCollection;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
-import javax.persistence.OneToMany;
+import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 /**
  * A specification for form data
  */
 @Embeddable
-public class FormData {
+public class FormData implements Serializable {
 
+    private static final long serialVersionUID = 1L;
 
     @Embedded
-    Set<FormItem> formItems;
+    @Cascade(CascadeType.ALL)
+    List<FormItem> formItems;
     String subTitle;
-    List<String> conditionalBody;
+    @ElementCollection
+    @Cascade(CascadeType.ALL)
+    Map<String, String> conditionalBody;
     String header;
     String conditionalSubTitle;
     String footer;
     String title;
 
-    public Set<FormItem> getFormItems() {
+    public List<FormItem> getFormItems() {
         return formItems;
     }
 
-    public void setFormItems(Set<FormItem> formItems) {
+    public void setFormItems(List<FormItem> formItems) {
         this.formItems = formItems;
     }
 
@@ -38,11 +46,11 @@ public class FormData {
         this.subTitle = subTitle;
     }
 
-    public List<String> getConditionalBody() {
+    public Map<String, String> getConditionalBody() {
         return conditionalBody;
     }
 
-    public void setConditionalBody(List<String> conditionalBody) {
+    public void setConditionalBody(Map<String, String> conditionalBody) {
         this.conditionalBody = conditionalBody;
     }
 
@@ -76,47 +84,5 @@ public class FormData {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    @Embeddable
-    class FormItem {
-
-        String label;
-        String value;
-        String comment;
-        @OneToMany
-        Set<FormItem> childItems;
-
-        public String getLabel() {
-            return label;
-        }
-
-        public void setLabel(String label) {
-            this.label = label;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        public void setValue(String value) {
-            this.value = value;
-        }
-
-        public String getComment() {
-            return comment;
-        }
-
-        public void setComment(String comment) {
-            this.comment = comment;
-        }
-
-        public Set<FormItem> getChildItems() {
-            return childItems;
-        }
-
-        public void setChildItems(Set<FormItem> childItems) {
-            this.childItems = childItems;
-        }
     }
 }

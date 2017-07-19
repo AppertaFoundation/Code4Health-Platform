@@ -1,11 +1,15 @@
 package cloud.operon.platform.domain;
 
 import cloud.operon.platform.domain.enumeration.NotificationStatus;
+import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.CascadeType;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * A generic class representing a notification
@@ -14,7 +18,7 @@ import javax.persistence.*;
 @Table(name = "notification")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Document(indexName = "notification")
-public class Notification {
+public class Notification implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -23,14 +27,17 @@ public class Notification {
     private Long id;
 
     @Embedded
+    @Cascade(CascadeType.ALL)
     Email email;
 
     @Embedded
+    @Cascade(CascadeType.ALL)
     FormData formData;
 
     String recordComponentId;
 
     @ManyToOne
+    @Cascade(CascadeType.ALL)
     Operino operino;
 
     NotificationStatus status;
