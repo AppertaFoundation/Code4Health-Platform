@@ -1,0 +1,23 @@
+{
+  "ctx/composer_name": "Dr Joyce Smith",
+  "ctx/health_care_facility|id": "999999-345",
+  "ctx/health_care_facility|name": "Northumbria Community NHS",
+  "ctx/id_namespace": "NHS-UK",
+  "ctx/id_scheme": "2.16.840.1.113883.2.1.4.3",
+  "ctx/language": "en",
+  "ctx/territory": "GB",
+ "ctx/time": "2015-05-27T00:19:02.518+02:00",
+  "laboratory_order/laboratory_test_request/lab_request/timing": "R5/2015-05-27T00:19:00+02:00/P2M",
+   "laboratory_order/laboratory_test_request/narrative": "hepatic function panel",
+   "laboratory_order/laboratory_test_request/lab_request/service_requested|value": "hepatic function panel",
+	 "laboratory_order/laboratory_test_request/lab_request/service_requested|code": "26958001",
+	 "laboratory_order/laboratory_test_request/lab_request/service_requested|terminology": "SNOMED-CT",
+	 "laboratory_order/laboratory_test_tracker/ism_transition/current_state|code": "526",
+   "laboratory_order/laboratory_test_tracker/ism_transition/current_state|value": "planned",
+	 "laboratory_order/laboratory_test_tracker/ism_transition/careflow_step|code": "at0003",
+   "laboratory_order/laboratory_test_tracker/ism_transition/careflow_step|value": "Test requested",
+   "laboratory_order/laboratory_test_tracker/test_name|value": "hepatic function panel",
+	 "laboratory_order/laboratory_test_tracker/test_name|code": "26958001",
+	 "laboratory_order/laboratory_test_tracker/test_name|terminology": "SNOMED-CT",
+   "laboratory_order/laboratory_test_tracker/time": "2015-05-27T00:19:02.518+02:00"
+ }

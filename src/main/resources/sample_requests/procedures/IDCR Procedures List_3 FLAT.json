@@ -1,0 +1,19 @@
+{
+ "ctx/composer_name": "Dr Joyce Smith",
+ "ctx/health_care_facility|id": "999999-345",
+ "ctx/health_care_facility|name": "Northumbria Community NHS",
+ "ctx/id_namespace": "NHS-UK",
+ "ctx/id_scheme": "2.16.840.1.113883.2.1.4.3",
+ "ctx/language": "en",
+ "ctx/territory": "GB",
+ "ctx/time": "2015-08-17T00:17:47.518+02:00",
+  "procedures_list/procedures:0/procedure:0/ism_transition/current_state|code": "245",
+  "procedures_list/procedures:0/procedure:0/ism_transition/current_state|value": "active",
+  "procedures_list/procedures:0/procedure:0/ism_transition/careflow_step|code": "at0047",
+  "procedures_list/procedures:0/procedure:0/ism_transition/careflow_step|value": "Procedure performed",
+  "procedures_list/procedures:0/procedure:0/procedure_name|value": "open reduction of closed clavicular fracture",
+  "procedures_list/procedures:0/procedure:0/procedure_name|terminology": "SNOMED-CT",
+"procedures_list/procedures:0/procedure:0/procedure_name|code": "38711002",
+
+  "procedures_list/procedures:0/procedure:0/time": "2015-08-12T12:17:33.829Z"
+}

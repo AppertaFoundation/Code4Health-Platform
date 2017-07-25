@@ -1,8 +1,13 @@
 package cloud.operon.platform.service.impl;
 
 import cloud.operon.platform.domain.Operino;
+import cloud.operon.platform.domain.Patient;
 import cloud.operon.platform.service.OperinoProvisioner;
 import cloud.operon.platform.service.OperinoService;
+import cloud.operon.platform.service.util.ThinkEhrRestClient;
+import com.fasterxml.jackson.databind.MappingIterator;
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,12 +24,11 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Service Implementation for provisioning Operinos.
@@ -43,12 +47,17 @@ public class OperinoProvisionerImpl implements InitializingBean, OperinoProvisio
     String username;
     String password;
     String templateToSubmit;
+    String agentName;
+    List<Patient> patients = new ArrayList<>();
 
     @Autowired
-    public RestTemplate restTemplate;
+    RestTemplate restTemplate;
 
     @Autowired
-    public OperinoService operinoService;
+    OperinoService operinoService;
+
+    @Autowired
+    ThinkEhrRestClient thinkEhrRestClient;
 
     @Override
     @RabbitHandler
@@ -88,13 +97,16 @@ public class OperinoProvisionerImpl implements InitializingBean, OperinoProvisio
                     HttpHeaders templateHeaders = new HttpHeaders();
                     templateHeaders.setContentType(MediaType.APPLICATION_XML);
                     templateHeaders.add("Authorization", "Basic " + token);
-                    HttpEntity<String> templateRequest = new HttpEntity<>(templateToSubmit, templateHeaders);
-                    log.debug("templateRequest = " + templateRequest);
-                    ResponseEntity templateResponse = restTemplate.postForEntity(templateUrl, templateRequest, String.class);
-                    log.debug("templateResponse = " + templateResponse);
+                    // upload various templates
+                    thinkEhrRestClient.uploadTemplate(templateHeaders, "sample_requests/allergies/allergies-template.xml");
+                    thinkEhrRestClient.uploadTemplate(templateHeaders, "sample_requests/lab-results/lab-results-template.xml");
+                    thinkEhrRestClient.uploadTemplate(templateHeaders, "sample_requests/orders/orders-template.xml");
+                    thinkEhrRestClient.uploadTemplate(templateHeaders, "sample_requests/problems/problems-template.xml");
+                    thinkEhrRestClient.uploadTemplate(templateHeaders, "sample_requests/procedures/procedures-template.xml");
+                    thinkEhrRestClient.uploadTemplate(templateHeaders, "sample_requests/vital-signs/vital-signs-template.xml");
 
                     // now call provisioner url with parameters to populate dummy data against problem diagnosis template
-                    // create data for submission
+                    // create data map for submission
                     Map<String, String> map = new HashMap<>();
                     map.put("username", data.get("username"));
                     map.put("password", data.get("password"));
@@ -102,16 +114,27 @@ public class OperinoProvisionerImpl implements InitializingBean, OperinoProvisio
                     map.put("subjectNamespace", subjectNamespace);
 
                     // now call ehrscape_provisioner endpoint with map and a parameter for data file
-                    for(int i=0; i< 5; i++) {
-                        map.put("patientsFile", "patients"+(i+1)+".csv");
-                        // update header to specify data is map
-                        templateHeaders.setContentType(MediaType.APPLICATION_JSON);
+                    templateHeaders.setContentType(MediaType.APPLICATION_JSON);
+                    for(Patient p : patients) {
+                        try {
+                            // create patient
+                            String patientId = thinkEhrRestClient.createPatient(templateHeaders, p);
+                            log.info("Created patient with Id = {}", patientId);
+                            // create ehr
+                            String ehrId = thinkEhrRestClient.createEhr(templateHeaders, subjectNamespace, patientId, agentName);
+                            log.info("Created ehr with Id = {}", ehrId);
+                            // now upload compositions against each template loaded above
+                            // -- first process allergy template compositions
+                            for(int i=1; i<7; i++){
+                                // create composition file path
+                                String compositionPath = "sample_requests/allergies/AllergiesList_" +i+"FLAT.json";
+                                String compositionId = thinkEhrRestClient.createComposition(templateHeaders, ehrId, "IDCR Allergies List.v0", agentName, compositionPath);
+                                log.info("Created composition with Id = {}", compositionId);
+                            }
 
-                        log.info("provisionerUrl = {}", provisionerUrl);
-                        HttpEntity<Map<String, String>> dummyDataRequest = new HttpEntity<>(map, templateHeaders);
-                        log.info("dummyDataRequest = {}", dummyDataRequest);
-                        templateResponse = restTemplate.postForEntity(provisionerUrl, dummyDataRequest, String.class);
-                        log.debug("templateResponse = " + templateResponse);
+                        } catch (IOException e) {
+                            log.error("Error processing json to submit for composition. Nested exception is : ", e);
+                        }
                     }
 
                 } else {
@@ -169,6 +192,25 @@ public class OperinoProvisionerImpl implements InitializingBean, OperinoProvisio
         if(getResponse == null || getResponse.getStatusCode() != HttpStatus.OK) {
             throw new RuntimeException("Unable to connect to ThinkEHR backend specified by: " + domainUrl);
         }
+
+        // load patients from files
+        for(int i=0; i< 5; i++) {
+            patients.addAll(loadPatientsList("data/patients" + (i + 1) + ".csv"));
+            log.info("Loaded {} patients from file {}", patients.size(), "data/patients"+i+".csv");
+        }
+        log.info("Final number of patients = {}", patients.size());
+    }
+
+    public List<Patient> loadPatientsList(String fileName) {
+        try {
+            CsvSchema bootstrapSchema = CsvSchema.emptySchema().withHeader();
+            CsvMapper mapper = new CsvMapper();
+            MappingIterator<Patient> mappingIterator = mapper.reader(Patient.class).with(bootstrapSchema).readValues(OperinoProvisionerImpl.class.getClassLoader().getResourceAsStream(fileName));
+            return mappingIterator.readAll();
+        } catch (Exception e) {
+            log.error("Error occurred while loading object list from file " + fileName, e);
+            return Collections.emptyList();
+        }
     }
 
     public String getUsername() {
@@ -201,5 +243,9 @@ public class OperinoProvisionerImpl implements InitializingBean, OperinoProvisio
 
     public void setSubjectNamespace(String subjectNamespace) {
         this.subjectNamespace = subjectNamespace;
+    }
+
+    public void setAgentName(String agentName) {
+        this.agentName = agentName;
     }
 }

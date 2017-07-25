@@ -1,0 +1,17 @@
+{
+  "ctx/composer_name": "Dr Joyce Smith",
+  "ctx/health_care_facility|id": "999999-345",
+  "ctx/health_care_facility|name": "Northumbria Community NHS",
+  "ctx/id_namespace": "NHS-UK",
+  "ctx/id_scheme": "2.16.840.1.113883.2.1.4.3",
+  "ctx/language": "en",
+  "ctx/territory": "GB",
+  "ctx/time": "2015-03-28T00:12:43.518+02:00",
+  "allergies_list/allergies_and_adverse_reactions:0/adverse_reaction:0/causative_agent|value": "dust allergy",
+  "allergies_list/allergies_and_adverse_reactions:0/adverse_reaction:0/causative_agent|code": "390952000",
+  "allergies_list/allergies_and_adverse_reactions:0/adverse_reaction:0/causative_agent|terminology": "SNOMED-CT",
+  "allergies_list/allergies_and_adverse_reactions:0/adverse_reaction:0/reaction_details/reaction|value": "rhinitis",
+  "allergies_list/allergies_and_adverse_reactions:0/adverse_reaction:0/reaction_details/reaction|code": "70076002",
+  "allergies_list/allergies_and_adverse_reactions:0/adverse_reaction:0/reaction_details/reaction|terminology": "SNOMED-CT",
+  "allergies_list/allergies_and_adverse_reactions:0/adverse_reaction:0/reaction_details/comment": "patient reported"
+}

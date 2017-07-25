@@ -1,0 +1,14 @@
+{
+  "ctx/composer_name": "Dr Joyce Smith",
+  "ctx/health_care_facility|id": "999999-345",
+  "ctx/health_care_facility|name": "Northumbria Community NHS",
+  "ctx/id_namespace": "NHS-UK",
+  "ctx/id_scheme": "2.16.840.1.113883.2.1.4.3",
+  "ctx/language": "en",
+  "ctx/territory": "GB",
+  "ctx/time": "2015-02-23T00:11:02.518+02:00",
+  "allergies_list/allergies_and_adverse_reactions:0/exclusion_of_an_adverse_reaction:0/exclusion_statement:0|value": "no known allergies",
+  "allergies_list/allergies_and_adverse_reactions:0/exclusion_of_an_adverse_reaction:0/exclusion_statement:0|terminology": "SNOMED-CT",
+  "allergies_list/allergies_and_adverse_reactions:0/exclusion_of_an_adverse_reaction:0/exclusion_statement:0|code": "249683010",
+  "allergies_list/allergies_and_adverse_reactions:0/exclusion_of_an_adverse_reaction:0/date_last_updated": "2015-02-23T00:11:02.518+02:00"
+}

@@ -1,0 +1,17 @@
+{
+  "ctx/composer_name": "Dr Joyce Smith",
+  "ctx/health_care_facility|id": "999999-345",
+  "ctx/health_care_facility|name": "Northumbria Community NHS",
+  "ctx/id_namespace": "NHS-UK",
+  "ctx/id_scheme": "2.16.840.1.113883.2.1.4.3",
+  "ctx/language": "en",
+  "ctx/territory": "GB",
+  "ctx/time": "2015-07-29T00:15:45.518+02:00",
+  "allergies_list/allergies_and_adverse_reactions:0/adverse_reaction:0/causative_agent|value": "allergy to seafood",
+  "allergies_list/allergies_and_adverse_reactions:0/adverse_reaction:0/causative_agent|code": "91937001",
+  "allergies_list/allergies_and_adverse_reactions:0/adverse_reaction:0/causative_agent|terminology": "SNOMED-CT",
+  "allergies_list/allergies_and_adverse_reactions:0/adverse_reaction:0/reaction_details/reaction|value": "allergic angio-oedema due to ingested food",
+  "allergies_list/allergies_and_adverse_reactions:0/adverse_reaction:0/reaction_details/reaction|code": "402388007",
+  "allergies_list/allergies_and_adverse_reactions:0/adverse_reaction:0/reaction_details/reaction|terminology": "SNOMED-CT",
+  "allergies_list/allergies_and_adverse_reactions:0/adverse_reaction:0/reaction_details/comment": "observed by clinician"
+}

@@ -154,6 +154,7 @@ provisioner:
     templateUrl: https://cdr.code4health.org/rest/v1/template/
     provisionerUrl: http://localhost:9597/api/provision/multiple-patient
     subjectNamespace: uk.nhs.nhs_number
+    agentName: operon_provisioner
     username:
     password:
 # Notifier settings
@@ -161,3 +162,5 @@ notifier:
     openEhrUrl: https://cdr.code4health.org/rest/v1/composition/
     teamName: Code4Health team
     skipCompositionIdValidation: true
+thinkehr:
+    baseUrl: https://cdr.code4health.org/rest/v1/

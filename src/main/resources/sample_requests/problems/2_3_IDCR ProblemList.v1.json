@@ -1,0 +1,16 @@
+{
+    "ctx/composer_name": "Dr Tony Shannon",
+	"ctx/composer_id": "G33567",
+    "ctx/health_care_facility|id": "999999-345",
+    "ctx/health_care_facility|name": "Ripple Valley Hospital NHS",
+    "ctx/id_namespace": "NHS-UK",
+    "ctx/id_scheme": "2.16.840.1.113883.2.1.4.3",
+    "ctx/language": "en",
+    "ctx/territory": "GB",
+    "ctx/time": "2015-11-02T00:11:02.518+02:00",
+    "problem_list/problems_and_issues:0/problem_diagnosis:0/date_time_of_onset": "1984-07-17T12:30:37.553Z",
+	"problem_list/problems_and_issues:0/problem_diagnosis:0/date_time_clinically_recognised": "1984-09-09",
+    "problem_list/problems_and_issues:0/problem_diagnosis:0/problem_diagnosis_name|code": "136450051",
+    "problem_list/problems_and_issues:0/problem_diagnosis:0/problem_diagnosis_name|terminology": "SNOMED-CT",
+    "problem_list/problems_and_issues:0/problem_diagnosis:0/problem_diagnosis_name|value": "Chronic obstructive lung disease"	
+}
