@@ -155,8 +155,8 @@ provisioner:
     explorerUrl: https://explorer.code4health.org/explorer
     subjectNamespace: uk.nhs.nhs_number
     agentName: operon_provisioner
-    username: ian
-    password: peu589qy
+    username:
+    password:
 # Notifier settings
 notifier:
     openEhrUrl: https://cdr.code4health.org/rest/v1/composition/

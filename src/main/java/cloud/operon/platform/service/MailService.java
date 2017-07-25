@@ -121,7 +121,7 @@ public class MailService {
         context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
         String content = templateEngine.process("operinoProvisioningEmail", context);
         String subject = messageSource.getMessage("email.provisioning.title", null, locale);
-        sendEmail("jay@operon.systems", subject, content, false, true);
+        sendEmail(operino.getUser().getEmail(), subject, content, false, true);
     }
 
     @Async
