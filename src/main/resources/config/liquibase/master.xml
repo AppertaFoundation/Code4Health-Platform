@@ -11,5 +11,6 @@
     <include file="classpath:config/liquibase/changelog/20170228091725_added_entity_constraints_Operino.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20170228143059_added_entity_constraints_OperinoComponent.xml" relativeToChangelogFile="false"/>
     <include file="classpath:config/liquibase/changelog/20170502801_added_column_Operino.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20170725423_added_column_Operino.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

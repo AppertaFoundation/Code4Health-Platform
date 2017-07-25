@@ -35,6 +35,9 @@ public class Operino implements Serializable {
     @Column(name = "active")
     private Boolean active;
 
+    @Column(name = "provision")
+    private Boolean provision = false;
+
     @Column(name = "domain")
     private String domain = UUID.randomUUID().toString();
 
@@ -126,6 +129,14 @@ public class Operino implements Serializable {
         this.domain = domain;
     }
 
+    public Boolean getProvision() {
+        return provision;
+    }
+
+    public void setProvision(Boolean provision) {
+        this.provision = provision;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -152,6 +163,7 @@ public class Operino implements Serializable {
             "id=" + id +
             ", name='" + name + "'" +
             ", active='" + active + "'" +
+            ", provision='" + provision + "'" +
             '}';
     }
 }

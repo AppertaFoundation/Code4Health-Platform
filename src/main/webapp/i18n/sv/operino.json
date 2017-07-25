@@ -38,8 +38,10 @@
             },
             "name": "Name",
             "active": "Active",
+            "provision": "Provision with dummy data",
             "user": "User",
-            "components": "Components"
+            "components": "Components",
+            "domain": "Domain"
         }
     }
 }
