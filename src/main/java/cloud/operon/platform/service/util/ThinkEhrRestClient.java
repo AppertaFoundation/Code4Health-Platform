@@ -58,20 +58,37 @@ public class ThinkEhrRestClient {
         if(responseEntity.getStatusCode() == HttpStatus.CREATED) {
             Map<String, String> meta = (Map<String, String>) response.get("meta");
             String href = meta.get("href");
-            return href.substring(href.lastIndexOf('/')+1);
+            return href.substring(href.lastIndexOf('/') + 1);
         } else {
             throw new RuntimeException("Unable to create patient");
         }
     }
 
-    public String createEhr(HttpHeaders httpHeaders, String subjectNamespace, String subjectId, String commiterName) throws JsonProcessingException {
+    public String createEhr(Patient patient, HttpHeaders httpHeaders, String subjectNamespace, String subjectId, String commiterName) throws IOException {
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + "ehr")
                 .queryParam("subjectNamespace", subjectNamespace)
                 .queryParam("subjectId", subjectId)
                 .queryParam("commiterName", commiterName);
 
-        HttpEntity<Object> request = new HttpEntity<>(httpHeaders);
+        // read body from existing json template and fill in values
+        InputStream inputStream = ThinkEhrRestClient.class.getClassLoader().getResourceAsStream("sample_requests/ehrStatusBody.json");
+        BufferedReader bufReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+        StringBuilder sb = new StringBuilder();
+        String line = bufReader.readLine();
+        while(line != null){
+            sb.append(line).append("\n");
+            line = bufReader.readLine();
+        }
+
+        // now build string
+        String bodyString = sb.toString();
+        // now update data with values from patient
+        bodyString = bodyString.replaceAll("<subjectId>", subjectId);
+        bodyString = bodyString.replaceAll("<subjectNamespace>", subjectNamespace);
+        bodyString = bodyString.replaceAll("<gender>", patient.getGender());
+        bodyString = bodyString.replaceAll("<birth_year>", String.valueOf(patient.getDateOfBirth().getYear()));
+        HttpEntity<Object> request = new HttpEntity<>(bodyString, httpHeaders);
         log.debug("request = " + request);
 
         ResponseEntity<Map> responseEntity = restTemplate.exchange(
