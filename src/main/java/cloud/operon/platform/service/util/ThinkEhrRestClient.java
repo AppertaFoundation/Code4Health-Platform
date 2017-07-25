@@ -66,15 +66,19 @@ public class ThinkEhrRestClient {
 
     public String createEhr(HttpHeaders httpHeaders, String subjectNamespace, String subjectId, String commiterName) throws JsonProcessingException {
 
-        Map<String, String> uriVariables = new HashMap<>();
-        uriVariables.put("subjectNamespace", subjectNamespace);
-        uriVariables.put("subjectId", subjectId);
-        uriVariables.put("commiterName", commiterName);
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + "ehr")
+                .queryParam("subjectNamespace", subjectNamespace)
+                .queryParam("subjectId", subjectId)
+                .queryParam("commiterName", commiterName);
 
         HttpEntity<Object> request = new HttpEntity<>(httpHeaders);
         log.debug("request = " + request);
 
-        ResponseEntity<Map> responseEntity = restTemplate.postForEntity(baseUrl + "ehr", request, Map.class, uriVariables);
+        ResponseEntity<Map> responseEntity = restTemplate.exchange(
+                builder.build().encode().toUri(),
+                HttpMethod.POST,
+                request,
+                Map.class);
         log.debug("responseEntity = {}", responseEntity);
         log.debug("responseEntity.getBody() = {}", responseEntity.getBody());
         Map response = responseEntity.getBody();
