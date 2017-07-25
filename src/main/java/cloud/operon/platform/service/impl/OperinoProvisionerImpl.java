@@ -2,6 +2,7 @@ package cloud.operon.platform.service.impl;
 
 import cloud.operon.platform.domain.Operino;
 import cloud.operon.platform.domain.Patient;
+import cloud.operon.platform.service.MailService;
 import cloud.operon.platform.service.OperinoProvisioner;
 import cloud.operon.platform.service.OperinoService;
 import cloud.operon.platform.service.util.ThinkEhrRestClient;
@@ -41,8 +42,8 @@ public class OperinoProvisionerImpl implements InitializingBean, OperinoProvisio
 
     private final Logger log = LoggerFactory.getLogger(OperinoProvisionerImpl.class);
     String domainUrl;
-    String templateUrl;
-    String provisionerUrl;
+    String cdrUrl;
+    String explorerUrl;
     String subjectNamespace;
     String username;
     String password;
@@ -58,6 +59,9 @@ public class OperinoProvisionerImpl implements InitializingBean, OperinoProvisio
 
     @Autowired
     ThinkEhrRestClient thinkEhrRestClient;
+
+    @Autowired
+    MailService mailService;
 
     @Override
     @RabbitHandler
@@ -97,51 +101,81 @@ public class OperinoProvisionerImpl implements InitializingBean, OperinoProvisio
                     HttpHeaders templateHeaders = new HttpHeaders();
                     templateHeaders.setContentType(MediaType.APPLICATION_XML);
                     templateHeaders.add("Authorization", "Basic " + token);
-                    // upload various templates
-                    thinkEhrRestClient.uploadTemplate(templateHeaders, "sample_requests/allergies/allergies-template.xml");
-                    thinkEhrRestClient.uploadTemplate(templateHeaders, "sample_requests/lab-results/lab-results-template.xml");
-                    thinkEhrRestClient.uploadTemplate(templateHeaders, "sample_requests/orders/orders-template.xml");
-                    thinkEhrRestClient.uploadTemplate(templateHeaders, "sample_requests/problems/problems-template.xml");
-                    thinkEhrRestClient.uploadTemplate(templateHeaders, "sample_requests/procedures/procedures-template.xml");
+                    // upload various templates - we have to upload at least on template as work around fo EhrExplorer bug
                     thinkEhrRestClient.uploadTemplate(templateHeaders, "sample_requests/vital-signs/vital-signs-template.xml");
+                    // now if user has requested provisioning, we upload other templates and generated data
+                    if (operino.getProvision()) {
+                        thinkEhrRestClient.uploadTemplate(templateHeaders, "sample_requests/allergies/allergies-template.xml");
+                        thinkEhrRestClient.uploadTemplate(templateHeaders, "sample_requests/lab-results/lab-results-template.xml");
+                        thinkEhrRestClient.uploadTemplate(templateHeaders, "sample_requests/orders/orders-template.xml");
+                        thinkEhrRestClient.uploadTemplate(templateHeaders, "sample_requests/problems/problems-template.xml");
+                        thinkEhrRestClient.uploadTemplate(templateHeaders, "sample_requests/procedures/procedures-template.xml");
 
-                    // now call provisioner url with parameters to populate dummy data against problem diagnosis template
-                    // create data map for submission
-                    Map<String, String> map = new HashMap<>();
-                    map.put("username", data.get("username"));
-                    map.put("password", data.get("password"));
-                    map.put("baseUrl", data.get(templateUrl));
-                    map.put("subjectNamespace", subjectNamespace);
+                        // now call provisioner url with parameters to populate dummy data against problem diagnosis template
 
-                    // now call ehrscape_provisioner endpoint with map and a parameter for data file
-                    templateHeaders.setContentType(MediaType.APPLICATION_JSON);
-                    for(Patient p : patients) {
-                        try {
-                            // create patient
-                            String patientId = thinkEhrRestClient.createPatient(templateHeaders, p);
-                            log.info("Created patient with Id = {}", patientId);
-                            // create ehr
-                            String ehrId = thinkEhrRestClient.createEhr(templateHeaders, subjectNamespace, patientId, agentName);
-                            log.info("Created ehr with Id = {}", ehrId);
-                            // now upload compositions against each template loaded above
-                            // -- first process allergy template compositions
-                            for(int i=1; i<7; i++){
+                        // now call ehrscape_provisioner endpoint with map and a parameter for data file
+                        templateHeaders.setContentType(MediaType.APPLICATION_JSON);
+                        for(Patient p : patients) {
+                            try {
+                                // create patient
+                                String patientId = thinkEhrRestClient.createPatient(templateHeaders, p);
+                                log.debug("Created patient with Id = {}", patientId);
+                                // create ehr
+                                String ehrId = thinkEhrRestClient.createEhr(templateHeaders, subjectNamespace, patientId, agentName);
+                                log.debug("Created ehr with Id = {}", ehrId);
+                                // now upload compositions against each template loaded above
+                                // -- first process vital signs template compositions
                                 // create composition file path
-                                String compositionPath = "sample_requests/allergies/AllergiesList_" +i+"FLAT.json";
-                                String compositionId = thinkEhrRestClient.createComposition(templateHeaders, ehrId, "IDCR Allergies List.v0", agentName, compositionPath);
-                                log.info("Created composition with Id = {}", compositionId);
-                            }
+                                String compositionPath = "sample_requests/vital-signs/vital-signs-composition.json";
+                                String compositionId = thinkEhrRestClient.createComposition(templateHeaders, ehrId, "Vital Signs Encounter (Composition)", agentName, compositionPath);
+                                log.debug("Created composition with Id = {}", compositionId);
+                                // -- first process allergy template compositions
+                                for(int i=1; i<7; i++){
+                                    // create composition file path
+                                    compositionPath = "sample_requests/allergies/AllergiesList_" +i+"FLAT.json";
+                                    compositionId = thinkEhrRestClient.createComposition(templateHeaders, ehrId, "IDCR Allergies List.v0", agentName, compositionPath);
+                                    log.debug("Created composition with Id = {}", compositionId);
+                                }
+                                // -- next process lab order compositions
+                                for(int i=1; i<13; i++){
+                                    // create composition file path
+                                    compositionPath = "sample_requests/orders/IDCR_Lab_Order_FLAT_" +i+".json";
+                                    compositionId = thinkEhrRestClient.createComposition(templateHeaders, ehrId, "IDCR - Laboratory Order.v0", agentName, compositionPath);
+                                    log.debug("Created composition with Id = {}", compositionId);
+                                }
+                                // -- next process procedure compositions
+                                for(int i=1; i<7; i++){
+                                    // create composition file path
+                                    compositionPath = "sample_requests/procedures/IDCR_Procedures_List_FLAT_" +i+".json";
+                                    compositionId = thinkEhrRestClient.createComposition(templateHeaders, ehrId, "IDCR Procedures List.v0", agentName, compositionPath);
+                                    log.debug("Created composition with Id = {}", compositionId);
+                                }
+                                // -- next process lab result compositions
+                                for(int i=1; i<13; i++){
+                                    // create composition file path
+                                    compositionPath = "sample_requests/lab-results/IDCR_Lab_Report_INPUT_FLAT_" +i+".json";
+                                    compositionId = thinkEhrRestClient.createComposition(templateHeaders, ehrId, "IDCR - Laboratory Test Report.v0", agentName, compositionPath);
+                                    log.debug("Created composition with Id = {}", compositionId);
+                                }
 
-                        } catch (IOException e) {
-                            log.error("Error processing json to submit for composition. Nested exception is : ", e);
+                            } catch (IOException e) {
+                                log.error("Error processing json to submit for composition. Nested exception is : ", e);
+                            }
                         }
+
                     }
+
+                    // if entire provisioning has been completed
+                    Map<String, String> configMap = operinoService.getConfigForOperino(operino);
+                    configMap.put("cdr", cdrUrl);
+                    configMap.put("explorer", explorerUrl);
+                    mailService.sendProvisioningCompletionEmail(operino, configMap);
 
                 } else {
                     log.error("Unable to create domain for operino {}", operino);
                 }
             } else {
-                log.info("Unable to verify domain {} does not already exist. So operino will NOT be processed.", operino.getDomain());
+                log.error("Unable to verify domain {} does not already exist. So operino will NOT be processed.", operino.getDomain());
             }
         } catch (HttpClientErrorException e) {
             log.error("Error looking up domain using domain id {}. Nested exception is : {}", operino.getDomain(), e);
@@ -229,16 +263,16 @@ public class OperinoProvisionerImpl implements InitializingBean, OperinoProvisio
         this.password = password;
     }
 
-    public void setTemplateUrl(String templateUrl) {
-        this.templateUrl = templateUrl;
+    public void setExplorerUrl(String explorerUrl) {
+        this.explorerUrl = explorerUrl;
+    }
+
+    public void setCdrUrl(String cdrUrl) {
+        this.cdrUrl = cdrUrl;
     }
 
     public void setDomainUrl(String domainUrl) {
         this.domainUrl = domainUrl;
-    }
-
-    public void setProvisionerUrl(String provisionerUrl) {
-        this.provisionerUrl = provisionerUrl;
     }
 
     public void setSubjectNamespace(String subjectNamespace) {

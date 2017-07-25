@@ -1,5 +1,6 @@
 package cloud.operon.platform.service;
 
+import cloud.operon.platform.domain.Operino;
 import cloud.operon.platform.domain.User;
 import io.github.jhipster.config.JHipsterProperties;
 import org.apache.commons.lang3.CharEncoding;
@@ -17,6 +18,7 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 
 import javax.mail.internet.MimeMessage;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Service for sending e-mails.
@@ -30,6 +32,8 @@ public class MailService {
     private final Logger log = LoggerFactory.getLogger(MailService.class);
 
     private static final String USER = "user";
+    private static final String OPERINO = "operino";
+    private static final String OPERINO_CONFIG = "config";
 
     private static final String BASE_URL = "baseUrl";
 
@@ -104,6 +108,20 @@ public class MailService {
         String content = templateEngine.process("activationEmail", context);
         String subject = messageSource.getMessage("email.activation.title", null, locale);
         sendEmail(user.getEmail(), subject, content, false, true);
+    }
+
+    @Async
+    public void sendProvisioningCompletionEmail(Operino operino, Map<String, String> config) {
+        log.debug("Sending provisioning completion e-mail to '{}'", operino.getUser().getEmail());
+        Locale locale = Locale.forLanguageTag(operino.getUser().getLangKey());
+        Context context = new Context(locale);
+        context.setVariable(USER, operino.getUser());
+        context.setVariable(OPERINO, operino);
+        context.setVariable(OPERINO_CONFIG, config);
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+        String content = templateEngine.process("operinoProvisioningEmail", context);
+        String subject = messageSource.getMessage("email.provisioning.title", null, locale);
+        sendEmail("jay@operon.systems", subject, content, false, true);
     }
 
     @Async

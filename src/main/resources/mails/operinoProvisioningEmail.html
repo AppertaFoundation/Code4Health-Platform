@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title th:text="#{email.provisioning.title}">Operino Status</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+    <body>
+        <p th:text="#{email.provisioning.greeting(${user.login})}">
+            Dear
+        </p>
+        <p th:text="#{email.provisioning.text1(${operino.name})}">
+            Your Operino ${operino.name} is now ready for use on the Code4Health Platform. Click on the link below to view it:
+        </p>
+        <p>
+            <a th:href="@{|${baseUrl}/#/operino/${operino.id}|}"
+               th:text="|${operino.name}|">Review Link</a>
+        </p>
+        <h4>Your operino configuration</h4>
+        <ul>
+            <li th:text="#{operino.config.cdr(${config[cdr]})}">Username: th:text="${config.cdr}"</li>
+            <li th:text="#{operino.config.explorer(${config[explorer]})}">Username: th:text="${config.explorer}"</li>
+            <li th:text="#{operino.config.username(${config[username]})}">Username: th:text="${config.username}"</li>
+            <li th:text="#{operino.config.password(${config[password]})}">Password: th:text="${config.password}"</li>
+            <li th:text="#{operino.config.token(${config[token]})}">API Token: th:text="${config.token}"</li>
+            <li th:text="#{operino.config.domain(${config[domainName]})}">Domain Name: th:text="${config.domainName}"</li>
+            <li th:text="#{operino.config.domainId(${config[domainSystemId]})}">Domain System id: th:text="${config.domainSystemId}"</li>
+        </ul>
+        <p>
+            <span th:text="#{email.activation.text2}">Regards, </span>
+            <br/>
+            <em th:text="#{email.signature}">JHipster.</em>
+        </p>
+    </body>
+</html>

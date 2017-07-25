@@ -155,12 +155,12 @@ application:
 # Provisioner settings
 provisioner:
     domainUrl: https://explorer.code4health.org/ehrscape-manager/rest/domain/
-    templateUrl: https://cdr.code4health.org/rest/v1/template/
-    provisionerUrl: http://ep.termlex.com/api/provision/multiple-patient
+    cdrUrl: https://cdr.code4health.org/rest/v1/
+    explorerUrl: https://explorer.code4health.org/explorer
     subjectNamespace: uk.nhs.nhs_number
     agentName: operon_provisioner
-    username:
-    password:
+    username: ian
+    password: peu589qy
 # Notifier settings
 notifier:
     openEhrUrl: https://cdr.code4health.org/rest/v1/composition/

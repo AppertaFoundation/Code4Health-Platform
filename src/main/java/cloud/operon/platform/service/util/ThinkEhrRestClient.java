@@ -44,7 +44,7 @@ public class ThinkEhrRestClient {
         log.debug("request = " + request);
 
         ResponseEntity<Map> responseEntity = restTemplate.postForEntity(url, request, Map.class);
-        log.info("responseEntity = {}", responseEntity);
+        log.debug("responseEntity = {}", responseEntity);
 
         return responseEntity;
     }
@@ -52,8 +52,8 @@ public class ThinkEhrRestClient {
     public String createPatient(HttpHeaders httpHeaders, Patient patient) throws JsonProcessingException {
 
         ResponseEntity<Map> responseEntity = doPost(baseUrl + "demographics/party", httpHeaders, transformPatient(patient));
-        log.info("responseEntity = {}", responseEntity);
-        log.info("responseEntity.getBody() = {}", responseEntity.getBody());
+        log.debug("responseEntity = {}", responseEntity);
+        log.debug("responseEntity.getBody() = {}", responseEntity.getBody());
         Map response = responseEntity.getBody();
         if(responseEntity.getStatusCode() == HttpStatus.CREATED) {
             Map<String, String> meta = (Map<String, String>) response.get("meta");
@@ -75,8 +75,8 @@ public class ThinkEhrRestClient {
         log.debug("request = " + request);
 
         ResponseEntity<Map> responseEntity = restTemplate.postForEntity(baseUrl + "ehr", request, Map.class, uriVariables);
-        log.info("responseEntity = {}", responseEntity);
-        log.info("responseEntity.getBody() = {}", responseEntity.getBody());
+        log.debug("responseEntity = {}", responseEntity);
+        log.debug("responseEntity.getBody() = {}", responseEntity.getBody());
         Map response = responseEntity.getBody();
         if(responseEntity.getStatusCode() == HttpStatus.CREATED) {
             return response.get("ehrId").toString();
@@ -102,8 +102,8 @@ public class ThinkEhrRestClient {
                 HttpMethod.POST,
                 request,
                 Map.class);
-        log.info("responseEntity = {}", responseEntity);
-        log.info("responseEntity.getBody() = {}", responseEntity.getBody());
+        log.debug("responseEntity = {}", responseEntity);
+        log.debug("responseEntity.getBody() = {}", responseEntity.getBody());
         Map response = responseEntity.getBody();
         if(responseEntity.getStatusCode() == HttpStatus.CREATED) {
             return response.get("compositionUid").toString();
