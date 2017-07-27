@@ -184,7 +184,7 @@ public class ThinkEhrRestClient {
         titleMap.put("value", patient.getTitle());
         titleMap.put("version", 1);
         Map<String, Object> nhsNumberMap = new HashMap<>();
-        nhsNumberMap.put("key", "uk.nhs.hospital_number");
+        nhsNumberMap.put("key", "uk.nhs.nhs_number");
         nhsNumberMap.put("value", patient.getNhsNumber());
         nhsNumberMap.put("version", 1);
         // add title and nhs number maps to partyAdditionalInfo

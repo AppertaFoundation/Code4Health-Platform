@@ -14,7 +14,7 @@
       "version": 0
     },
     {
-      "key": "uk.nhs.hospital_number",
+      "key": "uk.nhs.nhs_number",
       "value": "7430555",
       "version": 1
     }
