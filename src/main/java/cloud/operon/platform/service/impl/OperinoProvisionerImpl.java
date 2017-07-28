@@ -24,12 +24,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Service Implementation for provisioning Operinos.
@@ -47,7 +46,6 @@ public class OperinoProvisionerImpl implements InitializingBean, OperinoProvisio
     String subjectNamespace;
     String username;
     String password;
-    String templateToSubmit;
     String agentName;
     List<Patient> patients = new ArrayList<>();
 
@@ -185,21 +183,6 @@ public class OperinoProvisionerImpl implements InitializingBean, OperinoProvisio
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        try (InputStream inputStream = OperinoProvisionerImpl.class.getClassLoader().getResourceAsStream("init_template.xml")){
-            BufferedReader bufReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-
-            StringBuilder sb = new StringBuilder();
-            String line = bufReader.readLine();
-            while(line != null){
-                sb.append(line).append("\n");
-                line = bufReader.readLine();
-            }
-            templateToSubmit = sb.toString();
-        } catch (NullPointerException e){
-            log.error("Unable to read init template from class path. Nested exception is : ", e);
-        } finally {
-            log.info("Init template : {}", templateToSubmit);
-        }
 
         // verify we are able to connect to thinkehr instance
         String plainCreds = username + ":" + password;
