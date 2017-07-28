@@ -121,7 +121,7 @@ public class OperinoProvisionerImpl implements InitializingBean, OperinoProvisio
                                 String patientId = thinkEhrRestClient.createPatient(templateHeaders, p);
                                 log.debug("Created patient with Id = {}", patientId);
                                 // create ehr
-                                String ehrId = thinkEhrRestClient.createEhr(p, templateHeaders, subjectNamespace, patientId, agentName);
+                                String ehrId = thinkEhrRestClient.createEhr(p, templateHeaders, subjectNamespace, p.getNhsNumber(), agentName);
                                 log.debug("Created ehr with Id = {}", ehrId);
                                 // now upload compositions against each template loaded above
                                 // -- first process vital signs template compositions
