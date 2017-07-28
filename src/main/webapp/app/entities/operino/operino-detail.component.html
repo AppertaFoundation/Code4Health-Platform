@@ -11,15 +11,15 @@
     <div *ngIf="operino.config" class="row">
         <!--<h4>API Configuration</h4>-->
         <h4 class="col-sm-3" jhiTranslate="operonCloudPlatformApp.operino.config.token">Token</h4>
-        <pre class="col-sm-9">{{operino.config.token}}</pre>
+        <pre class="col-sm-9 text-muted">Basic {{operino.config.token}}</pre>
         <div class="col-sm-6">
             <dl class="row-md jh-entity-details">
                 <dt><span jhiTranslate="operonCloudPlatformApp.operino.domain">Domain</span></dt>
-                <dd>
+                <dd class="text-muted">
                     {{operino.domain}}
                 </dd>
                 <dt><span jhiTranslate="operonCloudPlatformApp.operino.config.username">Usename</span></dt>
-                <dd>
+                <dd class="text-muted">
                     {{operino.config.username}}
                 </dd>
             </dl>
@@ -27,11 +27,11 @@
         <div class="col-sm-6">
             <dl class="row-md jh-entity-details">
                 <dt><span jhiTranslate="operonCloudPlatformApp.operino.config.domainId">Domain Id</span></dt>
-                <dd>
+                <dd class="text-muted">
                     {{operino.config.domainSystemId}}
                 </dd>
                 <dt><span jhiTranslate="operonCloudPlatformApp.operino.config.password">Password</span></dt>
-                <dd>
+                <dd class="text-muted">
                     {{operino.config.password}}
                 </dd>
             </dl>
