@@ -9,6 +9,7 @@ import cloud.operon.platform.repository.search.OperinoSearchRepository;
 import cloud.operon.platform.security.SecurityUtils;
 import cloud.operon.platform.service.OperinoService;
 import cloud.operon.platform.service.UserService;
+import cloud.operon.platform.service.util.ThinkEhrRestClient;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,17 +38,20 @@ public class OperinoServiceImpl implements OperinoService{
     private final UserService userService;
     private final OperinoSearchRepository operinoSearchRepository;
     private final RabbitTemplate rabbitTemplate;
+    private final ThinkEhrRestClient thinkEhrRestClient;
 
     public OperinoServiceImpl(OperinoRepository operinoRepository,
                               NotificationRepository notificationRepository,
                               OperinoSearchRepository operinoSearchRepository,
                               UserService userService,
-                              RabbitTemplate rabbitTemplate) {
+                              RabbitTemplate rabbitTemplate,
+                              ThinkEhrRestClient thinkEhrRestClient) {
         this.operinoRepository = operinoRepository;
         this.operinoSearchRepository = operinoSearchRepository;
         this.notificationRepository = notificationRepository;
         this.userService = userService;
         this.rabbitTemplate = rabbitTemplate;
+        this.thinkEhrRestClient = thinkEhrRestClient;
     }
 
     /**
@@ -128,8 +132,16 @@ public class OperinoServiceImpl implements OperinoService{
     @Override
     public void delete(Long id) {
         log.debug("Request to delete Operino : {}", id);
-        operinoRepository.delete(id);
-        operinoSearchRepository.delete(id);
+        // veirfy ownership
+        Operino operino = findOne(id);
+        if(operino != null) {
+            // first truncate domain
+            thinkEhrRestClient.truncateDomain(operino.getDomain());
+            operinoRepository.delete(id);
+            operinoSearchRepository.delete(id);
+        } else {
+            log.error("Unable to find operino {} to delete", id);
+        }
     }
 
     /**

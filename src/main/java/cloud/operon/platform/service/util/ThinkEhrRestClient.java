@@ -3,6 +3,7 @@ package cloud.operon.platform.service.util;
 import cloud.operon.platform.domain.Patient;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,10 @@ import java.util.Map;
 @ConfigurationProperties(prefix = "thinkehr", ignoreUnknownFields = false)
 public class ThinkEhrRestClient {
 
+    String adminName;
+    String password;
     String baseUrl;
+    String managerUrl;
     @Autowired
     RestTemplate restTemplate;
     @Autowired
@@ -46,6 +50,21 @@ public class ThinkEhrRestClient {
         ResponseEntity<Map> responseEntity = restTemplate.postForEntity(url, request, Map.class);
         log.debug("responseEntity = {}", responseEntity);
 
+        return responseEntity;
+    }
+
+    public ResponseEntity truncateDomain(String domainSystemId) {
+        // url is managerUrl+/domain/{{domainSystemId}}/truncate
+        HttpEntity<Object> request = new HttpEntity<>(getAdminHeaders());
+        log.debug("request = " + request);
+
+        ResponseEntity<Map> responseEntity = restTemplate.postForEntity(managerUrl+"domain/" +domainSystemId + "/truncate", request, Map.class);
+        log.debug("responseEntity.getBody() = {}", responseEntity.getBody());
+        if(responseEntity.getStatusCode() == HttpStatus.OK) {
+            log.info("Successfully deleted domain {}", domainSystemId);
+        } else {
+            log.error("Unable to delete domain {}", domainSystemId);
+        }
         return responseEntity;
     }
 
@@ -221,7 +240,33 @@ public class ThinkEhrRestClient {
         return map;
     }
 
+    private HttpHeaders getAdminHeaders() {
+        // now build variables for posting to ehrscape provisioner
+        String plainCreds = adminName + ":" + password;
+        byte[] plainCredsBytes = plainCreds.getBytes();
+        byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
+        String base64Creds = new String(base64CredsBytes);
+        // set headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Basic " + base64Creds);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        return headers;
+    }
+
     public void setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setAdminName(String adminName) {
+        this.adminName = adminName;
+    }
+
+    public void setManagerUrl(String managerUrl) {
+        this.managerUrl = managerUrl;
     }
 }

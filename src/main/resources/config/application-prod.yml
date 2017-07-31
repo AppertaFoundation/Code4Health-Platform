@@ -164,3 +164,6 @@ notifier:
     skipCompositionIdValidation: true
 thinkehr:
     baseUrl: https://cdr.code4health.org/rest/v1/
+    managerUrl: https://explorer.code4health.org/ehrscape-manager/rest/
+    adminName:
+    password:
